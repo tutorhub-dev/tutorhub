@@ -1,30 +1,57 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Placeholder data for the user profile
-    const studentProfile = {
-        name: "Winston Nguyen",
-        profilePicture: "path/to/student-profile-picture.jpg",
-        appointments: [
-            { subject: "Math", date: "YYYY-MM-DD HH:MM" },
-            { subject: "Science", date: "YYYY-MM-DD HH:MM" },
-        ]
-    };
+    
+    const authToken = sessionStorage.getItem("authToken");
+    if (!authToken) {
+        window.location.href = "login.html";
+        return;
+    }
 
-        document.getElementById("userName").textContent = studentProfile.name;
-        document.getElementById("pfp").src = studentProfile.profilePicture; 
+    const headers = new Headers({
+        'Content-Type': 'application/json',
+        'Authorization': authToken
+    });
 
+    fetch('/user', {
+        method: 'POST',
+        headers: headers,
+    })
+
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById("userName").textContent = data.name;
+        document.getElementById("pfp").src = data.profilePicture;
+    })
+
+    .catch(error => console.error('Failed to fetch user data:', error));
+
+    fetch('/user/appointments', {
+        method: 'POST',
+        headers: headers,
+    })
+    .then(response => response.json())
+    .then(data => {
         const appointmentList = document.getElementById("appointmentList");
-        studentProfile.appointments.forEach(appointment => {
+        data.forEach(appointment => {
             const listItem = document.createElement("li");
             listItem.textContent = `${appointment.subject} - ${appointment.date}`;
             appointmentList.appendChild(listItem);
-        }); 
-
-
-        document.getElementById("logoutButton").addEventListener("click", function() {
-            // Placeholder code for logging out
-            console.log("Logging out...");
-
-            sessionStorage.clear();
-            window.location.href = "whateverIbrahimNamesTheLoginPage.html";
         });
+    })
+    .catch(error => console.error('Failed to fetch user appointments:', error));
+
+});
+    
+document.getElementById("logoutButton").addEventListener("click", function() {
+    fetch('/auth/logout', {
+        method: 'POST',
+        headers: new Headers({
+            'Authorization': sessionStorage.getItem("authToken")
+        }),
+        body: JSON.stringify({}) 
+    })
+    .then(() => {
+        sessionStorage.clear();
+        window.location.href = "login.html";
+    })
+    .catch(error => console.error('Failed to log out:', error));
 });
