@@ -1,18 +1,4 @@
-class TutorAPI
-{
-    constructor(apiConfig)
-    {
-        this.apiConfig = apiConfig;
-    }
-
-    login(req, res) {
-        res.status(501).send('Not Implemented')
-    }
-
-    logout(req, res) {
-        res.status(501).send('Not Implemented')
-    }
-
+class UserEndpoints {
     getUser(req, res) {
         res.status(501).send('Not Implemented')
     }
@@ -28,4 +14,10 @@ class TutorAPI
     deleteUser(req, res) {
         res.status(501).send('Not Implemented')
     }
+
+    getAppointments(req, res) {
+        res.status(501).send('Not Implemented')
+    }
 }
+
+module.exports = UserEndpoints;

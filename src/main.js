@@ -5,7 +5,7 @@ const app = express()
 const port = 3000
 
 const bodyParser = require('body-parser')
-const TutorAPI = require('./api/api.js')
+const TutorAPI = require('./api/tutor_api.js')
 
 const api = new TutorAPI({})
 
@@ -14,29 +14,34 @@ dotenv.config();
 app.use(bodyParser.json())
 
 /* auth endpoints */
-app.post('/login', api.login)
-app.post('/logout', api.logout)
+app.post('/api/login', api.authEndpoints.login)
+app.post('/api/logout', api.authEndpoints.logout)
+app.post('/register', api.authEndpoints.register)
 
 /* general user endpoints */
-app.get('/user', api.getUser) // get a user's data
-app.put('/user', api.createUser) // create a new user
-app.post('/user', api.updateUser) // update a user's data
-app.delete('/user', api.deleteUser) // delete a user
+app.route('/user')
+    .get(api.userEndpoints.getUser)
+    .put(api.userEndpoints.createUser)
+    .post(api.userEndpoints.updateUser)
+    .delete(api.userEndpoints.deleteUser)
+
 app.get('/user/appointment', api.getAppointment) // get a users appointments
 
 /* tutor-specific endpoints */
-app.get('/tutor', api.getTutor) // get a tutor's data
-app.put('/tutor', api.createTutor) // create a new tutor
-app.post('/tutor', api.updateTutor) // update a tutor's data
-app.delete('/tutor', api.deleteTutor) // delete a tutor
+app.route('/tutor')
+    .get(api.tutorEndpoints.getTutor)
+    .put(api.tutorEndpoints.createTutor)
+    .post(api.tutorEndpoints.updateTutor)
+    .delete(api.tutorEndpoints.deleteTutor)
 
 /* appointment endpoint */
-app.put('/appointment', api.createAppointment) // create a new appointment
-app.post('/appointment', api.updateAppointment) // update an appointment
-app.delete('/appointment', api.deleteAppointment) // delete an appointment
-
+app.route('/appointment')
+    .get(api.getAppointment) // get an appointment
+    .post(api.updateAppointment) // update an appointment
+    .delete(api.deleteAppointment) // delete an appointment
+    
 /* search endpoints */
-app.post('/search', api.search) // search for tutors
+app.post('/search', api.searchEndpoints.search) // search for tutors
 
 // serve files from the public directory
 app.use(express.static('public'))
