@@ -40,6 +40,28 @@ document.addEventListener('DOMContentLoaded', function() {
     .catch(error => console.error('Failed to fetch user appointments:', error));
 
 });
+
+document.getElementById("deleteAccountButton").addEventListener("click", function() {
+    if(confirm("Are you sure you want to delete your account?")) {
+        fetch('/user', {
+            method: 'DELETE',
+            headers: new Headers({
+                'Authorization': sessionStorage.getItem("authToken"),
+                'Content-Type': 'application/json'
+            })
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Failed to delete account');
+            alert('Your account has been successfully deleted!');
+            sessionStorage.clear();
+            window.location.href = "login.html";
+        })
+        .catch(error => {
+            console.error('Failed to delete account:', error);
+            alert('Failed to delete account');
+        });
+    }
+});
     
 document.getElementById("logoutButton").addEventListener("click", function() {
     fetch('/auth/logout', {
@@ -49,9 +71,13 @@ document.getElementById("logoutButton").addEventListener("click", function() {
         }),
         body: JSON.stringify({}) 
     })
-    .then(() => {
-        sessionStorage.clear();
-        window.location.href = "login.html";
+    .then(response => {
+        if(response.ok) {
+            sessionStorage.clear();
+            window.location.href = "login.html";
+        } else {
+            throw new Error('Failed to log out');
+        } 
     })
     .catch(error => console.error('Failed to log out:', error));
 });
