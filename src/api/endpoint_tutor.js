@@ -1,19 +1,24 @@
 class TutorEndpoints {
-    getTutor(req, res) {
+    #api 
+    constructor(api) {
+        this.#api = api;
+    }
+
+    getTutor = (req, res) => {
         res.status(501).send('Not Implemented')
     }
 
-    createTutor(req, res) {
+    createTutor = (req, res) => {
         res.status(501).send('Not Implemented')
     }
 
-    updateTutor(req, res) {
+    updateTutor = (req, res) => {
         res.status(501).send('Not Implemented')
     }
 
-    deleteTutor(req, res) {
+    deleteTutor = (req, res) => {
         res.status(501).send('Not Implemented')
     }
 }
 
-module.exports = TutorEndpoints;
+module.exports = TutorEndpoints

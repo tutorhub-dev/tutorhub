@@ -1,21 +1,27 @@
 class UserEndpoints {
-    getUser(req, res) {
+    #api;
+
+    constructor(api) {
+        this.#api = api;
+    }
+
+    getUser = (req, res) => {
         res.status(501).send('Not Implemented')
     }
 
-    createUser(req, res) {
+    createUser = (req, res) => {
         res.status(501).send('Not Implemented')
     }
 
-    updateUser(req, res) {
+    updateUser = (req, res) => {
         res.status(501).send('Not Implemented')
     }
 
-    deleteUser(req, res) {
+    deleteUser = (req, res) => {
         res.status(501).send('Not Implemented')
     }
 
-    getAppointments(req, res) {
+    getAppointments = (req, res) => {
         res.status(501).send('Not Implemented')
     }
 }

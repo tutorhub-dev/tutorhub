@@ -7,7 +7,11 @@ const port = 3000
 const bodyParser = require('body-parser')
 const TutorAPI = require('./api/tutor_api.js')
 
-const api = new TutorAPI({})
+// grab mongodb url from environment variable or use default
+const MDB_URL = (process.env.MDB_URL == undefined)
+                ? "mongodb://localhost:27017"
+                : process.env.MDB_URL 
+const api = new TutorAPI({}, MDB_URL + "/tutorhub")
 
 dotenv.config();
 
@@ -16,50 +20,35 @@ app.use(bodyParser.json())
 /* auth endpoints */
 app.post('/api/login', api.authEndpoints.login)
 app.post('/api/logout', api.authEndpoints.logout)
-app.post('/register', api.authEndpoints.register)
+app.post('/api/register', api.authEndpoints.register)
 
 /* general user endpoints */
-app.route('/user')
-    .get(api.userEndpoints.getUser)
-    .put(api.userEndpoints.createUser)
-    .post(api.userEndpoints.updateUser)
-    .delete(api.userEndpoints.deleteUser)
+app.get('/api/user', api.userEndpoints.getUser)
+app.put('/api/user', api.userEndpoints.createUser)
+app.post('/api/user', api.userEndpoints.updateUser) // dont do
+app.delete('/api/user', api.userEndpoints.deleteUser)
 
-app.get('/user/appointment', api.getAppointment) // get a users appointments
+app.get('/api/user/appointment', api.userEndpoints.getAppointments) // get a users appointments
 
 /* tutor-specific endpoints */
-app.route('/tutor')
-    .get(api.tutorEndpoints.getTutor)
-    .put(api.tutorEndpoints.createTutor)
-    .post(api.tutorEndpoints.updateTutor)
-    .delete(api.tutorEndpoints.deleteTutor)
+app.get('/api/tutor', api.tutorEndpoints.getTutor)
+app.put('/api/tutor', api.tutorEndpoints.createTutor)
+app.post('/api/tutor', api.tutorEndpoints.updateTutor) // dont do
+app.delete('/api/tutor', api.tutorEndpoints.deleteTutor)
 
 /* appointment endpoint */
-app.route('/appointment')
-    .get(api.getAppointment) // get an appointment
-    .post(api.updateAppointment) // update an appointment
-    .delete(api.deleteAppointment) // delete an appointment
-    
+app.get('/api/appointment', api.apptEndpoints.getAppointment) // get an appointment
+app.put('/api/appointment', api.apptEndpoints.createAppointment) // create an appointment
+app.post('/api/appointment', api.apptEndpoints.updateAppointment) // update an appointment
+app.delete('/api/appointment', api.apptEndpoints.deleteAppointment) // delete an appointment
+
 /* search endpoints */
-app.post('/search', api.searchEndpoints.search) // search for tutors
+app.post('/api/search', api.searchEndpoints.search) // search for tutors
 
 // serve files from the public directory
 app.use(express.static('public'))
 
-// connect to the database
-const connectDB = async () => {
-    try {
-        const conn = await mongoose.connect(process.env.MDB_URL);
-        console.log("Database Connected");
-    } catch (error) {
-        console.error(`Error: ${error.message}`);
-        Process.exit(1);
-    }
-}
-
-connectDB();
-
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
+    console.log(`TutorHub app listening on port ${port}`)
 })
 
