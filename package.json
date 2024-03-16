@@ -4,7 +4,7 @@
   "description": "Run that from the root directory\r `git add . --all`",
   "main": "tailwind.config.js",
   "scripts": {
-    "build": "npx tailwindcss -i ./src/input.css -o ./public/css/style.css",
+    "build": "npx tailwindcss -i ./tailwindcss/input.css -o ./public/css/style.css",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tailwindcss -i ./src/input.css -o ./public/output.css --watch"
   },
