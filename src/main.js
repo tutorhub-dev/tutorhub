@@ -28,8 +28,6 @@ app.put('/api/user', api.userEndpoints.createUser)
 app.post('/api/user', api.userEndpoints.updateUser) // dont do
 app.delete('/api/user', api.userEndpoints.deleteUser)
 
-app.get('/api/user/appointment', api.userEndpoints.getAppointments) // get a users appointments
-
 /* tutor-specific endpoints */
 app.get('/api/tutor', api.tutorEndpoints.getTutor)
 app.put('/api/tutor', api.tutorEndpoints.createTutor)

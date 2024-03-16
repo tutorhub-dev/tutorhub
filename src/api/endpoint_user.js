@@ -1,3 +1,6 @@
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+
 class UserEndpoints {
     #api;
 
@@ -6,36 +9,29 @@ class UserEndpoints {
     }
 
     getUser = (req, res) => {
-        if (this.#api.validateRequest(req, res, ['username', 'email']) == false) return;
+        // get the user from the auth token
+        let token = req.headers['authorization']
+        let user = this.auth.fetchUserByToken(token)
+        if (user == null) {
+            res.status(401).send('Unauthorized')
+            return
+        }
 
-        const username = req.body.username;
-        const email = req.body.email;
-        res.status(501).send('Not Implemented')
-    
-        this.#api.userCollection.findUser({ email: email, username: username }, (err, user) => {
-            if (err) {
-                res.status(500).send('Internal Server Error');
-            } else if (!user) {
-                res.status(404).send('User not found');
-            } else {
-                res.status(200).json(user);
-            }
-        });
+        res.status(200).json(user)
     }
 
-
-
     createUser = (req, res) => {
-        if (this.#api.validateRequest(req, res, ['email', 'hash_password', 'username']) == false) return;
+        if (this.#api.validateRequest(
+            req, res, ['email', 'password', 'username', 'is_tutor']
+        ) == false) return;
 
         const username = req.body.username;
         const email = req.body.email;
         const password = req.body.password;
-
-        
+        const is_tutor = req.body.is_tutor;
 
         // Hash the password before saving
-        bcrypt.hash(hash_password, saltRounds, (err, hash) => {
+        bcrypt.hash(password, saltRounds, (err, hash) => {
             if (err) {
                 console.log(err);
                 res.status(500).send('Internal Server Error');
@@ -44,8 +40,10 @@ class UserEndpoints {
                 const newUser = new this.#api.userCollection({
                     email: email,
                     hash_password: hash,
-                    username: username
+                    username: username,
+                    is_tutor: is_tutor
                 });
+
                 newUser.save().then(user => {
                     res.status(201).json(user);
                 }).catch(err => {
@@ -56,7 +54,6 @@ class UserEndpoints {
         });
     }
 
-    
     updateUser = (req, res) => {
         if (this.#api.validateRequest(req, res, ['email'])) return;
 
@@ -88,22 +85,6 @@ class UserEndpoints {
             }
         });
     }
-
-
-    getAppointments = (req, res) => {
-        if (this.#api.validateRequest(req, res, ['user_id'])) return;
-
-        const user_id = req.body.user_id;
-
-        this.#api.appointmentCollection.find({ tutor_id: user_id }, (err, appointments) => {
-            if (err) {
-                res.status(500).send('Internal Server Error');
-            } else {
-                res.status(200).json(appointments);
-            }
-        });
-    }
-
 }
 
 module.exports = UserEndpoints;

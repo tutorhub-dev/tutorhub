@@ -17,6 +17,7 @@ class TutorSchemas {
             email: { type: String, required: true },
             hash_password: { type: String, required: true },
             username: { type: String, required: true },
+            is_tutor: {type: Boolean, required: true },
             profile_picture: { type: String, required: false }
         }
     }
