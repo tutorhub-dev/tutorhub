@@ -2,7 +2,7 @@ const express = require('express')
 const mongoose = require("mongoose")
 const dotenv = require("dotenv")
 const app = express()
-const port = 3000
+const port = process.env.TH_PORT || 3000
 
 const bodyParser = require('body-parser')
 const TutorAPI = require('./api/tutor_api.js')

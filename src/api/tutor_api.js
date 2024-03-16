@@ -31,7 +31,7 @@ class TutorAPI {
 
         // connect to the database
         mongoose.connect(mongooseEndpoint)
-        console.log("Database Connected")
+        console.log("Database registered at " + mongooseEndpoint)
 
         // create the collections (tables) by specifying thier models
         this.authTokenCollection = mongoose.model(
