@@ -2,81 +2,52 @@
 <html>
 
 <head>
-    <title></title>
-    <link rel="stylesheet" type="text/css" href="css/signup.css" />
+    <title>Sign Up Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="js/signup.js"></script>
+    <link href="./output.css" rel="stylesheet">
 </head>
 
-<body>
-    <div id="container">
+<body class="bg-gray-100">
+    <div id="container" class="flex flex-col h-screen justify-center items-center">
         <header id="header-auth">
-            <h1>Sign Up Page</h1>
+            <h1 class="text-3xl font-bold">Sign Up Page</h1>
         </header>
-        <main id="main-left">
-
-        </main>
-        <main id="main-center">
-            <form id ="signupForm" class="auth-form">
-                <h3>Sign up</h3>
-                <p class="input-field">
-                    <!-- HTML Todo 1 -->
-
-                  
-
-                    <label for="Fname">First name:</label>
-                    <input type="text" name="uname" id="fname"/>
-                 
-                </p>
-                <p class="input-field">
-                
-                    <label for="lastname">Lastname:</label>
-                    <input type="text" name="Enter a last uname" id="Lastname"/>
-                   
-                </p>
-                <p class="input-field">
-                    <!-- HTML Todo 3 -->
-                    <label for="uname">User name:</label>
-                    <input type="text" name="uname" id="uname1"/>
-         
-                </p>
-                <p class="input-field">
- 
-                    <label for="pwd">Password:</label>
-                    <input type="password" name="pwd" id="pwd"/>
-              
-                </p>
-                <p class="input-field">
-                 
-                    <label for="pwd"> Confirm Password:</label>
-                    <input type="password" name="pwd" id="pwd1"/>
-                  
-                </p>
-                <p class="input-field">
-                 
-                    <label for="Email"> Email Address:</label>
-                    <input type="Email" name="Email" id="Email"/>
-                  
-                </p>
-               
-                <p class="input-field">
-            
-                    <a href="login.html">
-                        <button type="button" onclick="SignupFunction()">Submit</button>
-                </a>
-                  
-                </p>
+        <main id="main-center" class="bg-white p-8 rounded shadow-md max-w-md">
+            <form id="signupForm" class="auth-form">
+                <h3 class="text-xl font-semibold mb-4">Sign up</h3>
+                <div class="mb-4">
+                    <label for="fname" class="block text-sm font-semibold mb-2">First name:</label>
+                    <input type="text" name="fname" id="fname" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Enter your first name" required>
+                </div>
+                <div class="mb-4">
+                    <label for="lastname" class="block text-sm font-semibold mb-2">Last name:</label>
+                    <input type="text" name="lastname" id="lastname" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Enter your last name" required>
+                </div>
+                <div class="mb-4">
+                    <label for="uname1" class="block text-sm font-semibold mb-2">User name:</label>
+                    <input type="text" name="uname1" id="uname1" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Enter your username" required>
+                </div>
+                <div class="mb-4">
+                    <label for="pwd" class="block text-sm font-semibold mb-2">Password:</label>
+                    <input type="password" name="pwd" id="pwd" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Enter your password" required>
+                </div>
+                <div class="mb-4">
+                    <label for="pwd1" class="block text-sm font-semibold mb-2">Confirm Password:</label>
+                    <input type="password" name="pwd1" id="pwd1" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Confirm your password" required>
+                </div>
+                <div class="mb-4">
+                    <label for="Email" class="block text-sm font-semibold mb-2">Email Address:</label>
+                    <input type="email" name="Email" id="Email" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Enter your email address" required>
+                </div>
+                <div class="mb-6">
+                    <button type="button" onclick="SignupFunction()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">Submit</button>
+                </div>
             </form>
-            <div class="foot-note">
-              
+            <div class="foot-note text-sm">
+                <p>Already have an account? <a href="login.html" class="text-blue-500">Log in</a></p>
             </div>
         </main>
-        <main id="main-right">
-
-        </main>
-        <footer id="footer-auth">
-          
-                  
-        </footer>
     </div>
 </body>
 

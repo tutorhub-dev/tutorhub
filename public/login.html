@@ -3,66 +3,35 @@
 
 <head>
     <title>Tutor Hub</title>
-    
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="js/login.js"></script>
+    <link href="./output.css" rel="stylesheet">
 </head>
 
-<body>
-    <div id="container">
+<body class="bg-gray-100">
+    <div id="container" class="flex flex-col h-screen justify-center items-center">
         <header id="header-auth">
-            <h1>TutorHub</h1>
+            <h1 class="text-3xl font-bold">TutorHub</h1>
         </header>
-        <main id="main-left">
-
-        </main>
-        <main id="main-center">
+        <main id="main-center" class="bg-white p-8 rounded shadow-md max-w-md">
             <form class="auth-form">
-                <h3>Please log in</h3>
-                <p class="input-field">
-        
-
-                 
-                     <label for="fname">Email:</label>
-                    <input type="text" id="uname" name="uname">
-                  
-                   
-
-                </p>
-
-                <p class="input-field">
-   
-                    <label for="lname">Password:</label>
-                    <input type="password" id="password" name="lname">
-                    
-               
-             
-                    
-              
-                </p>
-               
-                <p class="input-field">
-                   
-                    <a id="pop" href="">
-                        <button type="submit" >  Log In</button>
-                     </a>
-                
-            
-                     
-                          </form>
-                </p>
-        
-            <div class="foot-note">
-           
-                <p>Don't have an account? <a href="signup.html">Sign up</a></p>
- 
+                <h3 class="text-xl font-semibold mb-4">Please log in</h3>
+                <div class="mb-4">
+                    <label for="uname" class="block text-sm font-semibold mb-2">Email:</label>
+                    <input type="text" id="uname" name="uname" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Enter your email" required>
+                </div>
+                <div class="mb-4">
+                    <label for="password" class="block text-sm font-semibold mb-2">Password:</label>
+                    <input type="password" id="password" name="password" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Enter your password" required>
+                </div>
+                <div class="mb-6">
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">Log In</button>
+                </div>
+            </form>
+            <div class="foot-note text-sm">
+                <p>Don't have an account? <a href="signup.html" class="text-blue-500">Sign up</a></p>
             </div>
         </main>
-        <main id="main-right">
-
-        </main>
-        <footer id="footer-auth">
-           
-        </footer>
     </div>
 </body>
 
