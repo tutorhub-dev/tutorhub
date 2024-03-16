@@ -35,17 +35,17 @@ class TutorAPI {
 
         // create the collections (tables) by specifying thier models
         this.authTokenCollection = mongoose.model(
-            'authtoken', new mongoose.Schema(TutorSchemas.authTokenSchema
-        ))
+            'authtoken', new mongoose.Schema(TutorSchemas.authTokenSchema)
+        )
         this.userCollection = mongoose.model(
-            'user', new mongoose.Schema(TutorSchemas.userSchema
-        ))
+            'user', new mongoose.Schema(TutorSchemas.userSchema)
+        )
         this.tutorCollection = mongoose.model(
-            'tutor', new mongoose.Schema(TutorSchemas.tutorSchema
-        ))
+            'tutor', new mongoose.Schema(TutorSchemas.tutorSchema)
+        )
         this.appointmentCollection = mongoose.model(
-            'appointment', new mongoose.Schema(TutorSchemas.appointmentSchema
-        ))
+            'appointment', new mongoose.Schema(TutorSchemas.appointmentSchema)
+        )
     }
 
     validateRequest(req, res, requiredParams) {
