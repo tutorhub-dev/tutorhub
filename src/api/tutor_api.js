@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const Authentication = require('./auth')
+const AuthAPI = require('./auth')
 
 const TutorSchemas = require('./schema')
 
@@ -20,7 +20,7 @@ class TutorAPI {
 
     constructor(apiConfig, mongooseEndpoint) {
         this.#apiConfig = apiConfig
-        this.auth = new Authentication()
+        this.auth = new AuthAPI(this)
         
         // set up the endpoints
         this.authEndpoints = new AuthEndpoints(this)
@@ -31,21 +31,21 @@ class TutorAPI {
 
         // connect to the database
         mongoose.connect(mongooseEndpoint)
-        console.log("Database Connected")
+        console.log("Database registered at " + mongooseEndpoint)
 
         // create the collections (tables) by specifying thier models
         this.authTokenCollection = mongoose.model(
-            'authtoken', new mongoose.Schema(TutorSchemas.authTokenSchema
-        ))
+            'authtoken', new mongoose.Schema(TutorSchemas.authTokenSchema)
+        )
         this.userCollection = mongoose.model(
-            'user', new mongoose.Schema(TutorSchemas.userSchema
-        ))
+            'user', new mongoose.Schema(TutorSchemas.userSchema)
+        )
         this.tutorCollection = mongoose.model(
-            'tutor', new mongoose.Schema(TutorSchemas.tutorSchema
-        ))
+            'tutor', new mongoose.Schema(TutorSchemas.tutorSchema)
+        )
         this.appointmentCollection = mongoose.model(
-            'appointment', new mongoose.Schema(TutorSchemas.appointmentSchema
-        ))
+            'appointment', new mongoose.Schema(TutorSchemas.appointmentSchema)
+        )
     }
 
     validateRequest(req, res, requiredParams) {

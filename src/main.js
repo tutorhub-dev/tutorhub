@@ -2,7 +2,7 @@ const express = require('express')
 const mongoose = require("mongoose")
 const dotenv = require("dotenv")
 const app = express()
-const port = 3000
+const port = process.env.TH_PORT || 3000
 
 const bodyParser = require('body-parser')
 const TutorAPI = require('./api/tutor_api.js')
@@ -27,8 +27,6 @@ app.get('/api/user', api.userEndpoints.getUser)
 app.put('/api/user', api.userEndpoints.createUser)
 app.post('/api/user', api.userEndpoints.updateUser) // dont do
 app.delete('/api/user', api.userEndpoints.deleteUser)
-
-app.get('/api/user/appointment', api.userEndpoints.getAppointments) // get a users appointments
 
 /* tutor-specific endpoints */
 app.get('/api/tutor', api.tutorEndpoints.getTutor)

@@ -1,3 +1,6 @@
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+
 class UserEndpoints {
     #api;
 
@@ -6,23 +9,81 @@ class UserEndpoints {
     }
 
     getUser = (req, res) => {
-        res.status(501).send('Not Implemented')
+        // get the user from the auth token
+        let token = req.headers['authorization']
+        let user = this.auth.fetchUserByToken(token)
+        if (user == null) {
+            res.status(401).send('Unauthorized')
+            return
+        }
+
+        res.status(200).json(user)
     }
 
     createUser = (req, res) => {
-        res.status(501).send('Not Implemented')
+        if (this.#api.validateRequest(
+            req, res, ['email', 'password', 'username', 'is_tutor']
+        ) == false) return;
+
+        const username = req.body.username;
+        const email = req.body.email;
+        const password = req.body.password;
+        const is_tutor = req.body.is_tutor;
+
+        // Hash the password before saving
+        bcrypt.hash(password, saltRounds, (err, hash) => {
+            if (err) {
+                console.log(err);
+                res.status(500).send('Internal Server Error');
+            } else {
+                // Save the user with hashed password
+                const newUser = new this.#api.userCollection({
+                    email: email,
+                    hash_password: hash,
+                    username: username,
+                    is_tutor: is_tutor
+                });
+
+                newUser.save().then(user => {
+                    res.status(201).json(user);
+                }).catch(err => {
+                    console.log(err);
+                    res.status(500).send('Internal Server Error');
+                });
+            }
+        });
     }
 
     updateUser = (req, res) => {
-        res.status(501).send('Not Implemented')
+        if (this.#api.validateRequest(req, res, ['email'])) return;
+
+        const email = req.body.email;
+
+        this.#api.userCollection.findOneAndUpdate({ email: email }, req.body, { new: true }, (err, user) => {
+            if (err) {
+                res.status(500).send('Internal Server Error');
+            } else if (!user) {
+                res.status(404).send('User not found');
+            } else {
+                res.status(200).json(user);
+            }
+        });
     }
 
     deleteUser = (req, res) => {
-        res.status(501).send('Not Implemented')
-    }
+        if (this.#api.validateRequest(req, res, ['email'])) return;
 
-    getAppointments = (req, res) => {
-        res.status(501).send('Not Implemented')
+        const email = req.body.email;
+
+        this.#api.userCollection.findOneAndDelete({ email: email }, (err, user) => {
+            if (err) {
+                res.status(500).send('Internal Server Error');
+            } else if (!user) {
+                res.status(404).send('User not found');
+            } else {
+                res.status(204).send();
+            }
+        });
     }
 }
 
