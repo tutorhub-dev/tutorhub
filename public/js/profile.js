@@ -1,3 +1,68 @@
+/* document.addEventListener('DOMContentLoaded', function() {
+    
+    const authToken = sessionStorage.getItem("authToken");
+    if (!authToken) {
+        window.location.href = "login.html";
+        return;
+    }
+
+    const tutorElements = document.querySelectorAll(".tutor-class");
+    const availabilityTable = document.getElementById("availabilityTable");
+
+    const headers = new Headers({
+        'Content-Type': 'application/json',
+        'Authorization': authToken
+    });
+}); */
+
+function fetchUserDetails() {
+    fetch('/user', {
+        method: 'POST',
+        headers: headers,
+    })
+
+    .then(response => {
+        if (!response.ok) throw new Error('Failed to fetch user data');
+        return response.json();
+    })
+    .then(data => {
+        document.getElementById("userName").textContent = data.name;
+        document.getElementById("pfp").src = data.profilePicture;
+
+        const userIsTutor = data.userIsTutor;
+        tutorElements.forEach(element => {
+            element.style.display = userIsTutor ? "block" : "none";
+        });
+
+        if (userIsTutor) {
+            fetchAndDisplayAvailability();
+        } else {
+            fetchUserAppointments();
+        }
+    })
+    .catch(error => console.error('Failed to fetch user data:', error));
+}
+
+function fetchUserAppointments() {
+    fetch('/user/appointments', {
+        method: 'POST',
+        headers: new Headers({
+            'Authorization': sessionStorage.getItem("authToken"),
+            'Content-Type': 'application/json'
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        const appointmentList = document.getElementById("appointmentList");
+        data.forEach(appointment => {
+            const listItem = document.createElement("li");
+            listItem.textContent = `${appointment.subject} - ${appointment.date}`;
+            appointmentList.appendChild(listItem);
+        });
+    })
+    .catch(error => console.error('Failed to fetch user appointments:', error));
+}
+
 document.getElementById("add-availability").addEventListener("click", function() {
     const start = document.getElementById("start").value;
     const end = document.getElementById("end").value;
@@ -9,7 +74,6 @@ document.getElementById("add-availability").addEventListener("click", function()
     document.getElementById("end").value = "";
     document.getElementById("subject").value = "";
 });
-
 
 function addAvailability(start, end, subject) {
     fetch('/tutor/availability', {
@@ -82,8 +146,6 @@ function fetchAndDisplayAvailability() {
     .catch(error => console.error('Failed to fetch availability:', error));
 }
 
-document.addEventListener("DOMContentLoaded", fetchAndDisplayAvailability);
-
 document.getElementById("deleteAccountButton").addEventListener("click", function() {
     if(confirm("Are you sure you want to delete your account?")) {
         fetch('/user', {
@@ -124,3 +186,5 @@ document.getElementById("logoutButton").addEventListener("click", function() {
     })
     .catch(error => console.error('Failed to log out:', error));
 });
+
+fetchUserDetails();

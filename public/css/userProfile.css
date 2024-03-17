@@ -2,6 +2,10 @@
     float: right;
 }
 
+#logoutButton {
+    float: right;
+}
+
 .appointment {
     margin: auto;
     width: 60%;

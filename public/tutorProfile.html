@@ -9,7 +9,11 @@
 <body class="h-72 bg-gradient-to-r from-slate-400 to-cyan-200">
     <button id="deleteAccountButton" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Delete Account</button>
     <button id="logoutButton" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Logout</button>
-    <table id="availabilityTable">
+    <div class="profile">
+        <img id="pfp" src="" alt="Profile Picture"/>
+        <h1 id="userName" class="font-mono">Username</h1>
+    </div>
+    <table id="availabilityTable" class="tutor-class">
         <thead>
             <tr>
                 <th class="font-mono">Start Time</th>
@@ -28,7 +32,7 @@
         </tbody>
     </table>
 
-    <script src="js/tutorProfile.js"></script>
+    <script src="js/profile.js"></script>
 </body>
 
 </html>
