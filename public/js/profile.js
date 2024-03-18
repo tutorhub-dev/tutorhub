@@ -3,19 +3,16 @@
     const authToken = sessionStorage.getItem("authToken");
     if (!authToken) {
         window.location.href = "login.html";
-        return;
+    } else {
+        const headers = new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': authToken
+        });
+        fetchUserDetails();
     }
-
-    const tutorElements = document.querySelectorAll(".tutor-class");
-    const availabilityTable = document.getElementById("availabilityTable");
-
-    const headers = new Headers({
-        'Content-Type': 'application/json',
-        'Authorization': authToken
-    });
 }); */
 
-function fetchUserDetails() {
+function fetchUserDetails(headers) {
     fetch('/user', {
         method: 'POST',
         headers: headers,
@@ -29,18 +26,23 @@ function fetchUserDetails() {
         document.getElementById("userName").textContent = data.name;
         document.getElementById("pfp").src = data.profilePicture;
 
-        const userIsTutor = data.userIsTutor;
-        tutorElements.forEach(element => {
-            element.style.display = userIsTutor ? "block" : "none";
-        });
-
-        if (userIsTutor) {
-            fetchAndDisplayAvailability();
-        } else {
-            fetchUserAppointments();
-        }
+        toggleElementVisibility(data.userIsTutor);
     })
     .catch(error => console.error('Failed to fetch user data:', error));
+}
+
+function toggleElementVisibility(userIsTutor) {
+    const tutorElements = document.querySelectorAll(".tutor-class");
+    const userElements = document.querySelectorAll(".user-class");
+
+    tutorElements.forEach(element => element.style.display = userIsTutor ? "block" : "none");
+    userElements.forEach(element => element.style.display = userIsTutor ? "none" : "block");
+
+    if (userIsTutor) {
+        fetchAndDisplayAvailability();
+    } else {
+        fetchUserAppointments();
+    }
 }
 
 function fetchUserAppointments() {
@@ -146,6 +148,25 @@ function fetchAndDisplayAvailability() {
     .catch(error => console.error('Failed to fetch availability:', error));
 }
 
+document.getElementById("logoutButton").addEventListener("click", function() {
+    fetch('/auth/logout', {
+        method: 'POST',
+        headers: new Headers({
+            'Authorization': sessionStorage.getItem("authToken")
+        }),
+        body: JSON.stringify({}) 
+    })
+    .then(response => {
+        if(response.ok) {
+            sessionStorage.clear();
+            window.location.href = "login.html";
+        } else {
+            throw new Error('Failed to log out');
+        } 
+    })
+    .catch(error => console.error('Failed to log out:', error));
+});
+
 document.getElementById("deleteAccountButton").addEventListener("click", function() {
     if(confirm("Are you sure you want to delete your account?")) {
         fetch('/user', {
@@ -168,23 +189,29 @@ document.getElementById("deleteAccountButton").addEventListener("click", functio
     }
 });
 
-document.getElementById("logoutButton").addEventListener("click", function() {
-    fetch('/auth/logout', {
-        method: 'POST',
-        headers: new Headers({
-            'Authorization': sessionStorage.getItem("authToken")
-        }),
-        body: JSON.stringify({}) 
-    })
-    .then(response => {
-        if(response.ok) {
-            sessionStorage.clear();
-            window.location.href = "login.html";
-        } else {
-            throw new Error('Failed to log out');
-        } 
-    })
-    .catch(error => console.error('Failed to log out:', error));
-});
+function toggleDropdown() {
+    var dropdownContent = document.getElementById("dropdownMenu");
+    if (dropdownContent) {
+      if (dropdownContent.style.display === "block") {
+        dropdownContent.style.display = "none";
+      } else {
+        dropdownContent.style.display = "block";
+      }
+    } else {
+      console.error('Dropdown menu element not found.');
+    }
+  }
 
+// Clicking outside of the dropdown will close it
+window.onclick = function(event) {
+    if (!event.target.matches('.menu, .menu *')) {
+      var dropdowns = document.getElementsByClassName("dropdown");
+      for (var i = 0; i < dropdowns.length; i++) {
+        var openDropdown = dropdowns[i];
+        if (openDropdown.style.display === "block") {
+          openDropdown.style.display = "none";
+        }
+      }
+    }
+};
 fetchUserDetails();

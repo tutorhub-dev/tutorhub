@@ -6,13 +6,32 @@
     <link rel="stylesheet" href="css/tutorProfile.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="h-72 bg-gradient-to-r from-slate-400 to-cyan-200">
-    <button id="deleteAccountButton" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Delete Account</button>
-    <button id="logoutButton" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Logout</button>
+<body class="h-72 bg-gradient-to-r from-slate-400 to-cyan-100">
+    <div class="hamburger-menu">
+        <div class="menu" onclick="toggleDropdown()">
+            <div class="bar1"></div>
+            <div class="bar2"></div>
+            <div class="bar3"></div>
+        </div>
+        <div class="dropdown" id="dropdownMenu">
+            <button id="logoutButton" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Logout</button>
+            <button id="editAccountButton" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Edit Account</button>
+            <button id="deleteAccountButton" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Delete Account</button>
+        </div>
+    </div>
+    
     <div class="profile">
         <img id="pfp" src="" alt="Profile Picture"/>
         <h1 id="userName" class="font-mono">Username</h1>
     </div>
+    
+    <div class="user-class">
+        <div class="appointment">
+            <h2 class="font-mono">Your Appointments</h2>
+            <ul id="appointmentList"></ul>
+        </div>
+    </div>
+
     <table id="availabilityTable" class="tutor-class">
         <thead>
             <tr>
