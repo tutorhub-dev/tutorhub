@@ -14,7 +14,7 @@
             <h1 class="text-3xl font-bold">Sign Up Page</h1>
         </header>
         <main id="main-center" class="bg-white p-8 rounded shadow-md max-w-md">
-            <form id="signupForm" class="auth-form">
+            <form class="signup-form">
                 <h3 class="text-xl font-semibold mb-4">Sign up</h3>
                 <div class="mb-4">
                     <label for="fname" class="block text-sm font-semibold mb-2">First name:</label>
@@ -40,8 +40,18 @@
                     <label for="Email" class="block text-sm font-semibold mb-2">Email Address:</label>
                     <input type="email" name="Email" id="Email" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Enter your email address" required>
                 </div>
+                <div class="mb-4">
+                    <input type="checkbox" id="is-tutor" name="is-tutor">
+                    <label for="is-tutor" class="text-sm font-semibold">Sign up as Tutor</label>
+                </div>
+
+                <div class="mb-4">
+                    <input type="checkbox" id="is-user" name="is-user">
+                    <label for="is-user" class="text-sm font-semibold">Sign up as User</label>
+                </div>
+
                 <div class="mb-6">
-                    <button type="button" onclick="SignupFunction()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">Submit</button>
+                    <button type="submit"  class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">Submit</button>
                 </div>
             </form>
             <div class="foot-note text-sm">

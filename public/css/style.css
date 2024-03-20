@@ -682,8 +682,8 @@ video {
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
 
-.to-cyan-200 {
-  --tw-gradient-to: #a5f3fc var(--tw-gradient-to-position);
+.to-cyan-100 {
+  --tw-gradient-to: #cffafe var(--tw-gradient-to-position);
 }
 
 .p-8 {

@@ -1,78 +1,76 @@
-function validateForm(){
-   
-   
-    var EmailRegx = /\S+@\S+\.\S+/;
-    var email= document.getElementById("uname").value;
-   var passwordRegx=/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
-   var Password=document.getElementById("password").value;
-   if(!EmailRegx.test(email)) {
-      alert("You have entered a invalid email address!");
-      
-       return false;
-   }
-   if(!passwordRegx.test(Password)){
-    alert("Invalid password")
-    return false;
-   }
-   return true;
-}
+document.addEventListener("DOMContentLoaded", function() {
+  const signupForm = document.querySelector(".signup-form");
 
+  signupForm.addEventListener("submit", function(event) {
+    event.preventDefault();
 
- function SubmitFunction() {
-  
-    if(!validateForm()) {
-        event.preventDefault()
-      
-    }
-    else{
-    document.forms["auth-form"].submit();
-}
+    const firstNameInput = document.querySelector("#fname");
+    const lastNameInput = document.querySelector("#lastname");
+    const usernameInput = document.querySelector("#uname1");
+    const passwordInput = document.querySelector("#pwd");
+    const confirmPasswordInput = document.querySelector("#pwd1");
+    const emailInput = document.querySelector("#Email");
+    const isTutorInput = document.querySelector("#is-tutor");
+    const isUserInput = document.querySelector("#is-user");
 
- }
+    const firstName = firstNameInput.value;
+    const lastName = lastNameInput.value;
+    const username = usernameInput.value;
+    const password = passwordInput.value;
+    const confirmPassword = confirmPasswordInput.value;
+    const email = emailInput.value;
+    const isTutor = isTutorInput.checked;
+    const isUser=isUserInput.checked;
 
- function validateSignup() {
-
-
- 
-
-    var emailInput = document.getElementById("Email");
-    var emailValue = emailInput.value;
-    var emailRegex = /\S+@\S+\.\S+/;
-    if (!emailRegex.test(emailValue)) {
-      alert("Please enter a valid email address.");
-      return false;
-    }
- 
-
-    var passwordInput = document.getElementById("pwd");
-    var confirmPasswordInput = document.getElementById("pwd1");
-    var passwordValue = passwordInput.value;
-    var confirmPasswordValue = confirmPasswordInput.value;
-    if (passwordValue.length < 6) {
-      alert("Password must be at least 6 characters long.");
-      return false;
-    }
- 
-    if (passwordValue != confirmPasswordValue) {
-      alert("Passwords do not match.");
-      return false;
-    }
-    
-
-
-    var usernameInput = document.getElementById("uname1");
-    var usernameValue = usernameInput.value;
-    var usernameRegex = /^[a-zA-Z]+$/;
-    if (!usernameRegex.test(usernameValue)) {
-      alert("Username can only contain alpha characters and no spaces.");
-      return false;
-    }
-  
-
-    return true;
+    if ((isTutor && isUser) || (!isTutor && !isUser)) {
+      alert("Please select either 'Sign up as Tutor' or 'Sign up as User'");
+      return;
   }
-  
+    
+    // Check if passwords match
+    if (password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
 
+    const formData = {
+      firstName: firstName,
+      lastName: lastName,
+      username: username,
+      password: password,
+      email: email,
+      isTutor: isTutor,
+      isUser:isUser
+    };
 
+    fetch("/api/register", {
+      method: "Post",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(formData)
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('HTTP error ' + response.status);
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Store user data in local storage
+      localStorage.setItem("userData", JSON.stringify(data));
+      console.log("Signup successful. User data:", data);
 
-  
+      // Redirect based on user selection
+      if (isTutor) {
+        window.location.href = "profile.html"; // Redirect to tutor dashboard
+      } else {
+        window.location.href = "public.html"; // Redirect to user dashboard
+      }
+    })
+    .catch(error => {
+      console.error('Signup failed:', error);
+      alert('Signup failed. Please try again later.');
+    });
+  });
+});
