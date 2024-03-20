@@ -3,35 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>Tutor Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/tutorProfile.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="h-72 bg-gradient-to-r from-slate-400 to-cyan-100">
-    <div class="hamburger-menu">
-        <div class="menu" onclick="toggleDropdown()">
-            <div class="bar1"></div>
-            <div class="bar2"></div>
-            <div class="bar3"></div>
-        </div>
-        <div class="dropdown" id="dropdownMenu">
-            <button id="logoutButton" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Logout</button>
-            <button id="editAccountButton" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Edit Account</button>
-            <button id="deleteAccountButton" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Delete Account</button>
-        </div>
-    </div>
-    
-    <div class="profile">
-        <img id="pfp" src="" alt="Profile Picture"/>
-        <h1 id="userName" class="font-mono">Username</h1>
-    </div>
-    
-    <div class="user-class">
-        <div class="appointment">
-            <h2 class="font-mono">Your Appointments</h2>
-            <ul id="appointmentList"></ul>
-        </div>
-    </div>
 
+    <body class="bg-gray-100">
+       
+        <!-- Left-side navbar -->
+        <div class="flex h-screen">
+            <div class="bg-gray-800 text-white w-64 flex-shrink-0">
+                <div class="p-4 flex flex-col h-full justify-between">
+                    <div>
+                    <h1 class="text-2xl font-bold mb-4">Tutor Dashboard</h1>
+                    <ul class="space-y-2">
+                        <li><a href="#" id="bookingsButton" class="block py-2 px-4 rounded hover:bg-gray-700">Bookings</a></li>
+                        <li><a href="#" id="editProfileButton" class="block py-2 px-4 rounded hover:bg-gray-700">Edit Profile</a></li>
+                        <li><a href="#" id="availabilityButton" class="block py-2 px-4 rounded hover:bg-gray-700">Availability</a></li>
+                        
+                    </ul>
+                </div>
+                <div>
+                    <button id="logoutButton" class="block w-full py-2 px-4 rounded hover:bg-gray-700">Logout</button>
+                </div>
+            </div>
+            </div>
+            <div class="flex-1 p-8">
     <table id="availabilityTable" class="tutor-class">
         <thead>
             <tr>
@@ -50,7 +47,7 @@
             </tr>        
         </tbody>
     </table>
-
+            </div>
     <script src="js/profile.js"></script>
     <script src="js/editProfile.js"></script>
 </body>

@@ -1,4 +1,4 @@
-document.getElementById("editAccountButton").addEventListener("click", function() {
+document.getElementById("editProfileButton").addEventListener("click", function() {
     window.location.href = "editProfile.html";
 })
 

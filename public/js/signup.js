@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
       // Redirect based on user selection
       if (isTutor) {
-        window.location.href = "profile.html"; // Redirect to tutor dashboard
+        window.location.href = "/public/profile.html"; // Redirect to tutor dashboard
       } else {
         window.location.href = "public.html"; // Redirect to user dashboard
       }
