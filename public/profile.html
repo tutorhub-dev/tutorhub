@@ -5,6 +5,8 @@
     <title>Tutor Profile</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/tutorProfile.css">
+     <!-- Include Font Awesome CSS -->
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -17,9 +19,18 @@
                     <div>
                     <h1 class="text-2xl font-bold mb-4">Tutor Dashboard</h1>
                     <ul class="space-y-2">
-                        <li><a href="#" id="bookingsButton" class="block py-2 px-4 rounded hover:bg-gray-700">Bookings</a></li>
-                        <li><a href="#" id="editProfileButton" class="block py-2 px-4 rounded hover:bg-gray-700">Edit Profile</a></li>
-                        <li><a href="#" id="availabilityButton" class="block py-2 px-4 rounded hover:bg-gray-700">Availability</a></li>
+                        <li><a href="#" id="bookingsButton" class="block py-2 px-4 rounded hover:bg-gray-700">
+                            <i class="fas fa-calendar-alt mr-2"></i> <!-- Font Awesome calendar icon -->
+                            Bookings
+                        </a></li>
+                    <li><a href="#" id="editProfileButton" class="block py-2 px-4 rounded hover:bg-gray-700">
+                            <i class="fas fa-user-edit mr-2"></i> <!-- Font Awesome edit icon -->
+                            Edit Profile
+                        </a></li>
+                    <li><a href="#" id="availabilityButton" class="block py-2 px-4 rounded hover:bg-gray-700">
+                            <i class="fas fa-clock mr-2"></i> <!-- Font Awesome clock icon -->
+                            Availability
+                        </a></li> 
                         
                     </ul>
                 </div>
