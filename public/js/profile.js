@@ -112,12 +112,18 @@ function addAvailability(start, end, subject) {
         deleteButton.dataset.id = newSlot.id;
         deleteButton.onclick = function() { deleteAvailability(newSlot.id); };
         deleteCell.appendChild(deleteButton);
+
+        if (userIsTutor) {
+            fetchAndDisplayAvailability();
+        } else {
+            fetchUserAppointments();
+        }
     })
     .catch(error => console.error('Failed to add your availability:', error));   
 }
 
 function deleteAvailability(slotId) {
-    fetch('/tutor/availability', { /* Maybe add a slotId feature in the availability API? */
+    fetch(`/tutor/availability/${slotId}`, { /* Maybe add a slotId feature in the availability API? */
         method: 'DELETE',
         headers: new Headers({
             'Authorization': sessionStorage.getItem("authToken"),
@@ -189,29 +195,4 @@ document.getElementById("deleteAccountButton").addEventListener("click", functio
     }
 });
 
-function toggleDropdown() {
-    var dropdownContent = document.getElementById("dropdownMenu");
-    if (dropdownContent) {
-      if (dropdownContent.style.display === "block") {
-        dropdownContent.style.display = "none";
-      } else {
-        dropdownContent.style.display = "block";
-      }
-    } else {
-      console.error('Dropdown menu element not found.');
-    }
-  }
-
-// Clicking outside of the dropdown will close it
-window.onclick = function(event) {
-    if (!event.target.matches('.menu, .menu *')) {
-      var dropdowns = document.getElementsByClassName("dropdown");
-      for (var i = 0; i < dropdowns.length; i++) {
-        var openDropdown = dropdowns[i];
-        if (openDropdown.style.display === "block") {
-          openDropdown.style.display = "none";
-        }
-      }
-    }
-};
 fetchUserDetails();

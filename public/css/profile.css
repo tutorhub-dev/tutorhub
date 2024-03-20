@@ -1,0 +1,35 @@
+table {
+    width: 69%;
+    border-collapse: collapse;
+    margin-left: 330px;
+    margin-top: 69px;
+}
+th, td {
+    text-align: left;
+    padding: 8px;
+}
+
+.top-right-container {
+    display: flex; 
+    flex-direction: column; 
+    align-items: flex-end; 
+    justify-content: flex-start; 
+    position: absolute; 
+    top: 0; 
+    right: 0; 
+    padding: 20px; 
+}
+
+#pfp {
+    max-height: 100px;
+    width: auto;
+}
+
+.appointments-container {
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    height: 100%; 
+    text-align: center; 
+}
