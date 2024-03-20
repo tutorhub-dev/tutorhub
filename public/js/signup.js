@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const confirmPasswordInput = document.querySelector("#pwd1");
     const emailInput = document.querySelector("#Email");
     const isTutorInput = document.querySelector("#is-tutor");
-    const isUserInput = document.querySelector("#is-user");
+   
 
     const firstName = firstNameInput.value;
     const lastName = lastNameInput.value;
@@ -20,12 +20,9 @@ document.addEventListener("DOMContentLoaded", function() {
     const confirmPassword = confirmPasswordInput.value;
     const email = emailInput.value;
     const isTutor = isTutorInput.checked;
-    const isUser=isUserInput.checked;
+   
 
-    if ((isTutor && isUser) || (!isTutor && !isUser)) {
-      alert("Please select either 'Sign up as Tutor' or 'Sign up as User'");
-      return;
-  }
+
     
     // Check if passwords match
     if (password !== confirmPassword) {
@@ -40,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function() {
       password: password,
       email: email,
       isTutor: isTutor,
-      isUser:isUser
+    
     };
 
     fetch("/api/register", {
@@ -63,9 +60,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
       // Redirect based on user selection
       if (isTutor) {
-        window.location.href = "/public/profile.html"; // Redirect to tutor dashboard
+        window.location.href = "profile.html"; // Redirect to tutor dashboard
       } else {
-        window.location.href = "public.html"; // Redirect to user dashboard
+        window.location.href = "index.html"; // Redirect to user dashboard
       }
     })
     .catch(error => {
