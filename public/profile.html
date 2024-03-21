@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-gray-300">
        
     <!-- Left-side navbar -->
     <div class="flex h-screen">
@@ -48,17 +48,43 @@
                 <img id="pfp" src="" alt="Profile Picture"/>
             </div>
         </div>
+        <div class="appointments-container">
+            <h2 class="font-mono">Your Appointments</h2>
+            <ul id="appointmentList"></ul>
+        </div>
 
+        <!-- User Elements -->
         <div class="user-class" style=>
-            <div class="appointments-container">
-                <h2 class="font-mono">Your Appointments</h2>
-                <ul id="appointmentList"></ul>
+            <div class="appointment-request">
+                <h2 class="font-mono">Request an Appointment</h2>
+                <form id="appointmentRequestForm">
+                    <label for="tutorSelect">Select Tutor:</label>
+                    <select id="tutorSelect" name="tutorId" required>
+                        <!-- Options should be populated dynamically based on available tutors -->
+                    </select>
+            
+                    <label for="appointmentDate">Date:</label>
+                    <input type="date" id="appointmentDate" name="date" required>
+            
+                    <label for="appointmentTime">Start Time:</label>
+                    <input type="time" id="appointmentStartTime" name="time" required>
+
+                    <label for="appointmentEndTime">End Time:</label>
+                    <input type="time" id="appointmentEndTime" name="time" required>
+            
+                    <label for="subject">Subject:</label>
+                    <input type="text" id="subject" name="subject" required>
+            
+                    <button type="submit" id="reqApptButton" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Request Appointment</button>
+                </form>
             </div>
         </div>
 
+        <!-- Tutor Elements -->
         <table id="availabilityTable" class="tutor-class" style=>
             <thead>
                 <tr>
+                    <th class="font-mono">Date</th>
                     <th class="font-mono">Start Time</th>
                     <th class="font-mono">End Time</th>
                     <th class="font-mono">Subject</th>
@@ -67,6 +93,7 @@
             </thead>
             <tbody>
                 <tr>
+                    <td><input type="date" id="date" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" ></td>
                     <td><input type="text" id="start" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" ></td>
                     <td><input type="text" id="end" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" ></td>
                     <td><input type="text" id="subject" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" ></td>
