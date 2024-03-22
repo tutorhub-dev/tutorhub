@@ -5,28 +5,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TutorHub - Connecting Tutors and Students</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"> 
-    <link href="css/style.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
-        /* Ensure footer stays at the bottom of the page */
-        html {
-            min-height: 100%;
-            position: relative;
+        .faq-section {
+            background-color: #f3f4f6;
         }
 
-        body {
-            margin: 0;
-            padding-bottom: 4rem; /* Adjust as needed to match footer height */
+        .faq-item {
+            border-bottom: 1px solid #d1d5db;
         }
 
-        footer {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-question {
+            color: #1f2937;
+            transition: color 0.3s ease;
+        }
+
+        .faq-answer {
+            color: #4b5563;
+            transition: max-height 0.5s ease;
+            max-height: 0;
+            overflow: hidden;
+        }
+
+        .accordion-item-toggle:checked ~ .accordion-item-content .faq-answer {
+            max-height: 1000px;
         }
     </style>
-
-
 </head>
 
 <body class="bg-gray-100">
@@ -34,63 +42,109 @@
     <nav class="bg-blue-500 py-4">
         <div class="container mx-auto flex justify-between items-center">
             <div>
-                <a href="#" class="text-white text-2xl font-bold">TutorHub</a>
+                <button id="homeButton" class="text-white text-2xl font-bold">TutorHub</button>
             </div>
             <div>
-                <a href="#" class="text-white mr-4">Login</a>
-                <a href="#" class="text-white bg-transparent border border-white px-4 py-2 rounded hover:bg-white hover:text-blue-500 transition duration-300">Sign Up</a>
+                <button id="loginButton" class="text-white mr-4">Login</button>
+                <button id="signupButton" class="text-white bg-transparent border border-white px-4 py-2 rounded hover:bg-white hover:text-blue-500 transition duration-300">Sign Up</button>
             </div>
         </div>
     </nav>
+    
 
     <!-- Hero Section -->
-    <div class="container mx-auto mt-8">
-        <div class="text-center">
-            <h1 class="text-4xl font-bold mb-4">Find Your Ideal Tutor</h1>
-            <p class="text-gray-700">TutorHub connects you with suitable tutors based on your needs and preferences.</p>
-            <button class="mt-8 bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600 transition duration-300">Get Started</button>
+    <div class="hero-section bg-cover bg-center py-16" style="background-image: url('images/\ tutorhub.jpg');">
+        <div class="container mx-auto text-center text-white">
+            <h1 class="text-gray-900 text-5xl font-bold mb-4">Find Your Ideal Tutor</h1>
+            <p class="text-gray-100 text-4xl " >TutorHub connects you with suitable tutors based on your needs and preferences.</p>
+            <button id="GetStarted" class="mt-8 bg-blue-500 text-white text-3xl px-6 py-3 rounded hover:bg-blue-600 transition duration-300">Get Started</button>
+        </div>
+    </div>
+    <h1 class="text-gray-900  text-center text-4xl font-bold mb-4">Our Features</h1>
+    
+    
+<!-- Feature Section 1 -->
+    <div class="container mx-auto mt-12 flex flex-col md:flex-row items-center justify-between">
+    
+        <div class="md:w-1/2 md:pr-8">
+            <h2 class="text-2xl font-bold mb-4">Find Tutors</h2>
+            <p class="text-gray-700 mb-4">Whether you're seeking assistance with mathematics, language arts, science, or any other subject under the sun, we've got you covered. Simply browse through our extensive database of tutors, filter by subject, availability, and expertise, and discover the perfect match for your unique learning needs. With personalized tutoring sessions tailored to your pace and style, achieving your academic goals has never been more attainable. Say goodbye to struggles and hello to success with our Find Tutors section today!</p>
+            <a href="find-tutors.html" class="text-blue-500 hover:underline">Learn More</a>
+        </div>
+        <div class="md:w-1/2 md:pl-8">
+            <img src="images/tutor.jpeg" alt="Find Tutors" class="mx-auto rounded-lg shadow-md">
         </div>
     </div>
 
-    <!-- Features Section -->
-    <div class="container mx-auto mt-12">
-        <h2 class="text-2xl font-bold mb-4">How TutorHub Works</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <!-- Feature 1 -->
-            <div class="bg-white rounded-lg p-6 shadow-md">
-                <h3 class="text-xl font-semibold mb-2">Find Tutors</h3>
-                <p class="text-gray-700">Search for tutors based on subjects or topics that you need help with.</p>
-            </div>
-            <!-- Feature 2 -->
-            <div class="bg-white rounded-lg p-6 shadow-md">
-                <h3 class="text-xl font-semibold mb-2">Book Sessions</h3>
-                <p class="text-gray-700">Place tutoring requests and message tutors directly to schedule sessions.</p>
-            </div>
-            <!-- Feature 3 -->
-            <div class="bg-white rounded-lg p-6 shadow-md">
-                <h3 class="text-xl font-semibold mb-2">Rate & Review</h3>
-                <p class="text-gray-700">Rate tutors based on their performance and leave reviews to help others make informed choices.</p>
-            </div>
+    <!-- Feature Section 2 -->
+    <div class="container mx-auto mt-12 flex flex-col md:flex-row items-center justify-between">
+        <div class="md:w-1/2 md:pr-8 order-2 md:order-1">
+            <img src="images/shcedule.jpeg" alt="Book Sessions" class="mx-auto rounded-lg shadow-md">
         </div>
-    </div>
-    <div class="container mx-auto mt-12 text-center">
-        <h2 class="text-2xl font-bold mb-4">Discover the Experience</h2>
-        <div class="flex justify-center">
-            <div class="w-1/3 mx-2">
-                <img src="https://via.placeholder.com/300" alt="Image 1" class="rounded-lg shadow-lg transform hover:scale-105 transition duration-300">
-            </div>
-            <div class="w-1/3 mx-2">
-                <img src="https://via.placeholder.com/300" alt="Image 2" class="rounded-lg shadow-lg transform hover:scale-105 transition duration-300">
-            </div>
-            <div class="w-1/3 mx-2">
-                <img src="https://via.placeholder.com/300" alt="Image 3" class="rounded-lg shadow-lg transform hover:scale-105 transition duration-300">
-            </div>
+        <div class="md:w-1/2 md:pl-8 order-1 md:order-2">
+            <h2 class="text-2xl font-bold mb-4">Book Sessions</h2>
+            <p class="text-gray-700 mb-4">
+                Welcome to our Book Sessions feature, where your educational aspirations take flight! Seamlessly schedule your tutoring sessions with our intuitive booking system. Whether you're preparing for an upcoming exam, aiming to master a challenging subject, or seeking enrichment in a particular area, booking sessions with our expert tutors is a breeze. Simply select your preferred tutor, choose a convenient time slot, and voila – you're one step closer to unlocking your full potential. With flexible scheduling options and personalized attention, each session is tailored to empower you on your learning journey. Embrace the convenience and efficiency of booking sessions with us, and embark on a path toward academic success today!</p>
+            <a href="book-sessions.html" class="text-blue-500 hover:underline">Learn More</a>
         </div>
     </div>
 
+    <!-- Feature Section 3 -->
+    <div class="container mx-auto mt-12 flex flex-col md:flex-row items-center justify-between">
+        <div class="md:w-1/2 md:pr-8">
+            <h2 class="text-2xl font-bold mb-4">Rate & Review</h2>
+            <p class="text-gray-700 mb-4">
+                Welcome to our Rate and Review section, where your feedback shapes the future of learning experiences! Share your insights, experiences, and impressions of your tutoring sessions with our dedicated tutors. Your reviews not only provide valuable guidance to other learners but also empower tutors to continually enhance their teaching methods and approaches. Whether you've experienced a eureka moment, overcome a challenging concept, or simply enjoyed a productive session, your feedback matters. Rate your tutor based on their expertise, communication skills, and overall effectiveness, and leave a detailed review to help fellow students make informed decisions. Together, let's foster a community of excellence where every learner's voice is heard and every tutor's impact is celebrated. Start rating and reviewing today to contribute to the collective growth and success of our learning community!</p>
+            <a href="rate-review.html" class="text-blue-500 hover:underline">Learn More</a>
+        </div>
+        <div class="md:w-1/2 md:pl-8">
+            <img src="images/rate.jpeg" alt="Rate & Review" class="mx-auto rounded-lg shadow-md">
+        </div>
+    </div>
+
+
+    <!-- FAQ Section -->
+<div class="container mx-auto mt-12">
+    <h2 class="text-3xl font-bold mb-6 text-center">Frequently Asked Questions</h2>
+
+    <div class="accordion">
+        <!-- FAQ Item 1 -->
+        <div class="accordion-item">
+            
+            <label for="faq1" class="accordion-item-heading">
+                <h3 class="text-lg font-semibold">How do I find a tutor?</h3>
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </label>
+            <div class="accordion-item-content">
+                <p class="text-gray-700">You can find a tutor by browsing through our extensive database of tutors, filtering by subject, availability, and expertise, and discovering the perfect match for your unique learning needs.</p>
+            </div>
+        </div>
+
+        <!-- FAQ Item 2 -->
+        <div class="accordion-item">
+          
+            <label for="faq2" class="accordion-item-heading">
+                <h3 class="text-lg font-semibold">How do I schedule a tutoring session?</h3>
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </label>
+            <div class="accordion-item-content">
+                <p class="text-gray-700">You can schedule a tutoring session by selecting your preferred tutor, choosing a convenient time slot, and booking the session through our intuitive booking system.</p>
+            </div>
+        </div>
+
+        <!-- Add more FAQ items as needed -->
+
+    </div>
+</div>
 
     <!-- Footer Section -->
-    <footer class="bg-gray-800 text-white py-4 ">
+    <footer class="bg-gray-800 text-white py-4">
         <div class="container mx-auto text-center">
             <p>&copy; 2024 TutorHub. All rights reserved.</p>
         </div>
