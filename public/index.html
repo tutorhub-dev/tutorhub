@@ -1,12 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>TutorHub - Connecting Tutors and Students</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"> 
     <link href="css/style.css" rel="stylesheet">
+    <style>
+        /* Ensure footer stays at the bottom of the page */
+        html {
+            min-height: 100%;
+            position: relative;
+        }
+
+        body {
+            margin: 0;
+            padding-bottom: 4rem; /* Adjust as needed to match footer height */
+        }
+
+        footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+
+
 </head>
-<body>
-    
+
+<body class="bg-gray-100">
+    <!-- Navigation Bar -->
+    <nav class="bg-blue-500 py-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <div>
+                <a href="#" class="text-white text-2xl font-bold">TutorHub</a>
+            </div>
+            <div>
+                <a href="#" class="text-white mr-4">Login</a>
+                <a href="#" class="text-white bg-transparent border border-white px-4 py-2 rounded hover:bg-white hover:text-blue-500 transition duration-300">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="container mx-auto mt-8">
+        <div class="text-center">
+            <h1 class="text-4xl font-bold mb-4">Find Your Ideal Tutor</h1>
+            <p class="text-gray-700">TutorHub connects you with suitable tutors based on your needs and preferences.</p>
+            <button class="mt-8 bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600 transition duration-300">Get Started</button>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="container mx-auto mt-12">
+        <h2 class="text-2xl font-bold mb-4">How TutorHub Works</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Feature 1 -->
+            <div class="bg-white rounded-lg p-6 shadow-md">
+                <h3 class="text-xl font-semibold mb-2">Find Tutors</h3>
+                <p class="text-gray-700">Search for tutors based on subjects or topics that you need help with.</p>
+            </div>
+            <!-- Feature 2 -->
+            <div class="bg-white rounded-lg p-6 shadow-md">
+                <h3 class="text-xl font-semibold mb-2">Book Sessions</h3>
+                <p class="text-gray-700">Place tutoring requests and message tutors directly to schedule sessions.</p>
+            </div>
+            <!-- Feature 3 -->
+            <div class="bg-white rounded-lg p-6 shadow-md">
+                <h3 class="text-xl font-semibold mb-2">Rate & Review</h3>
+                <p class="text-gray-700">Rate tutors based on their performance and leave reviews to help others make informed choices.</p>
+            </div>
+        </div>
+    </div>
+    <div class="container mx-auto mt-12 text-center">
+        <h2 class="text-2xl font-bold mb-4">Discover the Experience</h2>
+        <div class="flex justify-center">
+            <div class="w-1/3 mx-2">
+                <img src="https://via.placeholder.com/300" alt="Image 1" class="rounded-lg shadow-lg transform hover:scale-105 transition duration-300">
+            </div>
+            <div class="w-1/3 mx-2">
+                <img src="https://via.placeholder.com/300" alt="Image 2" class="rounded-lg shadow-lg transform hover:scale-105 transition duration-300">
+            </div>
+            <div class="w-1/3 mx-2">
+                <img src="https://via.placeholder.com/300" alt="Image 3" class="rounded-lg shadow-lg transform hover:scale-105 transition duration-300">
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Footer Section -->
+    <footer class="bg-gray-800 text-white py-4 ">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 TutorHub. All rights reserved.</p>
+        </div>
+    </footer>
 </body>
+
 </html>
