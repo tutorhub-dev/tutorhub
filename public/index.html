@@ -6,40 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TutorHub - Connecting Tutors and Students</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <style>
-        .faq-section {
-            background-color: #f3f4f6;
-        }
-
-        .faq-item {
-            border-bottom: 1px solid #d1d5db;
-        }
-
-        .faq-item:last-child {
-            border-bottom: none;
-        }
-
-        .faq-question {
-            color: #1f2937;
-            transition: color 0.3s ease;
-        }
-
-        .faq-answer {
-            color: #4b5563;
-            transition: max-height 0.5s ease;
-            max-height: 0;
-            overflow: hidden;
-        }
-
-        .accordion-item-toggle:checked ~ .accordion-item-content .faq-answer {
-            max-height: 1000px;
-        }
-    </style>
+   
 </head>
 
 <body class="bg-gray-100">
     <!-- Navigation Bar -->
-    <nav class="bg-blue-500 py-4">
+    <nav class="bg-blue-700 py-4">
         <div class="container mx-auto flex justify-between items-center">
             <div>
                 <button id="homeButton" class="text-white text-2xl font-bold">TutorHub</button>
@@ -51,19 +23,24 @@
         </div>
     </nav>
     
-
+   
     <!-- Hero Section -->
-    <div class="hero-section bg-cover bg-center py-16" style="background-image: url('images/\ tutorhub.jpg');">
+    <div class="hero-section bg-cover bg-center py-36" style="background-image: url('images/\ tutorhub.jpg');">
         <div class="container mx-auto text-center text-white">
             <h1 class="text-gray-900 text-5xl font-bold mb-4">Find Your Ideal Tutor</h1>
             <p class="text-gray-100 text-4xl " >TutorHub connects you with suitable tutors based on your needs and preferences.</p>
             <button id="GetStarted" class="mt-8 bg-blue-500 text-white text-3xl px-6 py-3 rounded hover:bg-blue-600 transition duration-300">Get Started</button>
         </div>
     </div>
+
     <h1 class="text-gray-900  text-center text-4xl font-bold mb-4">Our Features</h1>
     
+
+
+
+    <section class="container mx-auto mt-12 flex flex-col md:flex-row items-center justify-between">
     
-<!-- Feature Section 1 -->
+
     <div class="container mx-auto mt-12 flex flex-col md:flex-row items-center justify-between">
     
         <div class="md:w-1/2 md:pr-8">
@@ -75,7 +52,9 @@
             <img src="images/tutor.jpeg" alt="Find Tutors" class="mx-auto rounded-lg shadow-md">
         </div>
     </div>
+    </section>
 
+    <section class="container mx-auto mt-12 flex flex-col md:flex-row items-center justify-between">
     <!-- Feature Section 2 -->
     <div class="container mx-auto mt-12 flex flex-col md:flex-row items-center justify-between">
         <div class="md:w-1/2 md:pr-8 order-2 md:order-1">
@@ -88,7 +67,9 @@
             <a href="book-sessions.html" class="text-blue-500 hover:underline">Learn More</a>
         </div>
     </div>
+    </section>
 
+    <section class="container mx-auto mt-12 flex flex-col md:flex-row items-center justify-between">
     <!-- Feature Section 3 -->
     <div class="container mx-auto mt-12 flex flex-col md:flex-row items-center justify-between">
         <div class="md:w-1/2 md:pr-8">
@@ -101,10 +82,13 @@
             <img src="images/rate.jpeg" alt="Rate & Review" class="mx-auto rounded-lg shadow-md">
         </div>
     </div>
+    </section>
 
 
     <!-- FAQ Section -->
-<div class="container mx-auto mt-12">
+
+    <section class="container mx-auto mt-12 flex flex-col md:flex-row items-center justify-between">
+    <div class="container mx-auto mt-12">
     <h2 class="text-3xl font-bold mb-6 text-center">Frequently Asked Questions</h2>
 
     <div class="accordion">
@@ -142,7 +126,7 @@
 
     </div>
 </div>
-
+    </section>
     <!-- Footer Section -->
     <footer class="bg-gray-800 text-white py-4">
         <div class="container mx-auto text-center">
