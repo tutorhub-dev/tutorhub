@@ -18,10 +18,11 @@
             event.preventDefault();
             const tutorId = document.getElementById("tutorSelect").value;
             const date = document.getElementById("appointmentDate").value;
-            const time = document.getElementById("appointmentTime").value;
+            const startTime = document.getElementById("appointmentStartTime").value;
+            const endTime = document.getElementById("appointmentEndTime").value;
             const subject = document.getElementById("subject").value;
 
-            requestAppointment(tutorId, `${date}T${time}`, subject);
+            requestAppointment(tutorId, date, startTime, endTime, subject);
         });
     }
     getUserAppointments();
@@ -436,7 +437,7 @@ function requestAppointment(tutorId, date, start, end, subject) {
     })
     .then(response => {
         if (!response.ok) throw new Error('Failed to request appointment');
-        alert('Your appointment request has been sent!');
+        else alert('Your appointment request has been sent!');
     })
     .catch(error => console.error('Failed to request appointment:', error));
 }
