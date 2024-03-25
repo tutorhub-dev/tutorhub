@@ -18,13 +18,13 @@ dotenv.config();
 app.use(bodyParser.json())
 
 /* auth endpoints */
-app.post('/api/login', api.authEndpoints.login)
+app.post('/api/login', api.authEndpoints.login) // Good
 app.post('/api/logout', api.authEndpoints.logout)
-app.post('/api/register', api.authEndpoints.register)
+app.post('/api/hash', api.authEndpoints.makeHash) // Good
 
 /* general user endpoints */
 app.get('/api/user', api.userEndpoints.getUser)
-app.put('/api/user', api.userEndpoints.createUser)
+app.put('/api/user', api.userEndpoints.createUser) // Good
 app.post('/api/user', api.userEndpoints.updateUser) // dont do
 app.delete('/api/user', api.userEndpoints.deleteUser)
 

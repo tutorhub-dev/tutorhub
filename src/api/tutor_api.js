@@ -31,12 +31,20 @@ class TutorAPI {
 
         // connect to the database
         mongoose.connect(mongooseEndpoint)
+
+        const db = mongoose.connection;
+        db.on('error', console.error.bind(console, 'connection error:'));
+        db.once('open', function (callback) {
+            console.log("connection to db open")
+        });
+
         console.log("Database registered at " + mongooseEndpoint)
 
         // create the collections (tables) by specifying thier models
         this.authTokenCollection = mongoose.model(
             'authtoken', new mongoose.Schema(TutorSchemas.authTokenSchema)
         )
+
         this.userCollection = mongoose.model(
             'user', new mongoose.Schema(TutorSchemas.userSchema)
         )

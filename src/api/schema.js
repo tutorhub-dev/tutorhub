@@ -5,31 +5,31 @@ class TutorSchemas {
      * NOTE: Mongoose autmatically injects an _id field into all schemas
      */
 
-    get authTokenSchema() {
+    static get authTokenSchema() {
         return {
             user_id: { type: String, required: true },
             auth_token: { type: String, required: true }
         }
     }
 
-    get userSchema() {
+    static get userSchema() {
         return {
-            email: { type: String, required: true },
+            email: { type: String, required: true, unique: true },
             hash_password: { type: String, required: true },
             username: { type: String, required: true },
-            is_tutor: {type: Boolean, required: true },
-            profile_picture: { type: String, required: false }
+            is_tutor: {type: Boolean, required: false, default: false },
+            profile_picture: { type: String, required: false, default: "" }
         }
     }
 
-    get tutorSchema() {
+    static get tutorSchema() {
         return {
             user_id: { type: String, required: true },
             hourly_rate: { type: Number, required: true }
         }
     }
 
-    get appointmentSchema() {
+    static get appointmentSchema() {
         return {
             tutor_id: { type: String, required: true },
             student_id: { type: String, required: true },

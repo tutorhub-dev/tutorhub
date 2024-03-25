@@ -11,6 +11,26 @@ class AuthEndpoints {
         this.#api = api
     }
 
+    makeHash = (req, res) => {
+        // ensure we were sent the parameters we need
+        if (this.#api.validateRequest(req, res, ['password']) == false) return
+
+        // get the password from the request
+        const password = req.body.password
+
+        // hash the password
+        bcrypt.hash(password, saltRounds, (err, hash) => {
+            if (err) {
+                console.log(err)
+                res.status(500).send('Internal Server Error')
+            } else {
+                res.status(200).send({
+                    "hash": hash
+                })
+            }
+        })
+    }
+    
     login = (req, res) => {
         // ensure we were sent the parameters we need
         if (this.#api.validateRequest(req, res, ['email', 'password']) == false) return
@@ -41,10 +61,6 @@ class AuthEndpoints {
         }
 
 
-    }
-
-    register = (req, res) => {
-        res.status(501).send('Not Implemented')
     }
 
     #testCredentials = (email, password, cb) => {
