@@ -29,3 +29,17 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     } 
 });
+const accordionItems = document.querySelectorAll('.accordion-item');
+
+accordionItems.forEach(item => {
+    const checkbox = item.querySelector('input[type="checkbox"]');
+    const content = item.querySelector('.accordion-item-content');
+
+    checkbox.addEventListener('change', function () {
+        if (this.checked) {
+            content.classList.remove('hidden');
+        } else {
+            content.classList.add('hidden');
+        }
+    });
+});
