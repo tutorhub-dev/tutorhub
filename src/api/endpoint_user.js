@@ -11,13 +11,13 @@ class UserEndpoints {
     getUser = (req, res) => {
         // get the user from the auth token
         let token = req.headers['authorization']
-        let user = this.auth.fetchUserByToken(token)
-        if (user == null) {
-            res.status(401).send('Unauthorized')
-            return
-        }
-
-        res.status(200).json(user)
+        this.#api.auth.fetchUserByToken(token)
+        .then((user) => {
+            if (user == null)
+                res.status(401).send('Unauthorized')
+            else
+                res.status(200).json(user)
+        });
     }
 
     createUser = (req, res) => {
@@ -68,33 +68,45 @@ class UserEndpoints {
     }
 
     updateUser = (req, res) => {
-        if (this.#api.validateRequest(req, res, ['email'])) return;
-
-        const email = req.body.email;
-
-        this.#api.userCollection.findOneAndUpdate({ email: email }, req.body, { new: true }, (err, user) => {
-            if (err) {
-                res.status(500).send('Internal Server Error');
-            } else if (!user) {
-                res.status(404).send('User not found');
-            } else {
-                res.status(200).json(user);
+        // get the user from the auth token
+        let token = req.headers['authorization']
+        this.#api.auth.fetchUserByToken(token)
+        .then((user) => {
+            if (user == null)
+                res.status(401).send('Unauthorized')
+            else {
+                // update the user
+                this.#api.userCollection.findOneAndUpdate({ _id: user.user_id }, req.body, { new: true })
+                .then((user) => {
+                    if (user == null)
+                        res.status(404).send('User not found');
+                    else
+                        res.status(200).json({
+                            email: user.email,
+                            username: user.username,
+                            is_tutor: user.is_tutor
+                        });
+                });
             }
         });
     }
 
     deleteUser = (req, res) => {
-        if (this.#api.validateRequest(req, res, ['email'])) return;
-
-        const email = req.body.email;
-
-        this.#api.userCollection.findOneAndDelete({ email: email }, (err, user) => {
-            if (err) {
-                res.status(500).send('Internal Server Error');
-            } else if (!user) {
-                res.status(404).send('User not found');
-            } else {
-                res.status(204).send();
+        // get the user from the auth token
+        let token = req.headers['authorization']
+        this.#api.auth.fetchUserByToken(token)
+        .then((user) => {
+            if (user == null)
+                res.status(401).send('Unauthorized')
+            else {
+                // delete the user
+                this.#api.userCollection.findOneAndDelete({ _id: user.user_id })
+                .then((user) => {
+                    if (user == null)
+                        res.status(404).send('User not found');
+                    else
+                        res.status(204).send();
+                });
             }
         });
     }

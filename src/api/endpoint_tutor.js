@@ -5,17 +5,17 @@ class TutorEndpoints {
     }
 
     getTutor = (req, res) => {
-    // Extract tutor ID from request parameters
-    const tutor_id = req.params.id;
+        // Extract tutor ID from request parameters
+        const tutor_id = req.params.id;
 
-    // Validate tutor ID
-    if (!tutor_id) {
-        res.status(400).send('Missing tutor ID');
-        return;
-    }
+        // Validate tutor ID
+        if (!tutor_id) {
+            res.status(400).send('Missing tutor ID');
+            return;
+        }
 
-    // Find the tutor in the database
-    this.#api.tutorCollection.findOne({ _id: tutor_id })
+        // Find the tutor in the database
+        this.#api.tutorCollection.findOne({ _id: tutor_id })
         .then(tutor => {
             if (!tutor) {
                 res.status(404).send('Tutor not found');
@@ -27,7 +27,8 @@ class TutorEndpoints {
             console.error("Error fetching tutor:", err);
             res.status(500).send('Error fetching tutor');
         });
-};
+    };
+
     //**discuss with team: is creating a tutor seperate from their subject, hourlyRate, and availability.... user is already made so no need for user validation, creating tutor basically just setting the is_tutor flag to true for the user?? */
     createTutor = (req, res) => {
         // Extract user_id, username, email, and subject from request body

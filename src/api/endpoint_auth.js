@@ -30,7 +30,7 @@ class AuthEndpoints {
             }
         })
     }
-    
+
     login = (req, res) => {
         // ensure we were sent the parameters we need
         if (this.#api.validateRequest(req, res, ['email', 'password']) == false) return
@@ -54,20 +54,25 @@ class AuthEndpoints {
 
     logout = (req, res) => {
         // get the user from the auth token
-        let user = this.#api.auth.fetchUserByToken(req.headers['authorization'])
-        if (user == null) {
-            res.status(401).send('Unauthorized')
-            return
-        }
-
-
+        this.#api.auth.fetchUserByToken(req.headers['authorization'])
+        .then((user) => {
+            if (user == null)
+                res.status(401).send('Unauthorized')
+            else {
+                // delete the auth token
+                this.#api.authTokenCollection.deleteOne({ user_id: user.user_id })
+                .then(() => {
+                    res.status(200).send('Logged out')
+                })
+            }
+        });
     }
 
     #testCredentials = (email, password, cb) => {
         // make a query to the database to see if the user exists
         this.#api.userCollection.findOne({
             email: email
-        }, '_id, hash_password').then((user) => {
+        }, '_id hash_password').then((user) => {
             // if the user does not exist, return false
             if (!user) cb(null, false, null)
 
