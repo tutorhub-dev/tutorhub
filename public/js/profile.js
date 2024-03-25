@@ -117,31 +117,32 @@ function getUserAppointments() {
     .then(response => response.json())
     .then(data => {
         const appointmentList = document.getElementById("appointmentList");
-
         appointmentList.innerHTML = "";
         
         data.forEach(appointment => {
             const listItem = document.createElement("li");
             listItem.textContent = `${appointment.subject} - ${appointment.date}`;
 
-            const selectRating = document.createElement("select");
-            for (let i = 1; i <= 5; i++) {
-                const option = document.createElement("option");
-                option.value = i;
-                option.textContent = i;
-                selectRating.appendChild(option);
-            }
-            selectRating.onchange = () => setRate(appointment.id, selectRating.value);
-
-            const cancelButton = document.createElement("button");
-            cancelButton.textContent = "Cancel";
-            cancelButton.onclick = function() {
-                if (confirm("Are you sure you want to cancel this appointment?")) {
-                    cancelAppointment(appointment.id);
+            if (new Date() > new Date(appointment.end_time)) {
+                const selectRating = document.createElement("select");
+                for (let i = 1; i <= 5; i++) {
+                    const option = document.createElement("option");
+                    option.value = i;
+                    option.textContent = i;
+                    selectRating.appendChild(option);
                 }
-            };
-
-            listItem.appendChild(selectRating);
+                selectRating.onchange = () => setRate(appointment.id, selectRating.value);
+                listItem.appendChild(selectRating);
+            } else {
+                const cancelButton = document.createElement("button");
+                cancelButton.textContent = "Cancel";
+                cancelButton.onclick = function() {
+                    if (confirm("Are you sure you want to cancel this appointment?")) {
+                        cancelAppointment(appointment.id);
+                    }
+                };
+                listItem.appendChild(cancelButton);
+            }
             appointmentList.appendChild(listItem);
         });
     })
