@@ -80,7 +80,31 @@ function getTutorAppointments() {
 
 function displayTutorAppointments(appointments) {
     const appointmentList = document.getElementById("appointmentList");
+
+    appointmentList.innerHTML = "";
+
+    appointments.forEach(appointment => {
+        const listItem = document.createElement("li");
+        listItem.textContent = `${appointment.subject} - ${appointment.date}`;
+
+        const acceptButton = document.createElement("button");
+        acceptButton.textContent = "Accept";
+        acceptButton.onclick = function() {
+            acceptAppointment(appointment.id);
+        };
+
+        const declineButton = document.createElement("button");
+        declineButton.textContent = "Decline";
+        declineButton.onclick = function() {
+            declineAppointment(appointment.id);
+        };
+
+        listItem.appendChild(acceptButton);
+        listItem.appendChild(declineButton);
+        appointmentList.appendChild(listItem);
+    });
 }
+
 
 function getUserAppointments() {
     fetch('/src/api/user/appointments', {
