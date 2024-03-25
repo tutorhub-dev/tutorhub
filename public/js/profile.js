@@ -24,7 +24,85 @@
             requestAppointment(tutorId, `${date}T${time}`, subject);
         });
     }
+    getUserAppointments();
+    getTutorAppointments();
+    fetchAndDisplayAvailability();
+    searchTutorsAndSubjects();
+    displayAppointmentsBasedOnRole();
+
 }); */
+
+document.getElementById('bookingsButton').addEventListener('click', function() {
+    window.location.href = "appointments.html";
+});
+document.getElementById('availabilityButton').addEventListener('click', function() {
+    window.location.href = "availability.html";
+});
+
+class Observer {
+    update(appointmentId) {
+        //
+    }
+}
+
+
+class AppointmentSubject {
+    constructor() {
+        this.observers = [];
+    }
+
+    addObserver(observer) {
+        this.observers.push(observer);
+    }
+
+    removeObserver(observer) {
+        this.observers = this.observers.filter(obs => obs !== observer);
+    }
+
+    notifyObservers(appointmentId) {
+        this.observers.forEach(observer => observer.update(appointmentId));
+    }
+}
+
+class RateObserver extends Observer {
+    constructor() {
+        super();
+    }
+
+    update(appointmentId) {
+        const listItem = document.getElementById(`appointment-${appointmentId}`);
+        if (!listItem) return;
+
+        const selectRating = document.createElement("select");
+        for (let i = 1; i <= 5; i++) {
+            const option = document.createElement("option");
+            option.value = i;
+            option.textContent = i;
+            selectRating.appendChild(option);
+        }
+
+        const reviewField = document.createElement("textarea");
+        reviewField.placeholder = "Feel free to leave a review!";
+
+        const submitButton = document.createElement("button");
+        submitButton.textContent = "Submit Review";
+
+        submitButton.onclick = function() {
+            submitRatingAndReview(appointmentId, selectRating.value, reviewField.value);
+        }
+
+        selectRating.onchange = () => setRate(appointmentId, selectRating.value);
+        listItem.appendChild(selectRating);
+        listItem.appendChild(reviewField);
+        listItem.appendChild(submitButton);
+    }
+
+}
+
+const appointmentSubject = new AppointmentSubject();
+const rateObserver = new RateObserver();
+appointmentSubject.addObserver(rateObserver);
+
 
 // Display details functions
 function fetchUserDetails(headers) {
@@ -46,19 +124,77 @@ function fetchUserDetails(headers) {
     .catch(error => console.error('Failed to fetch user data:', error));
 }
 
-function fetchAndDisplayAvailability() {
-    fetch('/src/api/tutor/availability', {
-        method: 'GET',
+function searchTutorsAndSubjects() {
+    const searchQuery = document.getElementById('searchBar').value;
+    fetch ('/src/api/tutor/search', {
+        method: 'POST',
+        headers: new Headers({
+            'Authorization': sessionStorage.getItem("authToken"),
+            'Content-Type': 'application/json'
+        }),
+        body: JSON.stringify({ query: searchQuery })
+    })
+    .then(response => response.json())
+    .then(data => {
+        const availabilityList = document.getElementById("availabilityList");
+        availabilityList.innerHTML = "";
+        data.forEach(tutor => {
+            const tutorListItem = document.createElement("li");
+            tutorListItem.textContent = tutor.name;
+            tutorListItem.onclick = function() {
+                fetchTutorAvailability(tutor.id);
+            }
+            availabilityList.appendChild(tutorListItem);
+        });
+    })
+    .catch(error => console.error('Failed to search for tutors:', error));
+}
+
+document.getElementById("searchButton").addEventListener("click", function() {
+    searchTutorsAndSubjects();
+});
+
+function fetchTutorAvailability(tutorId) {
+    fetch (`/src/api/tutor/${tutorId}/availability`, {
+        method: 'POST',
         headers: new Headers({
             'Authorization': sessionStorage.getItem("authToken"),
             'Content-Type': 'application/json'
         })
     })
     .then(response => response.json())
-    .then(availabilitySlots => {
-        availabilitySlots.forEach(slot => {
-            addAvailability(slot.start, slot.end, slot.subject, slot.id);
+    .then(data => {
+        const availabilityList = document.getElementById("availabilityList");
+        availabilityList.innerHTML = "";
+        data.forEach(slot => {
+            const slotListItem = document.createElement("li");
+            slotListItem.textContent = `${slot.date} - ${slot.start} to ${slot.end} - ${slot.subject}`;
+            availabilityList.appendChild(slotListItem);
         });
+    })
+    .catch(error => console.error('Failed to fetch tutor availability:', error));
+}
+
+function fetchAndDisplayAvailability() {
+    fetch('/src/api/tutor/availability', {
+        method: 'POST',
+        headers: new Headers({
+            'Authorization': sessionStorage.getItem("authToken"),
+            'Content-Type': 'application/json'
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        const tableBody = document.getElementById("availabilityTable").getElementsByTagName("tbody")[0];
+        tableBody.innerHTML = "";
+
+        data.forEach(slot => {
+            const row = tableBody.insertRow();
+            row.insertCell(0).textContent = slot.date;
+            row.insertCell(1).textContent = slot.start;
+            row.insertCell(2).textContent = slot.end;
+            row.insertCell(3).textContent = slot.subject;
+        })
     })
     .catch(error => console.error('Failed to fetch availability:', error));
 }
@@ -105,6 +241,15 @@ function displayTutorAppointments(appointments) {
     });
 }
 
+function displayAppointmentsBasedOnRole() {
+    const isTutor = sessionStorage.getItem("isTutor");
+
+    if (isTutor) {
+        getTutorAppointments();
+    } else {
+        getUserAppointments();
+    }
+}
 
 function getUserAppointments() {
     fetch('/src/api/user/appointments', {
@@ -121,18 +266,11 @@ function getUserAppointments() {
         
         data.forEach(appointment => {
             const listItem = document.createElement("li");
-            listItem.textContent = `${appointment.subject} - ${appointment.date}`;
+            listItem.id = `appointment-${appointment.id}`;
+            listItem.textContent = `${appointment.subject} - ${appointment.date} - ${appointment.start_time} to ${appointment.end_time}`;
 
             if (new Date() > new Date(appointment.end_time)) {
-                const selectRating = document.createElement("select");
-                for (let i = 1; i <= 5; i++) {
-                    const option = document.createElement("option");
-                    option.value = i;
-                    option.textContent = i;
-                    selectRating.appendChild(option);
-                }
-                selectRating.onchange = () => setRate(appointment.id, selectRating.value);
-                listItem.appendChild(selectRating);
+                appointmentSubject.notifyObservers(appointment.id);
             } else {
                 const cancelButton = document.createElement("button");
                 cancelButton.textContent = "Cancel";
@@ -178,6 +316,44 @@ document.getElementById("add-availability").addEventListener("click", function()
     document.getElementById("end").value = "";
     document.getElementById("subject").value = "";
 });
+
+function fetchAndDisplayAvailability() {
+    fetch('/src/api/tutor/availability', {
+        method: 'POST',
+        headers: new Headers({
+            'Authorization': sessionStorage.getItem("authToken"),
+            'Content-Type': 'application/json'
+        })
+    })
+    .then(response => response.json())
+    .then (data => {
+        const tableBody = document.getElementById("availabilityTable").getElementsByTagName("tbody")[0];
+        tableBody.innerHTML = "";
+
+        data.forEach(slot => {
+            const addRow = tableBody.insertRow();
+
+            const dateCell = addRow.insertCell(0);
+            const startCell = addRow.insertCell(1);
+            const endCell = addRow.insertCell(2);
+            const subjectCell = addRow.insertCell(3);
+
+            dateCell.textContent = slot.date;
+            startCell.textContent = slot.start;
+            endCell.textContent = slot.end;
+            subjectCell.textContent = slot.subject;
+
+            const deleteCell = addRow.insertCell(4);
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "Delete Availability";
+            deleteButton.dataset.id = slot.id;
+            deleteButton.onclick = function() { deleteAvailability(slot.id); };
+            deleteCell.appendChild(deleteButton);
+        });
+
+    })
+
+}
 
 function createAvailability(date, start, end, subject) {
     fetch('/src/api/tutor/availability', {
@@ -312,21 +488,25 @@ function declineAppointment(appointmentId) {
     .catch(error => console.error('Failed to decline appointment:', error));
 }
 
-function setRate(appointmentId, rating) {
+function setRate(appointmentId, rating, review = null) {
     fetch(`/src/api/user/appointments/${appointmentId}/rate`, {
         method: 'POST',
         headers: new Headers({
             'Authorization': sessionStorage.getItem("authToken"),
             'Content-Type': 'application/json'
         }),
-        body: JSON.stringify({ rating: rating })
+        body: JSON.stringify({ rating: rating, review: review })
     })
     .then(response => {
         if (!response.ok) throw new Error("Failed to rate the appointment");
-        alert ("You have successfully rated the appointment!");
+        alert ("You have successfully rated and reviewed the appointment!");
         getUserAppointments();     
     })
     .catch(error => console.error('Failed to rate the appointment:', error));
+}
+
+function submitRatingAndReview (appointmentId, rating, review) {
+    setRate(appointmentId, rating, review);
 }
 
 
@@ -377,4 +557,3 @@ document.getElementById("rateButton").addEventListener("click", function() {
     setRate(selectedRating);
 });
 
-fetchUserDetails();
