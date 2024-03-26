@@ -40,14 +40,19 @@ class AuthEndpoints {
         const password = req.body.password
 
         // test the credentials
-        this.#testCredentials(email, password, (err, success, user_id) => {
+        this.#api.auth.testCredentials(email, password, (err, success, user_id) => {
             if (err) {
                 console.log(err)
                 res.status(500).send('Internal Server Error')
             } else if (!success) {
                 res.status(401).send('Unauthorized')
             } else {
-                this.#insertAuthToken(user_id, res)
+                this.#api.auth.insertAuthToken(user_id)
+                .then((authToken) => {
+                    res.status(200).send({
+                        "auth_token": authToken
+                    })
+                })
             }
         })
     }
@@ -85,22 +90,6 @@ class AuthEndpoints {
             }
         }).catch((err) => {
             cb(err, null, null)
-        })
-    }
-
-    #insertAuthToken = (userID, res) => {
-        const authToken = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
-
-        const authTokenEntry = new this.#api.authTokenCollection({
-            user_id: userID,
-            auth_token: authToken
-        })
-
-        // insert into the table
-        authTokenEntry.save().then(() => {
-            res.status(200).send({
-                "authToken": authToken
-            })
         })
     }
 }
