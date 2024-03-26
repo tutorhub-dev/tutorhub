@@ -34,6 +34,12 @@ app.get('/api/tutor', api.tutorEndpoints.getTutor) // Good
 app.post('/api/tutor', api.tutorEndpoints.updateTutor)
 app.delete('/api/tutor', api.tutorEndpoints.deleteTutor) // Good
 
+/* availability endpoints */
+app.get('/api/availability', api.availabilityEndpoints.getAvailability)
+app.put('/api/availability', api.availabilityEndpoints.createAvailability)
+app.post('/api/availability', api.availabilityEndpoints.updateAvailability)
+app.delete('/api/availability', api.availabilityEndpoints.deleteAvailability)
+
 /* appointment endpoint */
 app.get('/api/appointment', api.apptEndpoints.getAppointment) // Good
 app.put('/api/appointment', api.apptEndpoints.createAppointment) // Good
