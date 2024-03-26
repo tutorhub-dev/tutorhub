@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function() {
       console.log("Signup successful. User data:", data);
 
       // Redirect based on user selection
-      if (isTutor) {
+      if (is_Tutor) {
         window.location.href = "profile.html"; // Redirect to tutor dashboard
       } else {
         window.location.href = "index.html"; // Redirect to user dashboard
