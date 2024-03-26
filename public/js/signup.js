@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function() {
     };
 
     fetch("/api/user", {
-      method: "Put",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json"
       },
