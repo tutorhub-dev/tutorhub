@@ -8,6 +8,7 @@ const TutorSchemas = require('./schema')
 const AuthEndpoints = require('./endpoint_auth')
 const UserEndpoints = require('./endpoint_user')
 const TutorEndpoints = require('./endpoint_tutor')
+const AvailabilityEndpoints = require('./endpoint_availability')
 const ApptEndpoints = require('./endpoint_appt')
 const SearchEndpoints = require('./endpoint_search')
 
@@ -28,6 +29,7 @@ class TutorAPI {
         this.authEndpoints = new AuthEndpoints(this)
         this.userEndpoints = new UserEndpoints(this)
         this.tutorEndpoints = new TutorEndpoints(this)
+        this.availabilityEndpoints = new AvailabilityEndpoints(this)
         this.apptEndpoints = new ApptEndpoints(this)
         this.searchEndpoints = new SearchEndpoints(this)
 
@@ -46,7 +48,6 @@ class TutorAPI {
         this.authTokenCollection = mongoose.model(
             'authtoken', new mongoose.Schema(TutorSchemas.authTokenSchema)
         )
-
         this.userCollection = mongoose.model(
             'user', new mongoose.Schema(TutorSchemas.userSchema)
         )
@@ -55,6 +56,9 @@ class TutorAPI {
         )
         this.appointmentCollection = mongoose.model(
             'appointment', new mongoose.Schema(TutorSchemas.appointmentSchema)
+        )
+        this.availabilityCollection = mongoose.model(
+            'availability', new mongoose.Schema(TutorSchemas.availabilitySchema)
         )
     }
 

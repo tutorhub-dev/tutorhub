@@ -19,7 +19,8 @@ class ApptEndpoints {
                 else query = { user_id: account.getID() }
 
                 // find all appointments for the user
-                this.#api.appointmentCollection.find(query).then((appts) => {
+                this.#api.appointmentCollection.find(query)
+                .then((appts) => {
                     // return the appointments
                     if (!appts) res.status(404).json([])
                     else {
@@ -36,9 +37,13 @@ class ApptEndpoints {
 
                         res.status(200).json(filteredAppts);
                     }
-                })
+                }).catch(err => {
+                    this.#api.handleError(err, res);
+                });
             }
-        })
+        }).catch(err => {
+            this.#api.handleError(err, res);
+        });
     }
 
     createAppointment = (req, res) => {
@@ -110,7 +115,6 @@ class ApptEndpoints {
                 if (end_time) updateFields.end_time = end_time;
 
                 // Update appointment in the database
-                console.log(updateFields)
                 this.#api.appointmentCollection.findOneAndUpdate(
                     { _id: appointment_id }, updateFields, { new: true }
                 )
@@ -126,7 +130,9 @@ class ApptEndpoints {
                     res.status(500).send('Error updating appointment');
                 });
             }
-        })
+        }).catch(err => {
+            this.#api.handleError(err, res);
+        });
     }
 
     acceptAppointment = (req, res) => {
@@ -160,6 +166,8 @@ class ApptEndpoints {
                     res.status(500).send();
                 });
             }
+        }).catch(err => {
+            this.#api.handleError(err, res);
         });
     }
 
@@ -203,8 +211,12 @@ class ApptEndpoints {
                             res.status(401).send('Unauthorized');
                         }
                     }
+                }).catch(err => {
+                    this.#api.handleError(err, res);
                 });
             }
+        }).catch(err => {
+            this.#api.handleError(err, res);
         });
     }
 }

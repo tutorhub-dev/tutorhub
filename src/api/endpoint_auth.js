@@ -55,9 +55,13 @@ class AuthEndpoints {
                     delete data._id
 
                     res.status(200).send(data)
-                })
+                }).catch(err => {
+                    this.#api.handleError(err, res);
+                });
             }
-        })
+        }).catch(err => {
+            this.#api.handleError(err, res);
+        });
     }
 
     logout = (req, res) => {

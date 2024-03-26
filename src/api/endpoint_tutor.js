@@ -14,12 +14,8 @@ class TutorEndpoints {
             else {
                 res.status(200).json(account.getDataFiltered())
             }
-        }).catch((err) => {
-            if (typeof err == 'number') res.status(err).send();
-            else {
-                console.error(err);
-                res.status(500).send('Internal Server Error');
-            }
+        }).catch(err => {
+            this.#api.handleError(err, res);
         });
     };
 
@@ -54,10 +50,8 @@ class TutorEndpoints {
             } else {
                 res.status(200).json(result.value); // Return the updated tutor
             }
-        })
-        .catch(err => {
-            console.error("Error updating tutor:", err);
-            res.status(500).send('Error updating tutor');
+        }).catch(err => {
+            this.#api.handleError(err, res);
         });
     };
     
@@ -76,19 +70,8 @@ class TutorEndpoints {
         .then(() => {
             res.status(204).send();
         })
-        .catch((err) => {
-            console.error(err);
-            res.status(500).send('Internal Server Error');
-        });
-    };
-
-    #markAsTutor = (user_id, is_tutor) => {
-        return new Promise((resolve, reject) => {
-            this.#api.userCollection.updateOne({ _id: user_id }, { $set: { is_tutor: is_tutor } })
-            .then(() => {
-                resolve();
-            })
-            .catch(reject);
+        .catch(err => {
+            this.#api.handleError(err, res);
         });
     };
 }

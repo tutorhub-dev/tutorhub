@@ -24,14 +24,14 @@ class Tutor {
     getID = () => {
         return this.#id;
     }
-    
+
     getDataFiltered = () => {
         return {
             _id: this.#id,
             first_name: this.#data.first_name,
             last_name: this.#data.last_name,
             email: this.#data.email,
-            tutorname: this.#data.tutorname,
+            username: this.#data.username,
             hourly_rate: this.#data.hourly_rate,
             is_tutor: true
         };

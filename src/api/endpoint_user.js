@@ -26,39 +26,34 @@ class UserEndpoints {
 
     createUser = (req, res) => {
         // ensure we specified if we want to make a tutor or not
-        if (this.#api.validateRequest(req, res, ['is_tutor'])) {
-            // validate the request if we are making a tutor
-            if (req.body.is_tutor) {
-                // if we are making a tutor, ensure we have the subject
-                if (this.#api.validateRequest(
-                    req, res, [
-                        'first_name', 'last_name', 'email',
-                        'password', 'username', 'hourly_rate'
-                    ]
-                ) == false) return;
-            } else {
-                // if we are making a tutor, ensure we have the subject
-                if (this.#api.validateRequest(
-                    req, res, [
-                        'first_name', 'last_name', 'email',
-                        'password', 'username'
-                    ]
-                ) == false) return;
-            }
+        if (this.#api.validateRequest(req, res, ['is_tutor']) == false) return;
 
-            // create a new account
-            this.#api.account.makeNewAccount(req.body, req.body.is_tutor)
-            .then((account) => {
-                res.status(201).json(account.getDataFiltered());
-            }).catch((err) => {
-                // if the err is a number
-                if (err == 409) res.status(409).send();
-                else {
-                    console.error(err);
-                    res.status(500).send('Internal Server Error');
-                }
-            });
+        // validate the request if we are making a tutor
+        if (req.body.is_tutor) {
+            // if we are making a tutor, ensure we have the subject
+            if (this.#api.validateRequest(
+                req, res, [
+                    'first_name', 'last_name', 'email',
+                    'password', 'username', 'hourly_rate'
+                ]
+            ) == false) return;
+        } else {
+            // if we are making a tutor, ensure we have the subject
+            if (this.#api.validateRequest(
+                req, res, [
+                    'first_name', 'last_name', 'email',
+                    'password', 'username'
+                ]
+            ) == false) return;
         }
+
+        // create a new account
+        this.#api.account.makeNewAccount(req.body, req.body.is_tutor)
+        .then((account) => {
+            res.status(201).json(account.getDataFiltered());
+        }).catch(err => {
+            this.#api.handleError(err, res);
+        });
     }
 
     updateUser = (req, res) => {
@@ -84,8 +79,12 @@ class UserEndpoints {
                             username: user.username,
                             is_tutor: user.is_tutor
                         });
+                }).catch(err => {
+                    this.#api.handleError(err, res);
                 });
             }
+        }).catch(err => {
+            this.#api.handleError(err, res);
         });
     }
 
@@ -103,9 +102,8 @@ class UserEndpoints {
         .then(() => {
             res.status(204).send();
         })
-        .catch((err) => {
-            console.error(err);
-            res.status(500).send('Internal Server Error');
+        .catch(err => {
+            this.#api.handleError(err, res);
         });
     }
 }

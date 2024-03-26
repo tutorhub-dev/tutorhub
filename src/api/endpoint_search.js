@@ -21,27 +21,20 @@ class SearchEndpoints {
     this.#api.appointmentCollection.find({
         start_time: { $not: { $gte: new Date(end_time) } },
         end_time: { $not: { $lte: new Date(start_time) } }
-    }).toArray()
+    })
     .then(appointments => {
         // Extract tutor IDs from appointments
         const occupiedTutorIds = appointments.map(appointment => appointment.tutor_id);
 
         // Fetch all tutors from the database
-        this.#api.tutorCollection.find().toArray()
-        .then(tutors => {
-            // Filter out tutors who are not occupied during the specified time range
-            const availableTutors = tutors.filter(tutor => !occupiedTutorIds.includes(tutor._id));
+        return this.#api.tutorCollection.find().toArray()
+    }).then(tutors => {
+        // Filter out tutors who are not occupied during the specified time range
+        const availableTutors = tutors.filter(tutor => !occupiedTutorIds.includes(tutor._id));
 
-            res.status(200).json(availableTutors);
-        })
-        .catch(err => {
-            console.error("Error fetching tutors:", err);
-            res.status(500).send('Error fetching tutors');
-        });
-    })
-    .catch(err => {
-        console.error("Error searching for available tutors:", err);
-        res.status(500).send('Error searching for available tutors');
+        res.status(200).json(availableTutors);
+    }).catch(err => {
+        this.#api.handleError(err, res);
     });
 }
 };

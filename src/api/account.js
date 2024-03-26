@@ -56,7 +56,7 @@ class Account {
                 }
             })
             .catch(reject);
-        });
+        })
     }
 
     /* Factory method to create a handler for
