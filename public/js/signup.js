@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function() {
       if (is_Tutor) {
         window.location.href = "profile.html"; // Redirect to tutor dashboard
       } else {
-        window.location.href = "index.html"; // Redirect to user dashboard
+        window.location.href = "profile.html"; // Redirect to user dashboard
       }
     })
     .catch(error => {
