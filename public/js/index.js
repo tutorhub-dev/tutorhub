@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const loggedIn =  sessionStorage.getItem('authToken') || localStorage.getItem('authToken');
+    const loggedIn =  sessionStorage.getItem('authToken') || sessionStorage.getItem('authToken');
     const loginButton = document.getElementById('loginButton');
     const signupButton = document.getElementById('signupButton');
     const homeButton = document.getElementById('homeButton');

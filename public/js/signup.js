@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function() {
           })
           .then(data => {
               // Store user data in local storage
-              localStorage.setItem("userData", JSON.stringify(data));
+              sessionStorage.setItem("userData", JSON.stringify(data));
               console.log("Signup successful. User data:", data);
 
               // Redirect based on user selection

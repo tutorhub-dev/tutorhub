@@ -16,10 +16,12 @@ function editUser() {
     formData.append('confirm-password', confirmPassword);
     formData.append('pfp', profilePic);
 
+    let data = sessionStorage.getItem("userData");
+    let userData = JSON.parse(data);
     fetch('/user/update', {
         method: 'POST',
         headers: {
-            'Authorization': 'Bearer ' + sessionStorage.getItem("authToken")
+            'authorization':userData.token
         },
         body: formData
     })

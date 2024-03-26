@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function() {
     })
     .then(data => {
   
-      localStorage.setItem("userData", JSON.stringify(data));
+     sessionStorage.setItem("userData", JSON.stringify(data));
       console.log("Login successful. User data:", data);
  window.location.href = "profile.html"; 
     })

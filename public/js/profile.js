@@ -130,7 +130,7 @@ function searchTutorsAndSubjects() {
     fetch ('/src/api/tutor/search', {
         method: 'POST',
         headers: new Headers({
-            'Authorization': sessionStorage.getItem("authToken"),
+            'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
             'Content-Type': 'application/json'
         }),
         body: JSON.stringify({ query: searchQuery })
@@ -159,7 +159,7 @@ function fetchTutorAvailability(tutorId) {
     fetch (`/src/api/tutor/${tutorId}/availability`, {
         method: 'POST',
         headers: new Headers({
-            'Authorization': sessionStorage.getItem("authToken"),
+            'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
             'Content-Type': 'application/json'
         })
     })
@@ -180,7 +180,7 @@ function getTutorAppointments() {
     fetch('/src/api/tutor/appointments/requests', {
         method: 'POST',
         headers: new Headers({
-            'Authorization': sessionStorage.getItem("authToken"),
+            'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
             'Content-Type': 'application/json'
         })
     })
@@ -232,7 +232,7 @@ function getUserAppointments() {
     fetch('/src/api/user/appointments', {
         method: 'POST',
         headers: new Headers({
-            'Authorization': sessionStorage.getItem("authToken"),
+            'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
             'Content-Type': 'application/json'
         })
     })
@@ -298,7 +298,7 @@ function fetchAndDisplayAvailability() {
     fetch('/src/api/tutor/availability', {
         method: 'POST',
         headers: new Headers({
-            'Authorization': sessionStorage.getItem("authToken"),
+            'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
             'Content-Type': 'application/json'
         })
     })
@@ -336,7 +336,7 @@ function createAvailability(date, start, end, subject) {
     fetch('/src/api/tutor/availability', {
         method: 'POST',
         headers: new Headers({
-            'Authorization': sessionStorage.getItem("authToken"),
+            'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
             'Content-Type': 'application/json'
         }),
         body: JSON.stringify({
@@ -384,7 +384,7 @@ function deleteAvailability(slotId) {
     fetch(`/src/api/tutor/availability/${slotId}`, { /* Maybe add a slotId feature in the availability API? */
         method: 'DELETE',
         headers: new Headers({
-            'Authorization': sessionStorage.getItem("authToken"),
+            'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
             'Content-Type': 'application/json'
         })
     })
@@ -400,7 +400,7 @@ function requestAppointment(tutorId, date, start, end, subject) {
     fetch('/src/api/user/appointments', {
         method: 'POST',
         headers: new Headers({
-            'Authorization': sessionStorage.getItem("authToken"),
+            'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
             'Content-Type': 'application/json'
         }),
         body: JSON.stringify({
@@ -422,7 +422,7 @@ function cancelAppointment(appointmentId) {
     fetch(`/src/api/user/appointments/${appointmentId}`, {
         method: 'DELETE',
         headers: new Headers({
-            'Authorization': sessionStorage.getItem("authToken"),
+            'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
             'Content-Type': 'application/json'
         })
     })
@@ -437,7 +437,7 @@ function acceptAppointment(appointmentId) {
     fetch(`/src/api/tutor/appointments/${appointmentId}/accept`, {
         method: 'POST',
         headers: new Headers({
-            'Authorization': sessionStorage.getItem("authToken"),
+            'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
             'Content-Type': 'application/json'
         })
     })
@@ -453,7 +453,7 @@ function declineAppointment(appointmentId) {
     fetch(`/src/api/tutor/appointments/${appointmentId}/decline`, {
         method: 'POST',
         headers: new Headers({
-            'Authorization': sessionStorage.getItem("authToken"),
+            'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
             'Content-Type': 'application/json'
         })
     })
@@ -469,7 +469,7 @@ function setRate(appointmentId, rating, review = null) {
     fetch(`/src/api/user/appointments/${appointmentId}/rate`, {
         method: 'POST',
         headers: new Headers({
-            'Authorization': sessionStorage.getItem("authToken"),
+            'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
             'Content-Type': 'application/json'
         }),
         body: JSON.stringify({ rating: rating, review: review })
@@ -492,7 +492,7 @@ document.getElementById("logoutButton").addEventListener("click", function() {
     fetch('/src/api/auth/logout', {
         method: 'POST',
         headers: new Headers({
-            'Authorization': sessionStorage.getItem("authToken")
+            'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
         }),
         body: JSON.stringify({}) 
     })
@@ -512,7 +512,7 @@ document.getElementById("deleteAccountButton").addEventListener("click", functio
         fetch('/src/api/user', {
             method: 'DELETE',
             headers: new Headers({
-                'Authorization': sessionStorage.getItem("authToken"),
+                'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
                 'Content-Type': 'application/json'
             })
         })
