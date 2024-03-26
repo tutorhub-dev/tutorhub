@@ -1,26 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
     <title>Availability</title>
+    <!-- Include Tailwind CSS from CDN -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Include custom CSS file -->
     <link rel="stylesheet" href="css/style.css">
+    <!-- Include Font Awesome from CDN -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-</head>
-<body class="bg-slate-300">
+  </head>
+  <body class="bg-slate-300">
+    <!-- Search bar section -->
     <div id="search">
-        <input type="text" id="searchBar" placeholder="Search for tutors...">
-        <button id="searchButton" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300">Search</button>
+      <input type="text" id="searchBar" placeholder="Search for tutors...">
+      <button id="searchButton" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300">Search</button>
     </div>
-
+    <!-- Availability results section -->
     <div id="availability-results">
-        <h2 class="font-mono">Available Tutors</h2>
-        <div class="list">
-            <ul id="availabilityList">
-                <!-- Tutors will be populated here -->
-            </ul>
-        </div>
+      <!-- Heading for available tutors -->
+      <h2 class="font-mono">Available Tutors</h2>
+      <div class="list">
+        <ul id="availabilityList">
+          <!-- Tutors will be populated here -->
+        </ul>
+      </div>
     </div>
+    <!-- Include JavaScript file -->
     <script src="js/profile.js"></script>
-</body>
+  </body>
 </html>
