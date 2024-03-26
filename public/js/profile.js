@@ -176,30 +176,6 @@ function fetchTutorAvailability(tutorId) {
     .catch(error => console.error('Failed to fetch tutor availability:', error));
 }
 
-function fetchAndDisplayAvailability() {
-    fetch('/src/api/tutor/availability', {
-        method: 'POST',
-        headers: new Headers({
-            'Authorization': sessionStorage.getItem("authToken"),
-            'Content-Type': 'application/json'
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        const tableBody = document.getElementById("availabilityTable").getElementsByTagName("tbody")[0];
-        tableBody.innerHTML = "";
-
-        data.forEach(slot => {
-            const row = tableBody.insertRow();
-            row.insertCell(0).textContent = slot.date;
-            row.insertCell(1).textContent = slot.start;
-            row.insertCell(2).textContent = slot.end;
-            row.insertCell(3).textContent = slot.subject;
-        })
-    })
-    .catch(error => console.error('Failed to fetch availability:', error));
-}
-
 function getTutorAppointments() {
     fetch('/src/api/tutor/appointments/requests', {
         method: 'POST',
