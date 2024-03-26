@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function() {
   
       localStorage.setItem("userData", JSON.stringify(data));
       console.log("Login successful. User data:", data);
- window.location.href = "index.html"; 
+ window.location.href = "profile.html"; 
     })
     .catch(error => {
       
