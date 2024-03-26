@@ -70,7 +70,9 @@ class UserEndpoints {
                 res.status(401).send('Unauthorized')
             else {
                 // update the user
-                this.#api.userCollection.findOneAndUpdate({ _id: user.user_id }, req.body, { new: true })
+                this.#api.userCollection.findOneAndUpdate(
+                    { _id: user.user_id }, req.body, { new: true }
+                )
                 .then((user) => {
                     if (user == null)
                         res.status(404).send('User not found');

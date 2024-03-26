@@ -17,6 +17,14 @@ class User {
         this.#data = data;
     }
 
+    isTutor = () => {
+        return false;
+    }
+
+    getID = () => {
+        return this.#id;
+    }
+    
     getDataFiltered = () => {
         return {
             _id: this.#id,

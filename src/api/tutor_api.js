@@ -68,6 +68,15 @@ class TutorAPI {
         }
         return true
     }
+
+    handleError = (err, res) => {
+        if (typeof err == 'number')
+            res.status(err).send();
+        else {
+            console.error(err);
+            res.status(500).send();
+        }
+    }
 }
 
 module.exports = TutorAPI;

@@ -17,28 +17,29 @@ dotenv.config();
 
 app.use(bodyParser.json())
 
-/* auth endpoints */
+/* account endpoints */
 app.post('/api/login', api.authEndpoints.login) // Good
 app.post('/api/logout', api.authEndpoints.logout)
 app.post('/api/hash', api.authEndpoints.makeHash) // Good
 
+app.put('/api/user', api.userEndpoints.createUser) // Good
+
 /* general user endpoints */
 app.get('/api/user', api.userEndpoints.getUser) // Good
-app.put('/api/user', api.userEndpoints.createUser) // Good
 app.post('/api/user', api.userEndpoints.updateUser) // Good
 app.delete('/api/user', api.userEndpoints.deleteUser) // Good
 
 /* tutor-specific endpoints */
 app.get('/api/tutor', api.tutorEndpoints.getTutor) // Good
-app.put('/api/tutor', api.tutorEndpoints.createTutor) // Good
 app.post('/api/tutor', api.tutorEndpoints.updateTutor)
 app.delete('/api/tutor', api.tutorEndpoints.deleteTutor) // Good
 
 /* appointment endpoint */
-app.get('/api/appointment', api.apptEndpoints.getAppointment) // get an appointment
-app.put('/api/appointment', api.apptEndpoints.createAppointment) // create an appointment
-app.post('/api/appointment', api.apptEndpoints.updateAppointment) // update an appointment
-app.delete('/api/appointment', api.apptEndpoints.deleteAppointment) // delete an appointment
+app.get('/api/appointment', api.apptEndpoints.getAppointment) // Good
+app.put('/api/appointment', api.apptEndpoints.createAppointment) // Good
+app.post('/api/appointment', api.apptEndpoints.updateAppointment) // Good
+app.post('/api/appointment/accept', api.apptEndpoints.acceptAppointment) // Good
+app.delete('/api/appointment', api.apptEndpoints.deleteAppointment) // Good
 
 /* search endpoints */
 app.post('/api/search', api.searchEndpoints.search) // search for tutors

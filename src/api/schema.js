@@ -4,7 +4,6 @@ class TutorSchemas {
     /**
      * NOTE: Mongoose autmatically injects an _id field into all schemas
      */
-
     static get authTokenSchema() {
         return {
             user_id: { type: String, required: true },
@@ -38,7 +37,9 @@ class TutorSchemas {
             tutor_id: { type: String, required: true },
             user_id: { type: String, required: true },
             start_time: { type: String, required: true },
-            end_time: { type: String, required: true }
+            end_time: { type: String, required: true },
+            subject: { type: String, required: true },
+            is_confirmed: { type: Boolean, required: true, default: false }
         }
     }
 

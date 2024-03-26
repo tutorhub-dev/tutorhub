@@ -70,7 +70,7 @@ class Account {
                     auth_token: token
                 }, 'user_id')
                 .then((authTokenEntry) => {
-                    if (!authTokenEntry) resolve(null)
+                    if (!authTokenEntry) reject(401)
                     else {
                         const id = authTokenEntry.get('user_id');
                         this.isTutor(token)
@@ -80,6 +80,7 @@ class Account {
                             else
                                 resolve(User.createHandler(this.#api, id));
                         })
+                        .catch(reject);
                     }
                 })
                 .catch(reject);

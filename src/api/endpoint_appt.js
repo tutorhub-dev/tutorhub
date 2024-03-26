@@ -8,100 +8,118 @@ class ApptEndpoints {
     getAppointment = (req, res) => {
         // get the user from the auth token
         let token = req.headers['authorization']
-        this.auth.fetchUserByToken(token)
-        .then((user) => {
-            if (user == null) 
+        this.#api.account.createAccountHandler(token)
+        .then((account) => {
+            if (account == null)
                 res.status(401).send('Unauthorized')
             else {
                 // get all the appointments for the user
                 let query;
-                if (user.is_student) query = { student_id: user.user_id }
-                else query = { tutor_id: user.user_id }
+                if (account.isTutor) query = { tutor_id: account.getID() }
+                else query = { user_id: account.getID() }
 
+                // find all appointments for the user
                 this.#api.appointmentCollection.find(query).then((appts) => {
                     // return the appointments
                     if (!appts) res.status(404).json([])
-                    else res.status(200).json(appts)
+                    else {
+                        // filter out sensitive information from the appointments
+                        let filteredAppts = appts.map((appt) => {
+                            return {
+                                appointment_id: appt._id,
+                                tutor_id: appt.tutor_id,
+                                user_id: appt.user_id,
+                                start_time: appt.start_time,
+                                end_time: appt.end_time
+                            }
+                        });
+
+                        res.status(200).json(filteredAppts);
+                    }
                 })
             }
-        });
+        })
     }
 
     createAppointment = (req, res) => {
+        // validate the request
+        if (this.#api.validateRequest(
+            req, res, [ 'tutor_id', 'user_id', 'start_time', 'end_time', 'subject' ]
+        ) == false) return;
+
         // get the user from the auth token
         let token = req.headers['authorization']
-        this.auth.fetchUserByToken(token)
-        .then((user) => {
-            if (user == null)
+        this.#api.account.createAccountHandler(token)
+        .then((account) => {
+            if (account == null)
                 res.status(401).send('Unauthorized')
             else {
                 // Extract appointment details from request body
-                const { tutor_id, student_id, startTime, time } = req.body;
+                const tutor_id = req.body.tutor_id;
+                const user_id = req.body.user_id;
+                const start_time = req.body.start_time;
+                const end_time = req.body.end_time;
+                const subject = req.body.subject;
 
-                // Validate appointment details
-                if (!tutor_id || !student_id || !date || !time) {
-                    res.status(400).send('Missing required parameters')
-                    return;
-                }
-
-                // Create appointment object
-                const appointment = {
+                // Create new appointment object
+                const appointment = this.#api.appointmentCollection({
                     tutor_id: tutor_id,
-                    student_id: student_id,
+                    user_id: user_id,
                     start_time: start_time,
                     end_time: end_time,
-                };
+                    subject: subject
+                });
 
                 // Save appointment to the database
-                this.#api.appointmentCollection.insertOne(appointment)
-                .then(result => {
-                    res.status(201).json(result.ops[0]); // Return the created appointment
-                })
-                .catch(err => {
-                    console.error("Error creating appointment:", err);
-                    res.status(500).send('Error creating appointment');
-                });
+                return appointment.save()
             }
+        })
+        .then((result) => {
+            if (!result) res.status(500).send();
+            else res.status(201).json({
+                appointment_id: result._id
+            });
+        })
+        .catch((err) => {
+            this.#api.handleError(err, res);
         });
     }
 
     updateAppointment = (req, res) => {
+        // validate the request
+        if (this.#api.validateRequest(
+            req, res, [ 'appointment_id' ]
+        ) == false) return;
+
         // get the user from the auth token
         let token = req.headers['authorization']
-        this.auth.fetchUserByToken(token)
-        .then((user) => {
-            if (user == null)
+        this.#api.account.createAccountHandler(token)
+        .then((account) => {
+            if (account == null)
                 res.status(401).send('Unauthorized')
             else {
-                // Extract appointment ID and update details from request body
-                const appointment_id = req.params.id;
-                const { tutor_id, student_id, start_time, end_time } = req.body;
-
-                // Validate appointment ID and update details
-                if (!appointment_id || (!tutor_id && !student_id && !start_time && !end_time)) {
-                    res.status(400).send('Missing required parameters');
-                    return;
-                }
+                // Extract updated information from request body
+                const appointment_id = req.body.appointment_id;
+                const start_time = req.body.start_time;
+                const end_time = req.body.end_time;
 
                 // Construct update object based on provided fields
                 const updateFields = {};
-                if (tutor_id) updateFields.tutor_id = tutor_id;
-                if (student_id) updateFields.student_id = student_id;
+                updateFields._id = appointment_id;
                 if (start_time) updateFields.start_time = start_time;
                 if (end_time) updateFields.end_time = end_time;
 
                 // Update appointment in the database
+                console.log(updateFields)
                 this.#api.appointmentCollection.findOneAndUpdate(
-                    { _id: appointment_id },
-                    { $set: updateFields },
-                    { returnOriginal: false }
+                    { _id: appointment_id }, updateFields, { new: true }
                 )
                 .then(result => {
-                    if (!result.value) {
-                        res.status(404).send('Appointment not found');
-                    } else {
-                        res.status(200).json(result.value); // Return the updated appointment
-                    }
+                    if (!result)
+                        res.status(400).send();
+                    else
+                        // Return the updated appointment
+                        res.status(200).json(result); 
                 })
                 .catch(err => {
                     console.error("Error updating appointment:", err);
@@ -111,35 +129,80 @@ class ApptEndpoints {
         })
     }
 
-    deleteAppointment = (req, res) => {
+    acceptAppointment = (req, res) => {
+        // validate the request
+        if (this.#api.validateRequest(
+            req, res, ['appointment_id']
+        ) == false) return;
+
         // get the user from the auth token
-        let token = req.headers['authorization'];
-        this.auth.fetchUserByToken(token)
-        .then((user) => {
-            if (user == null)
+        let token = req.headers['authorization']
+        this.#api.account.createAccountHandler(token)
+        .then((account) => {
+            if (account == null)
                 res.status(401).send('Unauthorized')
             else {
                 // Extract appointment ID from request parameters
-                const appointment_id = req.params.id;
+                const appointment_id = req.body.appointment_id;
 
-                // Validate appointment ID
-                if (!appointment_id) {
-                    res.status(400).send('Missing appointment ID');
-                    return;
-                }
-
-                // Delete appointment from the database
-                this.#api.appointmentCollection.deleteOne({ _id: appointment_id })
+                // Update the appointment to accepted
+                this.#api.appointmentCollection.findOneAndUpdate(
+                    { _id: appointment_id }, { is_confirmed: true }, { new: true }
+                )
                 .then(result => {
-                    if (result.deletedCount === 0) {
-                        res.status(404).send('Appointment not found');
-                    } else {
-                        res.status(204).send(); // No content, successful deletion
-                    }
+                    if (!result)
+                        res.status(404).send();
+                    else
+                        res.status(200).json(result);
                 })
                 .catch(err => {
-                    console.error("Error deleting appointment:", err);
-                    res.status(500).send('Error deleting appointment');
+                    console.error("Error accepting appointment:", err);
+                    res.status(500).send();
+                });
+            }
+        });
+    }
+
+    deleteAppointment = (req, res) => {
+        // validate the request
+        if (this.#api.validateRequest(
+            req, res, ['appointment_id']
+        ) == false) return;
+
+        // get the user from the auth token
+        let token = req.headers['authorization']
+        this.#api.account.createAccountHandler(token)
+        .then((account) => {
+            if (account == null)
+                res.status(401).send('Unauthorized')
+            else {
+                // Extract appointment ID from request parameters
+                const appointment_id = req.body.appointment_id;
+
+                // get the appointment with the given ID
+                this.#api.appointmentCollection.findById(appointment_id)
+                .then((appointment) => {
+                    if (!appointment) {
+                        res.status(404).send('Appointment not found');
+                    } else {
+                        // check that the account is either the tutor or the student
+                        if (
+                            account.getID() == appointment.tutor_id ||
+                            account.getID() == appointment.student_id
+                        ) {
+                            // delete the appointment
+                            this.#api.appointmentCollection.deleteOne({ _id: appointment_id })
+                            .then(() => {
+                                res.status(204).send();
+                            })
+                            .catch(err => {
+                                console.error("Error deleting appointment:", err);
+                                res.status(500).send();
+                            });
+                        } else {
+                            res.status(401).send('Unauthorized');
+                        }
+                    }
                 });
             }
         });

@@ -23,43 +23,6 @@ class TutorEndpoints {
         });
     };
 
-    //**discuss with team: is creating a tutor seperate from their subject, hourlyRate, and availability.... user is already made so no need for user validation, creating tutor basically just setting the is_tutor flag to true for the user?? */
-    createTutor = (req, res) => {
-        // Extract user_id, username, email, and subject from request body
-        const { subject } = req.body;
-
-        // get the user from the auth token
-        let token = req.headers['authorization']
-        this.#api.auth.fetchUserByToken(token)
-        .then((user) => {
-            if (user == null) 
-                res.status(401).send('Unauthorized')
-            else {
-                // mark the user as a tutor
-                this.#markAsTutor(user.user_id, true)
-                then(() => {
-                    // Create tutor object
-                    const tutor = {
-                        user_id: user.user_id,
-                        username: user.username,
-                        email: user.email,
-                        subject: subject
-                    };
-
-                    // Insert the new tutor into the database
-                    this.#api.tutorCollection.insertOne(tutor)
-                    .then(result => {
-                        res.status(201).json(result.ops[0]); // Return the created tutor
-                    })
-                    .catch(err => {
-                        console.error("Error creating tutor:", err);
-                        res.status(500).send('Error creating tutor');
-                    });
-                });
-            }
-        });
-    };
-
     //**discuss with team: is subject a part of tutor or will they be handled elsewhere (setting availability/appointment) ****///
     updateTutor = (req, res) => {
         // Extract tutor ID from request parameters

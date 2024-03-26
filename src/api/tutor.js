@@ -17,6 +17,14 @@ class Tutor {
         this.#data = data;
     }
 
+    isTutor = () => {
+        return true;
+    }
+
+    getID = () => {
+        return this.#id;
+    }
+    
     getDataFiltered = () => {
         return {
             _id: this.#id,
