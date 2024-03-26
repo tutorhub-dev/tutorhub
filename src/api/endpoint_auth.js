@@ -72,26 +72,6 @@ class AuthEndpoints {
             }
         });
     }
-
-    #testCredentials = (email, password, cb) => {
-        // make a query to the database to see if the user exists
-        this.#api.userCollection.findOne({
-            email: email
-        }, '_id hash_password').then((user) => {
-            // if the user does not exist, return false
-            if (!user) cb(null, false, null)
-
-            // if the user exists, compare the password
-            else {
-                bcrypt.compare(password, user.get('hash_password'), (err, result) => {
-                    if (err) cb(err, null, null)
-                    else cb(null, result, user.get('_id'))
-                })
-            }
-        }).catch((err) => {
-            cb(err, null, null)
-        })
-    }
 }
 
 module.exports = AuthEndpoints

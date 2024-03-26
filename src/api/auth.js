@@ -21,8 +21,7 @@ class AuthAPI {
                     else {
                         // look up the user by the user id
                         return this.#api.userCollection.findById(
-                            authTokenEntry.get('user_id'),
-                            'email username profile_picture'
+                            authTokenEntry.get('user_id')
                         );
                     }
                 })
