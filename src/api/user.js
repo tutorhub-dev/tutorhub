@@ -44,6 +44,22 @@ class User {
         });
     }
 
+    static createHandlerFromBlank = (api, data) => {
+        return new Promise((resolve, reject) => {
+            // create a new user
+            const user = new api.userCollection(data);
+            user.save()
+            .then(() => {
+                // append the id to the data
+                data.user_id = user._id;
+
+                User.#privateConstruct = true;
+                resolve(new User(api, user._id, data));
+            })
+            .catch(reject);
+        });
+    }
+
     deleteAccount = () => {
         return new Promise((resolve, reject) => {
             this.#api.userCollection.findOneAndDelete({ _id: this.#id })
@@ -53,6 +69,23 @@ class User {
                 else
                     resolve();
             })
+            .catch(reject);
+        });
+    }
+    
+    generateToken = () => {
+        return new Promise((resolve, reject) => {
+            // create a new auth token
+            this.#api.auth.insertAuthToken(this.#id, false)
+            .then(resolve)
+            .catch(reject);
+        });
+    }
+
+    deAuthenticate = () => {
+        return new Promise((resolve, reject) => {
+            this.#api.auth.clearAuthTokens(this.#id)
+            .then(resolve)
             .catch(reject);
         });
     }

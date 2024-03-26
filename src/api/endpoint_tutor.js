@@ -15,8 +15,11 @@ class TutorEndpoints {
                 res.status(200).json(account.getDataFiltered())
             }
         }).catch((err) => {
-            console.error(err);
-            res.status(500).send('Internal Server Error');
+            if (typeof err == 'number') res.status(err).send();
+            else {
+                console.error(err);
+                res.status(500).send('Internal Server Error');
+            }
         });
     };
 
@@ -101,7 +104,11 @@ class TutorEndpoints {
         let token = req.headers['authorization']
         this.#api.account.createAccountHandler(token)
         .then((account) => {
-            return account.deleteAccount();
+            if (account == null)
+                res.status(401).send('Unauthorized')
+            else {
+                return account.deleteAccount();
+            }
         })
         .then(() => {
             res.status(204).send();

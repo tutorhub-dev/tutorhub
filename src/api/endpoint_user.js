@@ -25,62 +25,40 @@ class UserEndpoints {
     }
 
     createUser = (req, res) => {
-        if (this.#api.validateRequest(
-            req, res, [
-                'first_name',
-                'last_name',
-                'email',
-                'password',
-                'username',
-                'is_tutor'
-            ]
-        ) == false) return;
-
-        // Check if a user exists with the same email
-        this.#api.userCollection.findOne({
-            email: req.body.email
-        }, '_id').then((user) => {
-            if (user != null) {
-                res.status(409).send('User already exists');
+        // ensure we specified if we want to make a tutor or not
+        if (this.#api.validateRequest(req, res, ['is_tutor'])) {
+            // validate the request if we are making a tutor
+            if (req.body.is_tutor) {
+                // if we are making a tutor, ensure we have the subject
+                if (this.#api.validateRequest(
+                    req, res, [
+                        'first_name', 'last_name', 'email',
+                        'password', 'username', 'hourly_rate'
+                    ]
+                ) == false) return;
             } else {
-                // Hash the password before saving
-                bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
-                    if (err) {
-                        console.log(err);
-                        res.status(500).send('Internal Server Error');
-                    } else {
-                        // Save the user with hashed password
-                        const newUser = new this.#api.userCollection({
-                            first_name: req.body.first_name,
-                            last_name: req.body.last_name,
-                            email: req.body.email,
-                            hash_password: hash,
-                            username: req.body.username,
-                            is_tutor:  req.body.is_tutor
-                        });
-
-                        newUser.save().then(user => {
-                            // log the user in
-                            this.#api.auth.insertAuthToken(user._id, res)
-                            .then((authToken) => {
-                                // return the user & token
-                                res.status(201).json({
-                                    token: authToken,
-                                    first_name: user.first_name,
-                                    last_name: user.last_name,
-                                    email: user.email,
-                                    username: user.username,
-                                    is_tutor: user.is_tutor
-                                });
-                            });
-                        }).catch(err => {
-                            console.log(err);
-                            res.status(500).send('Internal Server Error');
-                        });
-                    }
-                });
+                // if we are making a tutor, ensure we have the subject
+                if (this.#api.validateRequest(
+                    req, res, [
+                        'first_name', 'last_name', 'email',
+                        'password', 'username'
+                    ]
+                ) == false) return;
             }
-        });
+
+            // create a new account
+            this.#api.account.makeNewAccount(req.body, req.body.is_tutor)
+            .then((account) => {
+                res.status(201).json(account.getDataFiltered());
+            }).catch((err) => {
+                // if the err is a number
+                if (err == 409) res.status(409).send();
+                else {
+                    console.error(err);
+                    res.status(500).send('Internal Server Error');
+                }
+            });
+        }
     }
 
     updateUser = (req, res) => {
@@ -114,7 +92,11 @@ class UserEndpoints {
         let token = req.headers['authorization']
         this.#api.account.createAccountHandler(token)
         .then((account) => {
-            return account.deleteAccount();
+            if (account == null)
+                res.status(401).send('Unauthorized')
+            else {
+                return account.deleteAccount();
+            }
         })
         .then(() => {
             res.status(204).send();

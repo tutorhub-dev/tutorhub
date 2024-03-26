@@ -11,6 +11,8 @@ class AuthEndpoints {
         this.#api = api
     }
 
+    // Endpoint for debugging purposes only.
+    // TODO: remove endpoint before production
     makeHash = (req, res) => {
         // ensure we were sent the parameters we need
         if (this.#api.validateRequest(req, res, ['password']) == false) return
@@ -40,18 +42,19 @@ class AuthEndpoints {
         const password = req.body.password
 
         // test the credentials
-        this.#api.auth.testCredentials(email, password, (err, success, user_id) => {
-            if (err) {
-                console.log(err)
-                res.status(500).send('Internal Server Error')
-            } else if (!success) {
+        this.#api.account.testCredentials(email, password)
+        .then((account) => {
+            if (!account || account == null)
                 res.status(401).send('Unauthorized')
-            } else {
-                this.#api.auth.insertAuthToken(user_id)
+            else {
+                account.generateToken()
                 .then((authToken) => {
-                    res.status(200).send({
-                        "auth_token": authToken
-                    })
+                    // send the user data and the auth token
+                    let data = account.getDataFiltered()
+                    data.auth_token = authToken
+                    delete data._id
+
+                    res.status(200).send(data)
                 })
             }
         })
@@ -59,17 +62,17 @@ class AuthEndpoints {
 
     logout = (req, res) => {
         // get the user from the auth token
-        this.#api.auth.fetchUserByToken(req.headers['authorization'])
-        .then((user) => {
-            if (user == null)
-                res.status(401).send('Unauthorized')
-            else {
-                // delete the auth token
-                this.#api.authTokenCollection.deleteOne({ user_id: user.user_id })
-                .then(() => {
-                    res.status(200).send('Logged out')
-                })
-            }
+        let token = req.headers['authorization']
+        this.#api.account.createAccountHandler(token)
+        .then((account) => {
+            return account.deAuthenticate();
+        })
+        .then(() => {
+            res.status(200).send('Logged out')
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('Internal Server Error');
         });
     }
 }

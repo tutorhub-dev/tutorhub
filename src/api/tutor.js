@@ -23,7 +23,7 @@ class Tutor {
             first_name: this.#data.first_name,
             last_name: this.#data.last_name,
             email: this.#data.email,
-            username: this.#data.username,
+            tutorname: this.#data.tutorname,
             hourly_rate: this.#data.hourly_rate,
             is_tutor: true
         };
@@ -45,15 +45,48 @@ class Tutor {
         });
     }
 
+    static createHandlerFromBlank = (api, data) => {
+        return new Promise((resolve, reject) => {
+            // create a new tutor
+            const tutor = new api.tutorCollection(data);
+            tutor.save()
+            .then(() => {
+                // append the id to the data
+                data.tutor_id = tutor._id;
+
+                Tutor.#privateConstruct = true;
+                resolve(new Tutor(api, tutor._id, data));
+            })
+            .catch(reject);
+        });
+    }
+
     deleteAccount = () => {
         return new Promise((resolve, reject) => {
-            this.#api.userCollection.findOneAndDelete({ _id: this.#id })
+            this.#api.tutorCollection.findOneAndDelete({ _id: this.#id })
             .then((tutor) => {
                 if (tutor == null)
                     reject('Tutor not found');
                 else
                     resolve();
             })
+            .catch(reject);
+        });
+    }
+
+    generateToken = () => {
+        return new Promise((resolve, reject) => {
+            // create a new auth token
+            this.#api.auth.insertAuthToken(this.#id, true)
+            .then(resolve)
+            .catch(reject);
+        });
+    }
+
+    deAuthenticate = () => {
+        return new Promise((resolve, reject) => {
+            this.#api.auth.clearAuthTokens(this.#id)
+            .then(resolve)
             .catch(reject);
         });
     }

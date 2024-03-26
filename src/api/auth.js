@@ -1,5 +1,4 @@
 const bcrypt = require('bcrypt')
-const saltRounds = 10
 
 class AuthAPI {
     #api;
@@ -44,9 +43,11 @@ class AuthAPI {
         });
     }
 
-    insertAuthToken = (userID) => {
+    insertAuthToken = (userID, is_tutor) => {
         return new Promise((resolve, reject) => {
-            const authToken = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+            const authToken = (is_tutor ? 't' : 'u')
+                + Math.random().toString(36).substring(2, 15)
+                + Math.random().toString(36).substring(2, 15)
 
             const authTokenEntry = new this.#api.authTokenCollection({
                 user_id: userID,
@@ -70,26 +71,6 @@ class AuthAPI {
         return this.#api.authTokenCollection.deleteMany({
             user_id: userID
         });
-    }
-
-    testCredentials = (email, password, cb) => {
-        // make a query to the database to see if the user exists
-        this.#api.userCollection.findOne({
-            email: email
-        }, '_id hash_password').then((user) => {
-            // if the user does not exist, return false
-            if (!user) cb(null, false, null)
-
-            // if the user exists, compare the password
-            else {
-                bcrypt.compare(password, user.get('hash_password'), (err, result) => {
-                    if (err) cb(err, null, null)
-                    else cb(null, result, user.get('_id'))
-                })
-            }
-        }).catch((err) => {
-            cb(err, null, null)
-        })
     }
 }
 
