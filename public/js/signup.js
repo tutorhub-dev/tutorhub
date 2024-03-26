@@ -40,8 +40,8 @@ document.addEventListener("DOMContentLoaded", function() {
     
     };
 
-    fetch("/api/register", {
-      method: "Post",
+    fetch("/api/user", {
+      method: "Put",
       headers: {
         "Content-Type": "application/json"
       },
