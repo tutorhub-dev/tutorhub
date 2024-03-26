@@ -37,16 +37,17 @@ class TutorSchemas {
         return {
             tutor_id: { type: String, required: true },
             user_id: { type: String, required: true },
-            start_time: { type: Date, required: true },
-            end_time: { type: Date, required: true }
+            start_time: { type: String, required: true },
+            end_time: { type: String, required: true }
         }
     }
 
     static get availabilitySchema() {
         return {
             tutor_id: { type: String, required: true },
-            start_time: { type: Date, required: true },
-            end_time: { type: Date, required: true },
+            days: { type: [String], required: true },
+            start_hour: { type: Number, required: true },
+            end_hour: { type: Number, required: true },
             subject: { type: String, required: true }
         }
     }

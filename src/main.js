@@ -29,10 +29,10 @@ app.post('/api/user', api.userEndpoints.updateUser) // Good
 app.delete('/api/user', api.userEndpoints.deleteUser) // Good
 
 /* tutor-specific endpoints */
-app.get('/api/tutor', api.tutorEndpoints.getTutor) // 
-app.put('/api/tutor', api.tutorEndpoints.createTutor) 
-app.post('/api/tutor', api.tutorEndpoints.updateTutor) // dont do
-app.delete('/api/tutor', api.tutorEndpoints.deleteTutor)
+app.get('/api/tutor', api.tutorEndpoints.getTutor) // Good
+app.put('/api/tutor', api.tutorEndpoints.createTutor) // Good
+app.post('/api/tutor', api.tutorEndpoints.updateTutor)
+app.delete('/api/tutor', api.tutorEndpoints.deleteTutor) // Good
 
 /* appointment endpoint */
 app.get('/api/appointment', api.apptEndpoints.getAppointment) // get an appointment
