@@ -19,14 +19,16 @@ class TutorSchemas {
             email: { type: String, required: true, unique: true },
             hash_password: { type: String, required: true },
             username: { type: String, required: true },
-            is_tutor: {type: Boolean, required: false, default: false },
-            profile_picture: { type: String, required: false, default: "" }
         }
     }
 
     static get tutorSchema() {
         return {
-            user_id: { type: String, required: true },
+            first_name: { type: String, required: true },
+            last_name: { type: String, required: true },
+            email: { type: String, required: true, unique: true },
+            hash_password: { type: String, required: true },
+            username: { type: String, required: true },
             hourly_rate: { type: Number, required: true }
         }
     }
@@ -34,9 +36,18 @@ class TutorSchemas {
     static get appointmentSchema() {
         return {
             tutor_id: { type: String, required: true },
-            student_id: { type: String, required: true },
+            user_id: { type: String, required: true },
             start_time: { type: Date, required: true },
             end_time: { type: Date, required: true }
+        }
+    }
+
+    static get availabilitySchema() {
+        return {
+            tutor_id: { type: String, required: true },
+            start_time: { type: Date, required: true },
+            end_time: { type: Date, required: true },
+            subject: { type: String, required: true }
         }
     }
 }

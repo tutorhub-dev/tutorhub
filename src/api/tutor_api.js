@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
 const AuthAPI = require('./auth')
+const Account = require('./account')
 
 const TutorSchemas = require('./schema')
 
@@ -21,6 +22,7 @@ class TutorAPI {
     constructor(apiConfig, mongooseEndpoint) {
         this.#apiConfig = apiConfig
         this.auth = new AuthAPI(this)
+        this.account = new Account(this)
         
         // set up the endpoints
         this.authEndpoints = new AuthEndpoints(this)

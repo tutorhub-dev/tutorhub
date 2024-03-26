@@ -29,8 +29,8 @@ app.post('/api/user', api.userEndpoints.updateUser) // Good
 app.delete('/api/user', api.userEndpoints.deleteUser) // Good
 
 /* tutor-specific endpoints */
-app.get('/api/tutor', api.tutorEndpoints.getTutor) 
-app.put('/api/tutor', api.tutorEndpoints.createTutor)
+app.get('/api/tutor', api.tutorEndpoints.getTutor) // 
+app.put('/api/tutor', api.tutorEndpoints.createTutor) 
 app.post('/api/tutor', api.tutorEndpoints.updateTutor) // dont do
 app.delete('/api/tutor', api.tutorEndpoints.deleteTutor)
 

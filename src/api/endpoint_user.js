@@ -11,12 +11,16 @@ class UserEndpoints {
     getUser = (req, res) => {
         // get the user from the auth token
         let token = req.headers['authorization']
-        this.#api.auth.fetchUserByToken(token)
-        .then((user) => {
-            if (user == null)
+        this.#api.account.createAccountHandler(token)
+        .then((account) => {
+            if (account == null)
                 res.status(401).send('Unauthorized')
-            else
-                res.status(200).json(user)
+            else {
+                res.status(200).json(account.getDataFiltered())
+            }
+        }).catch((err) => {
+            console.error(err);
+            res.status(500).send('Internal Server Error');
         });
     }
 
@@ -108,20 +112,16 @@ class UserEndpoints {
     deleteUser = (req, res) => {
         // get the user from the auth token
         let token = req.headers['authorization']
-        this.#api.auth.fetchUserByToken(token)
-        .then((user) => {
-            if (user == null)
-                res.status(401).send('Unauthorized')
-            else {
-                // delete the user
-                this.#api.userCollection.findOneAndDelete({ _id: user.user_id })
-                .then((user) => {
-                    if (user == null)
-                        res.status(404).send('User not found');
-                    else
-                        res.status(204).send();
-                });
-            }
+        this.#api.account.createAccountHandler(token)
+        .then((account) => {
+            return account.deleteAccount();
+        })
+        .then(() => {
+            res.status(204).send();
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('Internal Server Error');
         });
     }
 }
