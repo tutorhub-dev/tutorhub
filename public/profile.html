@@ -49,14 +49,7 @@
     <div class="flex-1 p-8">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <!-- Left Column -->
-            <div>
-                <!-- Appointments Container -->
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <h2 class="text-lg font-semibold mb-4">Your Appointments</h2>
-                    <div class="list">
-                        <ul id="appointmentList"></ul>
-                    </div>
-                </div>
+            <div class="user-class">
                 <!-- Request Appointment Section -->
                 <div class="bg-white rounded-lg shadow-md p-6 mt-8">
                     <h2 class="text-lg font-semibold mb-4">Request an Appointment</h2>
@@ -73,7 +66,7 @@
                 </div>
             </div>
             <!-- Right Column -->
-            <div>
+            <div class="tutor-class">
                 <!-- Tutor Availability Table -->
                 <div class="bg-white rounded-lg shadow-md p-6">
                     <h2 class="text-lg font-semibold mb-4">Tutor Availability</h2>
@@ -101,55 +94,6 @@
             </div>
         </div>
 
-        <!-- User Elements -->
-        <div class="user-class" style=>
-            <div class="appointment-request">
-                <h2 class="font-mono">Request an Appointment</h2>
-                <form id="appointmentRequestForm">
-                    <label for="tutorSelect">Select Tutor:</label>
-                    <select id="tutorSelect" name="tutorId" required>
-                        <!-- Options should be populated dynamically based on available tutors -->
-                    </select>
-            
-                    <label for="appointmentDate">Date:</label>
-                    <input type="date" id="appointmentDate" name="date" required>
-            
-                    <label for="appointmentTime">Start Time:</label>
-                    <input type="time" id="appointmentStartTime" name="time" required>
-
-                    <label for="appointmentEndTime">End Time:</label>
-                    <input type="time" id="appointmentEndTime" name="time" required>
-            
-                    <label for="subject">Subject:</label>
-                    <input type="text" id="subject" name="subject" required>
-            
-                    <button type="submit" id="reqApptButton" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Request Appointment</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- Tutor Elements -->
-        <table id="availabilityTable" class="tutor-class" style=>
-            <thead>
-                <tr>
-                    <th class="font-mono">Date</th>
-                    <th class="font-mono">Start Time</th>
-                    <th class="font-mono">End Time</th>
-                    <th class="font-mono">Subject</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><input type="date" id="date" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" ></td>
-                    <td><input type="text" id="start" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" ></td>
-                    <td><input type="text" id="end" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" ></td>
-                    <td><input type="text" id="subject" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" ></td>
-                    <td><button id="add-availability" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Add Availability</button></td>
-                </tr>
-                <tr>
-                </tr>
-            </tbody>
-        </table>
     </div>
     
     <script src="js/profile.js"></script>
