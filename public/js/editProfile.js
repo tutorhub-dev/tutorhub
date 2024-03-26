@@ -5,16 +5,17 @@ document.addEventListener("DOMContentLoaded", function() {
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
         const confirmPassword = document.getElementById("confirm-password").value;
-        const profilePic = document.getElementById("pfp").files[0];
-
+        
+        if (password !== confirmPassword) {
+            alert("Passwords do not match");
+            return;
+        }
         // Create form data object to send user data
-        const formData = new FormData();
-        formData.append('username', username);
-        formData.append('email', email);
-        formData.append('password', password);
-        formData.append('confirm-password', confirmPassword);
-        formData.append('pfp', profilePic);
-
+        const formData = {
+           username: username,
+            password: password,
+            email: email
+          };
         // Retrieve user token from session storage
         let data = sessionStorage.getItem("userData");
         let userData = JSON.parse(data);
@@ -77,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Add event listener to edit form for form submission
-    const editForm = document.getElementById("edit-form");
+    const editForm = document.getElementById("submit");
     if (editForm) {
         editForm.addEventListener("submit", function(event) {
             event.preventDefault();
@@ -97,3 +98,4 @@ document.addEventListener("DOMContentLoaded", function() {
         console.error('Delete account button not found');
     }
 });
+
