@@ -14,97 +14,88 @@
        
     <!-- Left-side navbar -->
     <div class="flex h-screen">
-        <div class="bg-gray-800 text-white w-64 flex-shrink-0">
-            <div class="p-4 flex flex-col h-full justify-between">
-                <div>
+    <div class="bg-gray-800 text-white w-64 flex-shrink-0">
+        <div class="p-4 flex flex-col h-full justify-between">
+            <div>
                 <h1 class="text-2xl font-bold mb-4">Tutor Dashboard</h1>
                 <ul class="space-y-2">
                     <li><a href="#" id="bookingsButton" class="block py-2 px-4 rounded hover:bg-gray-700">
                         <i class="fas fa-calendar-alt mr-2"></i> <!-- Font Awesome calendar icon -->
                         Bookings
                     </a></li>
-                <li><a href="#" id="editProfileButton" class="block py-2 px-4 rounded hover:bg-gray-700">
+                    <li><a href="#" id="editProfileButton" class="block py-2 px-4 rounded hover:bg-gray-700">
                         <i class="fas fa-user-edit mr-2"></i> <!-- Font Awesome edit icon -->
                         Edit Profile
                     </a></li>
-                <li><a href="#" id="availabilityButton" class="block py-2 px-4 rounded hover:bg-gray-700">
+                    <li><a href="#" id="availabilityButton" class="block py-2 px-4 rounded hover:bg-gray-700">
                         <i class="fas fa-clock mr-2"></i> <!-- Font Awesome clock icon -->
                         Availability
                     </a></li> 
-                    
                 </ul>
             </div>
+            <!-- User Info Section -->
+            <div class="flex items-center space-x-4">
+                <img src="path_to_profile_picture.jpg" alt="Profile Picture" class="w-8 h-8 rounded-full">
+                <span class="text-sm font-medium">Username</span>
+            </div>
+            <!-- Logout Button -->
             <div>
                 <button id="logoutButton" class="block w-full py-2 px-4 rounded hover:bg-gray-700">Logout</button>
             </div>
         </div>
     </div>
-
+    
+   
     <div class="flex-1 p-8">
-
-        <div class="profile mb-4">
-            <div class="top-right-container">
-                <h1 id="userName" class="font-mono">Username</h1>
-                <img id="pfp" src="" alt="Profile Picture"/>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Left Column -->
+            <div class="user-class">
+                <!-- Request Appointment Section -->
+                <div class="bg-white rounded-lg shadow-md p-6 mt-8">
+                    <h2 class="text-lg font-semibold mb-4">Request an Appointment</h2>
+                    <form id="appointmentRequestForm">
+                        <div class="mb-4">
+                            <label for="tutorSelect" class="block font-medium">Select Tutor:</label>
+                            <select id="tutorSelect" name="tutorId" required class="border border-gray-300 rounded-lg p-2 w-full">
+                                <!-- Options should be populated dynamically based on available tutors -->
+                            </select>
+                        </div>
+                        <!-- Other input fields -->
+                        <button type="submit" id="reqApptButton" class="bg-gray-800 text-white font-medium rounded-lg px-4 py-2.5 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300">Request Appointment</button>
+                    </form>
+                </div>
+            </div>
+            <!-- Right Column -->
+            <div class="tutor-class">
+                <!-- Tutor Availability Table -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h2 class="text-lg font-semibold mb-4">Tutor Availability</h2>
+                    <table id="availabilityTable" class="w-full">
+                        <thead>
+                            <tr>
+                                <th class="font-semibold">Date</th>
+                                <th class="font-semibold">Start Time</th>
+                                <th class="font-semibold">End Time</th>
+                                <th class="font-semibold">Subject</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="date" id="date" class="border border-gray-300 rounded-lg p-2 w-full"></td>
+                                <td><input type="text" id="start" class="border border-gray-300 rounded-lg p-2 w-full"></td>
+                                <td><input type="text" id="end" class="border border-gray-300 rounded-lg p-2 w-full"></td>
+                                <td><input type="text" id="subject" class="border border-gray-300 rounded-lg p-2 w-full"></td>
+                                <td><button id="add-availability" class="bg-gray-800 text-white font-medium rounded-lg px-4 py-2.5 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300">Add Availability</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-        <div class="appointments-container">
-            <h2 class="font-mono">Your Appointments</h2>
-            <div class="list">
-                <ul id="appointmentList"></ul>
-            </div>
-        </div>
 
-        <!-- User Elements -->
-        <div class="user-class" style=>
-            <div class="appointment-request">
-                <h2 class="font-mono">Request an Appointment</h2>
-                <form id="appointmentRequestForm">
-                    <label for="tutorSelect">Select Tutor:</label>
-                    <select id="tutorSelect" name="tutorId" required>
-                        <!-- Options should be populated dynamically based on available tutors -->
-                    </select>
-            
-                    <label for="appointmentDate">Date:</label>
-                    <input type="date" id="appointmentDate" name="date" required>
-            
-                    <label for="appointmentTime">Start Time:</label>
-                    <input type="time" id="appointmentStartTime" name="time" required>
-
-                    <label for="appointmentEndTime">End Time:</label>
-                    <input type="time" id="appointmentEndTime" name="time" required>
-            
-                    <label for="subject">Subject:</label>
-                    <input type="text" id="subject" name="subject" required>
-            
-                    <button type="submit" id="reqApptButton" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Request Appointment</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- Tutor Elements -->
-        <table id="availabilityTable" class="tutor-class" style=>
-            <thead>
-                <tr>
-                    <th class="font-mono">Date</th>
-                    <th class="font-mono">Start Time</th>
-                    <th class="font-mono">End Time</th>
-                    <th class="font-mono">Subject</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><input type="date" id="date" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" ></td>
-                    <td><input type="text" id="start" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" ></td>
-                    <td><input type="text" id="end" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" ></td>
-                    <td><input type="text" id="subject" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" ></td>
-                    <td><button id="add-availability" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Add Availability</button></td>
-                </tr>
-                <tr>
-                </tr>
-            </tbody>
-        </table>
     </div>
+    
     <script src="js/profile.js"></script>
     <script src="js/editProfile.js"></script>
 </body>

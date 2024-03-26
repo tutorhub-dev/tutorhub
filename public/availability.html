@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Availability</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-300">
+    <div id="search">
+        <input type="text" id="searchBar" placeholder="Search for tutors...">
+        <button id="searchButton" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300">Search</button>
+    </div>
+
+    <div id="availability-results">
+        <h2 class="font-mono">Available Tutors</h2>
+        <div class="list">
+            <ul id="availabilityList">
+                <!-- Tutors will be populated here -->
+            </ul>
+        </div>
+    </div>
+    <script src="js/profile.js"></script>
+</body>
+</html>
