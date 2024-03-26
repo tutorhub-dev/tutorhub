@@ -79,6 +79,7 @@ class TutorEndpoints {
             res.status(500).send('Error finding user');
         });
     };
+    
     //**discuss with team: is subject a part of tutor or will they be handled elsewhere (setting availability/appointment) ****///
     updateTutor = (req, res) => {
         // Extract tutor ID from request parameters

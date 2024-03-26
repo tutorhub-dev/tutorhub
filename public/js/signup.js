@@ -31,17 +31,16 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     const formData = {
-      firstName: firstName,
-      lastName: lastName,
+      first_name: firstName,
+      last_name: lastName,
       username: username,
       password: password,
       email: email,
-      isTutor: isTutor,
-    
+      is_tutor: isTutor
     };
 
     fetch("/api/user", {
-      method: "Put",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json"
       },

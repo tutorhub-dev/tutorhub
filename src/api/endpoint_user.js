@@ -22,7 +22,14 @@ class UserEndpoints {
 
     createUser = (req, res) => {
         if (this.#api.validateRequest(
-            req, res, ['email', 'password', 'username', 'is_tutor']
+            req, res, [
+                'first_name',
+                'last_name',
+                'email',
+                'password',
+                'username',
+                'is_tutor'
+            ]
         ) == false) return;
 
         const username = req.body.username;
