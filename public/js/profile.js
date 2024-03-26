@@ -25,12 +25,12 @@
             requestAppointment(tutorId, date, startTime, endTime, subject);
         });
     }
+    toggleElementVisibility();
     getUserAppointments();
     getTutorAppointments();
     fetchAndDisplayAvailability();
     searchTutorsAndSubjects();
     displayAppointmentsBasedOnRole();
-
 }); */
 
 document.getElementById('bookingsButton').addEventListener('click', function() {
@@ -107,9 +107,12 @@ appointmentSubject.addObserver(rateObserver);
 
 // Display details functions
 function fetchUserDetails(headers) {
-    fetch('/src/api/user', {
+    fetch('/api/user', {
         method: 'POST',
-        headers: headers,
+        headers: headers ({
+            'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
+            'Content-Type': 'application/json'
+        })
     })
 
     .then(response => {
@@ -120,14 +123,14 @@ function fetchUserDetails(headers) {
         document.getElementById("userName").textContent = data.name;
         document.getElementById("pfp").src = data.profilePicture;
 
-        toggleElementVisibility(data.userIsTutor);
+        toggleElementVisibility(data.isTutor);
     })
     .catch(error => console.error('Failed to fetch user data:', error));
 }
 
 function searchTutorsAndSubjects() {
     const searchQuery = document.getElementById('searchBar').value;
-    fetch ('/src/api/tutor/search', {
+    fetch ('/api/search', {
         method: 'POST',
         headers: new Headers({
             'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
@@ -135,7 +138,10 @@ function searchTutorsAndSubjects() {
         }),
         body: JSON.stringify({ query: searchQuery })
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) throw new Error('Failed to search for tutors');
+        return response.json(); // { tutors: [], subjects: []
+    })
     .then(data => {
         const availabilityList = document.getElementById("availabilityList");
         availabilityList.innerHTML = "";
@@ -156,14 +162,17 @@ document.getElementById("searchButton").addEventListener("click", function() {
 });
 
 function fetchTutorAvailability(tutorId) {
-    fetch (`/src/api/tutor/${tutorId}/availability`, {
+    fetch (`/api/tutor/${tutorId}/availability`, {
         method: 'POST',
         headers: new Headers({
             'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
             'Content-Type': 'application/json'
         })
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) throw new Error('Failed to fetch tutor availability');
+        return response.json();
+    })
     .then(data => {
         const availabilityList = document.getElementById("availabilityList");
         availabilityList.innerHTML = "";
@@ -177,14 +186,17 @@ function fetchTutorAvailability(tutorId) {
 }
 
 function getTutorAppointments() {
-    fetch('/src/api/tutor/appointments/requests', {
+    fetch('/api/tutor/appointments/requests', {
         method: 'POST',
         headers: new Headers({
             'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
             'Content-Type': 'application/json'
         })
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) throw new Error('Failed to fetch tutor appointments');
+        return response.json();
+    })
     .then(data => {
         displayTutorAppointments(data);
     })
@@ -193,12 +205,11 @@ function getTutorAppointments() {
 
 function displayTutorAppointments(appointments) {
     const appointmentList = document.getElementById("appointmentList");
-
     appointmentList.innerHTML = "";
 
     appointments.forEach(appointment => {
         const listItem = document.createElement("li");
-        listItem.textContent = `${appointment.subject} - ${appointment.date}`;
+        listItem.textContent = `${appointment.subject} - ${appointment.date}` - `${appointment.start_time} to ${appointment.end_time}`;
 
         const acceptButton = document.createElement("button");
         acceptButton.textContent = "Accept";
@@ -219,7 +230,7 @@ function displayTutorAppointments(appointments) {
 }
 
 function displayAppointmentsBasedOnRole() {
-    const isTutor = sessionStorage.getItem("isTutor");
+    const isTutor = sessionStorage.getItem("isTutor") === "true";
 
     if (isTutor) {
         getTutorAppointments();
@@ -229,14 +240,17 @@ function displayAppointmentsBasedOnRole() {
 }
 
 function getUserAppointments() {
-    fetch('/src/api/user/appointments', {
+    fetch('/api/user/appointments', {
         method: 'POST',
         headers: new Headers({
             'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
             'Content-Type': 'application/json'
         })
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) throw new Error('Failed to fetch user appointments');
+        return response.json();
+    })
     .then(data => {
         const appointmentList = document.getElementById("appointmentList");
         appointmentList.innerHTML = "";
@@ -255,6 +269,13 @@ function getUserAppointments() {
                     if (confirm("Are you sure you want to cancel this appointment?")) {
                         cancelAppointment(appointment.id);
                     }
+                }
+                const editButton = document.createElement("button");
+                editButton.textContent = "Edit Appointment";
+                editButton.onclick = function() {
+                    const newStart = prompt("Enter the new start time:");
+                    const newEnd = prompt("Enter the new end time:");
+                    editAppointment(appointment.id, newStart, newEnd);
                 };
                 listItem.appendChild(cancelButton);
             }
@@ -264,19 +285,12 @@ function getUserAppointments() {
     .catch(error => console.error('Failed to fetch user appointments:', error));
 }
 
-function toggleElementVisibility(userIsTutor) {
+function toggleElementVisibility(isTutor) {
     const tutorElements = document.querySelectorAll(".tutor-class");
     const userElements = document.querySelectorAll(".user-class");
 
-    tutorElements.forEach(element => element.style.display = userIsTutor ? "block" : "none");
-    userElements.forEach(element => element.style.display = userIsTutor ? "none" : "block");
-
-    if (userIsTutor) {
-        fetchAndDisplayAvailability();
-        getTutorAppointments();
-    } else {
-        getUserAppointments();
-    }
+    tutorElements.forEach(element => element.style.display = isTutor ? "block" : "none");
+    userElements.forEach(element => element.style.display = isTutor ? "none" : "block");
 }
 
 // Availability functions
@@ -295,14 +309,17 @@ document.getElementById("add-availability").addEventListener("click", function()
 });
 
 function fetchAndDisplayAvailability() {
-    fetch('/src/api/tutor/availability', {
+    fetch('/api/tutor/availability', {
         method: 'POST',
         headers: new Headers({
             'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
             'Content-Type': 'application/json'
         })
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) throw new Error('Failed to fetch availability');
+        return response.json();
+    })
     .then (data => {
         const tableBody = document.getElementById("availabilityTable").getElementsByTagName("tbody")[0];
         tableBody.innerHTML = "";
@@ -327,22 +344,21 @@ function fetchAndDisplayAvailability() {
             deleteButton.onclick = function() { deleteAvailability(slot.id); };
             deleteCell.appendChild(deleteButton);
         });
-
     })
-
+    .catch(error => console.error('Failed to fetch availability:', error));
 }
 
-function createAvailability(date, start, end, subject) {
-    fetch('/src/api/tutor/availability', {
+function createAvailability(days, start_hour, end_hour, subject) {
+    fetch('/api/tutor/availability', {
         method: 'POST',
         headers: new Headers({
             'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
             'Content-Type': 'application/json'
         }),
         body: JSON.stringify({
-            date: date,
-            start: start,
-            end: end,
+            days: days,
+            start_hour: start_hour,
+            end_hour: end_hour,
             subject: subject
             })
     })
@@ -355,33 +371,35 @@ function createAvailability(date, start, end, subject) {
         const addRow = tableBody.insertRow();
 
         const dateCell = addRow.insertCell(0);
+        dateCell.textContent = newSlot.days;
+
         const startCell = addRow.insertCell(1);
+        startCell.textContent = newSlot.start_hour;
+
         const endCell = addRow.insertCell(2);
+        endCell.textContent = newSlot.end_hour;
+
         const subjectCell = addRow.insertCell(3);
+        subjectCell.textContent = newSlot.subject;
 
-        dateCell.textContent = newSlot.date;
-        startCell.textContent = start;
-        endCell.textContent = end;
-        subjectCell.textContent = subject;
-
-        const deleteCell = addRow.insertCell(3);
+        const deleteCell = addRow.insertCell(4);
         const deleteButton = document.createElement("button");
         deleteButton.textContent = "Delete Availability";
         deleteButton.dataset.id = newSlot.id;
         deleteButton.onclick = function() { deleteAvailability(newSlot.id); };
         deleteCell.appendChild(deleteButton);
-
-        if (userIsTutor) {
-            fetchAndDisplayAvailability();
-        } else {
-            getUserAppointments();
-        }
     })
     .catch(error => console.error('Failed to add your availability:', error));   
 }
 
+function formatHour(decimalHour) {
+    const hour = Math.floor(decimalHour);
+    const minute = Math.round((decimalHour - hour) * 60);
+    return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+}
+
 function deleteAvailability(slotId) {
-    fetch(`/src/api/tutor/availability/${slotId}`, { /* Maybe add a slotId feature in the availability API? */
+    fetch(`/api/tutor/availability/${slotId}`, { /* Maybe add a slotId feature in the availability API? */
         method: 'DELETE',
         headers: new Headers({
             'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
@@ -397,7 +415,7 @@ function deleteAvailability(slotId) {
 
 // Appointment functions
 function requestAppointment(tutorId, date, start, end, subject) {
-    fetch('/src/api/user/appointments', {
+    fetch('/api/appointment', {
         method: 'POST',
         headers: new Headers({
             'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
@@ -418,8 +436,29 @@ function requestAppointment(tutorId, date, start, end, subject) {
     .catch(error => console.error('Failed to request appointment:', error));
 }
 
+function editAppointment(appointmentId, newStart, newEnd) {
+    const body = JSON.stringify({
+        start: newStart,
+        end: newEnd
+    });
+
+    fetch(`/src/api/appointment/${appointmentId}`, {
+        method: 'POST',
+        headers: new Headers({
+            'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
+            'Content-Type': 'application/json'
+        }),
+        body: body
+    }) 
+    .then(response => {
+        if (!response.ok) throw new Error('Failed to edit appointment');
+        alert('Your appointment has been successfully edited!');
+    })
+    .catch(error => console.error('Failed to edit appointment:', error));
+}
+
 function cancelAppointment(appointmentId) {
-    fetch(`/src/api/user/appointments/${appointmentId}`, {
+    fetch(`/src/api/user/appointment/${appointmentId}`, {
         method: 'DELETE',
         headers: new Headers({
             'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
@@ -434,12 +473,15 @@ function cancelAppointment(appointmentId) {
 }
 
 function acceptAppointment(appointmentId) {
-    fetch(`/src/api/tutor/appointments/${appointmentId}/accept`, {
+    const body = JSON.stringify({ appointment_id: appointmentId });
+
+    fetch(`/api/appointment/accept`, {
         method: 'POST',
         headers: new Headers({
             'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
             'Content-Type': 'application/json'
-        })
+        }),
+        body: body
     })
     .then(response => {
         if (!response.ok) throw new Error('Failed to accept appointment');
@@ -450,12 +492,15 @@ function acceptAppointment(appointmentId) {
 } 
 
 function declineAppointment(appointmentId) {
-    fetch(`/src/api/tutor/appointments/${appointmentId}/decline`, {
-        method: 'POST',
+    const body = JSON.stringify({ appointment_id: appointmentId });
+
+    fetch(`/api/appointment`, {
+        method: 'DELETE',
         headers: new Headers({
             'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
             'Content-Type': 'application/json'
-        })
+        }),
+        body: body
     })
     .then(response => {
         if (!response.ok) throw new Error('Failed to decline appointment');
@@ -466,7 +511,7 @@ function declineAppointment(appointmentId) {
 }
 
 function setRate(appointmentId, rating, review = null) {
-    fetch(`/src/api/user/appointments/${appointmentId}/rate`, {
+    fetch(`/api/user/appointment/${appointmentId}/rate`, {
         method: 'POST',
         headers: new Headers({
             'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
@@ -475,7 +520,9 @@ function setRate(appointmentId, rating, review = null) {
         body: JSON.stringify({ rating: rating, review: review })
     })
     .then(response => {
-        if (!response.ok) throw new Error("Failed to rate the appointment");
+        if (!response.ok) {
+            throw new Error("Failed to rate the appointment");
+        }
         alert ("You have successfully rated and reviewed the appointment!");
         getUserAppointments();     
     })
@@ -489,7 +536,7 @@ function submitRatingAndReview (appointmentId, rating, review) {
 
 // Button functions
 document.getElementById("logoutButton").addEventListener("click", function() {
-    fetch('/src/api/auth/logout', {
+    fetch('/api/logout', {
         method: 'POST',
         headers: new Headers({
             'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
