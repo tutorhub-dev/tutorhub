@@ -162,12 +162,15 @@ document.getElementById("searchButton").addEventListener("click", function() {
 });
 
 function fetchTutorAvailability(tutorId) {
-    fetch (`/api/tutor/${tutorId}/availability`, {
+    const body = JSON.stringify({ tutor_id: tutorId });
+
+    fetch (`/api/tutor/`, {
         method: 'POST',
         headers: new Headers({
             'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
             'Content-Type': 'application/json'
-        })
+        }),
+        body: body
     })
     .then(response => {
         if (!response.ok) throw new Error('Failed to fetch tutor availability');
@@ -186,7 +189,7 @@ function fetchTutorAvailability(tutorId) {
 }
 
 function getTutorAppointments() {
-    fetch('/api/tutor/appointments/requests', {
+    fetch('/api/appointment', {
         method: 'POST',
         headers: new Headers({
             'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
@@ -240,7 +243,7 @@ function displayAppointmentsBasedOnRole() {
 }
 
 function getUserAppointments() {
-    fetch('/api/user/appointments', {
+    fetch('/api/user/', {
         method: 'POST',
         headers: new Headers({
             'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
@@ -309,7 +312,7 @@ document.getElementById("add-availability").addEventListener("click", function()
 });
 
 function fetchAndDisplayAvailability() {
-    fetch('/api/tutor/availability', {
+    fetch('/api/tutor/', {
         method: 'POST',
         headers: new Headers({
             'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
@@ -349,18 +352,20 @@ function fetchAndDisplayAvailability() {
 }
 
 function createAvailability(days, start_hour, end_hour, subject) {
+    const body = JSON.stringify({
+        days: days,
+        start_hour: start_hour,
+        end_hour: end_hour,
+        subject: subject
+    });
+
     fetch('/api/tutor/availability', {
         method: 'POST',
         headers: new Headers({
             'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
             'Content-Type': 'application/json'
         }),
-        body: JSON.stringify({
-            days: days,
-            start_hour: start_hour,
-            end_hour: end_hour,
-            subject: subject
-            })
+        body: body
     })
     .then(response => {
         if (!response.ok) throw new Error('Failed to add your availability');
@@ -399,12 +404,15 @@ function formatHour(decimalHour) {
 }
 
 function deleteAvailability(slotId) {
-    fetch(`/api/tutor/availability/${slotId}`, { /* Maybe add a slotId feature in the availability API? */
+    const body = JSON.stringify({ slot_id: slotId });
+
+    fetch(`/api/tutor/`, { /* Maybe add a slotId feature in the availability API? */
         method: 'DELETE',
         headers: new Headers({
             'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
             'Content-Type': 'application/json'
-        })
+        }),
+        body: body
     })
     .then(response => {
         if (!response.ok) throw new Error('Failed to delete availability');
@@ -415,19 +423,20 @@ function deleteAvailability(slotId) {
 
 // Appointment functions
 function requestAppointment(tutorId, date, start, end, subject) {
+    const body = JSON.stringify({
+        tutor_id: tutorId,
+        date: date,
+        start: start,
+        end: end,
+        subject: subject
+    });
     fetch('/api/appointment', {
         method: 'POST',
         headers: new Headers({
             'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
             'Content-Type': 'application/json'
         }),
-        body: JSON.stringify({
-            tutorId: tutorId,
-            date: date,
-            start: start,
-            end: end,
-            subject: subject
-        })
+        body: body
     })
     .then(response => {
         if (!response.ok) throw new Error('Failed to request appointment');
@@ -439,10 +448,11 @@ function requestAppointment(tutorId, date, start, end, subject) {
 function editAppointment(appointmentId, newStart, newEnd) {
     const body = JSON.stringify({
         start: newStart,
-        end: newEnd
+        end: newEnd,
+        appointment_id: appointmentId
     });
 
-    fetch(`/src/api/appointment/${appointmentId}`, {
+    fetch(`/api/appointment/`, {
         method: 'POST',
         headers: new Headers({
             'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
@@ -458,12 +468,15 @@ function editAppointment(appointmentId, newStart, newEnd) {
 }
 
 function cancelAppointment(appointmentId) {
-    fetch(`/src/api/user/appointment/${appointmentId}`, {
+    const body = JSON.stringify({ appointment_id: appointmentId });
+
+    fetch(`/api/appointment/`, {
         method: 'DELETE',
         headers: new Headers({
             'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
             'Content-Type': 'application/json'
-        })
+        }),
+        body: body
     })
     .then(response => {
         if (!response.ok) throw new Error('Failed to cancel appointment');
@@ -556,7 +569,7 @@ document.getElementById("logoutButton").addEventListener("click", function() {
 
 document.getElementById("deleteAccountButton").addEventListener("click", function() {
     if(confirm("Are you sure you want to delete your account?")) {
-        fetch('/src/api/user', {
+        fetch('/api/user', {
             method: 'DELETE',
             headers: new Headers({
                 'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
