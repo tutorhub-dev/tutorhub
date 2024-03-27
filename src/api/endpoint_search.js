@@ -4,39 +4,65 @@ class SearchEndpoints {
     constructor(api) {
         this.#api = api;
     }
-    
 
-    // **discuss with team: want to add a filter by subject and rate as well possibly*** as of rn only filters for overlapping times
-
+    // can filter by: tutors, subjects, and days
     search = (req, res) => {
-        const { start_time, end_time } = req.query;
+        // check that the request contains at least a tutor, subject, or day
+        this.#validateRequest(req)
+        .then(() => {
+            // get the tutors, subjects, and days from the request
+            let tutor_id = req.body.tutor_id;
+            let subject = req.body.subject;
+            let day = req.body.day;
 
-    // Validate start_time and end_time
-    if (!start_time || !end_time) {
-        res.status(400).send('Missing start_time or end_time parameters');
-        return;
+            // search for availabilties where the tutor or subject match,
+            // or it contains one of the days
+            let query = {};
+            if (tutor_id != undefined) query.tutor_id = tutor_id;
+            if (subject != undefined) query.subject = subject;
+            if (day != undefined) query.days = { $in: [day] };
+            console.log("Query: " + JSON.stringify(query));
+
+            // find all availabilities that match the query
+            return this.#api.availabilityCollection.find(query);
+        })
+        .then((availabilities) => {
+            // return the availabilities
+            if (!availabilities)
+                res.status(404).json([])
+            else {
+                // filter out sensitive information from the availabilities
+                let filteredAvailabilities = availabilities.map((availability) => {
+                    return {
+                        availability_id: availability._id,
+                        tutor_id: availability.tutor_id,
+                        days: availability.days,
+                        start_hour: availability.start_hour,
+                        end_hour: availability.end_hour,
+                        subject: availability.subject
+                    }
+                });
+
+                res.status(200).json(filteredAvailabilities);
+            }
+        })
+        .catch(err => {
+            this.#api.handleError(err, res);
+        });
     }
 
-    // Find tutors who don't have appointments overlapping with the specified time range
-    this.#api.appointmentCollection.find({
-        start_time: { $not: { $gte: new Date(end_time) } },
-        end_time: { $not: { $lte: new Date(start_time) } }
-    })
-    .then(appointments => {
-        // Extract tutor IDs from appointments
-        const occupiedTutorIds = appointments.map(appointment => appointment.tutor_id);
+    #validateRequest = (req) => {
+        return new Promise((resolve, reject) => {
+            // check that the request contains at least a tutor, subject, or day
+            if (
+                req.body.tutor_id == undefined &&
+                req.body.subject == undefined &&
+                req.body.day == undefined
+            ) reject(400);
 
-        // Fetch all tutors from the database
-        return this.#api.tutorCollection.find().toArray()
-    }).then(tutors => {
-        // Filter out tutors who are not occupied during the specified time range
-        const availableTutors = tutors.filter(tutor => !occupiedTutorIds.includes(tutor._id));
-
-        res.status(200).json(availableTutors);
-    }).catch(err => {
-        this.#api.handleError(err, res);
-    });
-}
+            else resolve();
+        });
+    }
 };
 
 

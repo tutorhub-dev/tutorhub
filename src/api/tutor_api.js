@@ -24,7 +24,7 @@ class TutorAPI {
         this.#apiConfig = apiConfig
         this.auth = new AuthAPI(this)
         this.account = new Account(this)
-        
+
         // set up the endpoints
         this.authEndpoints = new AuthEndpoints(this)
         this.userEndpoints = new UserEndpoints(this)
