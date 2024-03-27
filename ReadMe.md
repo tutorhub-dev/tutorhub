@@ -1,3 +1,9 @@
+# Students
+mitsukaki - Ephraim B.
+egalized00 - Ibrahim
+Nost01 - Winston N.
+Mohammed-Darbi - Mohammed
+
 # Git Command Help
 ## To Add all new files (usually you should run this every time before you commit)
 Run that from the root directory
