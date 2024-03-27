@@ -28,7 +28,6 @@ document.addEventListener("DOMContentLoaded", function() {
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
         const confirmPassword = document.getElementById("confirm-password").value;
-        const hourlyRate = isTutor ? document.getElementById("hourlyRate").value : null;
 
         // Create form data object to send user data
         const formData = {
