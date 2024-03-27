@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(response => {
                 if (response.ok) {
                     sessionStorage.clear();
-                    window.location.href = "login.html";
+                    window.location.href = "index.html";
                 } else {
                     throw new Error('Failed to log out');
                 }
