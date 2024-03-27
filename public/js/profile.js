@@ -33,11 +33,14 @@
     displayAppointmentsBasedOnRole();
 }); */
 
-document.getElementById('bookingsButton').addEventListener('click', function() {
-    window.location.href = "appointments.html";
-});
 document.getElementById('availabilityButton').addEventListener('click', function() {
     window.location.href = "availability.html";
+});
+document.getElementById('editProfileButton').addEventListener('click', function() {
+    window.location.href = "editProfile.html";
+});
+document.getElementById('bookingsButton').addEventListener('click', function() {
+    window.location.href = "appointments.html";
 });
 
 class Observer {
@@ -123,7 +126,7 @@ function fetchUserDetails(headers) {
         document.getElementById("userName").textContent = data.name;
         document.getElementById("pfp").src = data.profilePicture;
 
-        toggleElementVisibility(data.isTutor);
+        toggleElementVisibility(data.is_tutor);
     })
     .catch(error => console.error('Failed to fetch user data:', error));
 }
@@ -164,7 +167,7 @@ document.getElementById("searchButton").addEventListener("click", function() {
 function fetchTutorAvailability(tutorId) {
     const body = JSON.stringify({ tutor_id: tutorId });
 
-    fetch (`/api/tutor/`, {
+    fetch (`/api/availability/`, {
         method: 'POST',
         headers: new Headers({
             'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
@@ -233,9 +236,9 @@ function displayTutorAppointments(appointments) {
 }
 
 function displayAppointmentsBasedOnRole() {
-    const isTutor = sessionStorage.getItem("isTutor") === "true";
+    const is_tutor = sessionStorage.getItem("is_tutor") === "true";
 
-    if (isTutor) {
+    if (is_tutor) {
         getTutorAppointments();
     } else {
         getUserAppointments();
@@ -243,7 +246,7 @@ function displayAppointmentsBasedOnRole() {
 }
 
 function getUserAppointments() {
-    fetch('/api/user/', {
+    fetch('/api/appointment/', {
         method: 'POST',
         headers: new Headers({
             'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
@@ -288,12 +291,12 @@ function getUserAppointments() {
     .catch(error => console.error('Failed to fetch user appointments:', error));
 }
 
-function toggleElementVisibility(isTutor) {
+function toggleElementVisibility(is_tutor) {
     const tutorElements = document.querySelectorAll(".tutor-class");
     const userElements = document.querySelectorAll(".user-class");
 
-    tutorElements.forEach(element => element.style.display = isTutor ? "block" : "none");
-    userElements.forEach(element => element.style.display = isTutor ? "none" : "block");
+    tutorElements.forEach(element => element.style.display = is_tutor ? "block" : "none");
+    userElements.forEach(element => element.style.display = is_tutor ? "none" : "block");
 }
 
 // Availability functions
@@ -359,7 +362,7 @@ function createAvailability(days, start_hour, end_hour, subject) {
         subject: subject
     });
 
-    fetch('/api/tutor/availability', {
+    fetch('/api/availability', {
         method: 'POST',
         headers: new Headers({
             'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
@@ -524,13 +527,13 @@ function declineAppointment(appointmentId) {
 }
 
 function setRate(appointmentId, rating, review = null) {
-    fetch(`/api/user/appointment/${appointmentId}/rate`, {
+    fetch(`/api/appointment/rate`, {
         method: 'POST',
         headers: new Headers({
             'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
             'Content-Type': 'application/json'
         }),
-        body: JSON.stringify({ rating: rating, review: review })
+        body: JSON.stringify({ rating: rating, review: review, appointment_id: appointmentId})
     })
     .then(response => {
         if (!response.ok) {
@@ -553,6 +556,7 @@ document.getElementById("logoutButton").addEventListener("click", function() {
         method: 'POST',
         headers: new Headers({
             'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
+            'Content-Type': 'application/json'
         }),
         body: JSON.stringify({}) 
     })
@@ -591,6 +595,7 @@ document.getElementById("deleteAccountButton").addEventListener("click", functio
 
 document.getElementById("rateButton").addEventListener("click", function() {
     const selectedRating = document.getElementById("rating").value;
+    
     setRate(selectedRating);
 });
 

@@ -15,24 +15,38 @@
         <div class="mb-4">
           <label for="username" class="font-semibold block">Username</label>
           <input type="text" id="username" name="username" class="border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring focus:border-blue-500">
+          <span class="error-message" id="username-error"></span> <!-- Error message for username -->
         </div>
         <!-- Email field -->
         <div class="mb-4">
           <label for="email" class="font-semibold block">Email</label>
           <input type="email" id="email" name="email" class="border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring focus:border-blue-500">
+          <span class="error-message" id="email-error"></span> <!-- Error message for email -->
         </div>
+        
         <!-- Password field -->
         <div class="mb-4">
           <label for="password" class="font-semibold block">Password</label>
           <input type="password" id="password" name="password" class="border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring focus:border-blue-500">
+          <span class="error-message" id="password-error"></span> <!-- Error message for password -->
         </div>
         <!-- Confirm Password field -->
         <div class="mb-4">
           <label for="confirm-password" class="font-semibold block">Confirm Password</label>
           <input type="password" id="confirm-password" name="confirm-password" class="border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring focus:border-blue-500">
+          <span class="error-message" id="confirm-password-error"></span> <!-- Error message for confirm password -->
         </div>
         <!-- Profile Picture upload field -->
-       
+        <div class="mb-4">
+          <label for="profile-picture" class="font-semibold block">Profile Picture</label>
+          <input type="file" id="profile-picture" name="profile-picture" class="border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring focus:border-blue-500">
+        </div>
+        <!-- Hourly rate -->
+        <div class="mb-4" id="hourlyRateField" style="display: none;">
+          <label for="hourly-rate" class="font-semibold block">Hourly Rate</label>
+          <input type="number" id="hourly-rate" name="hourlyRate" class="border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring focus:border-blue-500">
+        </div>
+
         <!-- Submit button -->
         <button type="submit" id="submit" class="bg-gray-800 hover:bg-gray-900 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:ring focus:border-blue-500">Submit</button>
         <!-- Delete Account button -->
