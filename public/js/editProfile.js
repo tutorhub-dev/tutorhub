@@ -7,11 +7,11 @@ document.addEventListener("DOMContentLoaded", function() {
         const password = document.getElementById("password").value;
         const confirmPassword = document.getElementById("confirm-password").value;
 
-        const formData = new FormData();
-        formData.append('username', username);
-        formData.append('email', email);
-        formData.append('password', password);
-        formData.append('confirm-password', confirmPassword);
+        const formData = {
+            username: username,
+             password: password,
+             email: email
+           };
 
         // Retrieve user token from session storage
         let data = sessionStorage.getItem("userData");
@@ -22,10 +22,12 @@ document.addEventListener("DOMContentLoaded", function() {
         fetch('/api/user', {
             method: 'POST',
             headers: {
-                'authorization': userData.token,
-                'Content-Type': 'application/json'
+                'authorization':userData.token
+            
             },
+
             body: JSON.stringify(formData)
+          
         })
         .then(response => {
             if (response.ok) {
