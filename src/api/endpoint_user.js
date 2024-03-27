@@ -18,9 +18,9 @@ class UserEndpoints {
             else {
                 res.status(200).json(account.getDataFiltered())
             }
-        }).catch((err) => {
-            console.error(err);
-            res.status(500).send('Internal Server Error');
+        })
+        .catch((err) => {
+            this.#api.handleError(err, res);
         });
     }
 
@@ -50,8 +50,17 @@ class UserEndpoints {
         // create a new account
         this.#api.account.makeNewAccount(req.body, req.body.is_tutor)
         .then((account) => {
-            res.status(201).json(account.getDataFiltered());
-        }).catch(err => {
+            // log the user in
+            account.generateToken()
+            .then((authToken) => {
+                // send the user data and the auth token
+                let data = account.getDataFiltered();
+                data.token = authToken;
+
+                res.status(201).json(data);
+            })
+        })
+        .catch(err => {
             this.#api.handleError(err, res);
         });
     }
@@ -59,31 +68,30 @@ class UserEndpoints {
     updateUser = (req, res) => {
         // get the user from the auth token
         let token = req.headers['authorization']
-        this.#api.auth.fetchUserByToken(token)
-        .then((user) => {
-            if (user == null)
+        this.#api.account.createAccountHandler(token)
+        .then((account) => {
+            if (account == null)
                 res.status(401).send('Unauthorized')
             else {
                 // update the user
-                this.#api.userCollection.findOneAndUpdate(
-                    { _id: user.user_id }, req.body, { new: true }
-                )
-                .then((user) => {
-                    if (user == null)
-                        res.status(404).send('User not found');
-                    else
-                        res.status(200).json({
-                            first_name: user.first_name,
-                            last_name: user.last_name,
-                            email: user.email,
-                            username: user.username,
-                            is_tutor: user.is_tutor
-                        });
-                }).catch(err => {
-                    this.#api.handleError(err, res);
-                });
+                return this.#api.userCollection.findOneAndUpdate(
+                    { _id: account.getID() }, req.body, { new: true }
+                );
             }
-        }).catch(err => {
+        })
+        .then((user) => {
+            if (user == null)
+                res.status(404).send();
+            else
+                res.status(200).json({
+                    first_name: user.first_name,
+                    last_name: user.last_name,
+                    email: user.email,
+                    username: user.username,
+                    is_tutor: false
+                });
+        })
+        .catch((err) => {
             this.#api.handleError(err, res);
         });
     }
