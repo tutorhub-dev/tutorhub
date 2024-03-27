@@ -1,5 +1,4 @@
-const btn_style = "bg-red-700 text-white font-medium rounded-lg px-4 py-2.5 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300";
-const btn_style1 = "bg-blue-700 text-white font-medium rounded-lg px-4 py-2.5 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300";
+const btn_style = "bg-gray-800 text-white font-medium rounded-lg px-4 py-2.5 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300";
 
 function editAppointment(appointmentId, newStart, newEnd) {
     const body = JSON.stringify({
@@ -203,7 +202,7 @@ class AppointmentPanel {
                         `;
                     else
                         confirm = `
-                            <button class="${ btn_styl1}" onclick="appointmentPanel.acceptAppointment('${appointment.appointment_id }')">Accept</button>
+                            <button class="${ btn_style}" onclick="appointmentPanel.acceptAppointment('${appointment.appointment_id }')">Accept</button>
                             <button class="${ btn_style}" onclick="appointmentPanel.deleteAppointment('${appointment.appointment_id }')">Decline</button>
                         `;
                 } else {
