@@ -305,8 +305,9 @@ document.getElementById("add-availability").addEventListener("click", function()
     const start = document.getElementById("start").value;
     const end = document.getElementById("end").value;
     const subject = document.getElementById("subject").value;
+    const tutor_id = JSON.parse(sessionStorage.userData).token;
 
-    createAvailability(date, start, end, subject);
+    createAvailability(tutor_id, date, start, end, subject);
 
     document.getElementById("date").value = "";
     document.getElementById("start").value = "";
@@ -354,8 +355,9 @@ function fetchAndDisplayAvailability() {
     .catch(error => console.error('Failed to fetch availability:', error));
 }
 
-function createAvailability(days, start_hour, end_hour, subject) {
+function createAvailability(tutor_id, days, start_hour, end_hour, subject) {
     const body = JSON.stringify({
+        tutor_id: tutor_id,
         days: days,
         start_hour: start_hour,
         end_hour: end_hour,
