@@ -32,7 +32,15 @@ class AvailabilityPanel {
             }
         })
         .then(response => {
-            if (!response.ok) throw new Error('Failed to fetch availability');
+            if (!response.ok) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "An internal error ocurred"
+                }); 
+                
+                throw new Error('Failed to fetch availability');
+            }
             return response.json();
         })
         .then(data => {
@@ -75,10 +83,19 @@ class AvailabilityPanel {
             body: body
         })
         .then(response => {
-            if (!response.ok) throw new Error('Failed to add your availability');
+            if (!response.ok) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "An internal error ocurred"
+                });
+
+                throw new Error('Failed to add your availability');
+            }
+
             return response.json();
         })
-        .then(newSlot => {
+        .then(() => {
             return this.render()
         })
         .then(() => {
@@ -100,7 +117,16 @@ class AvailabilityPanel {
             body: body
         })
         .then(response => {
-            if (!response.ok) throw new Error('Failed to delete availability');
+            if (!response.ok) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "An internal error ocurred"
+                });
+
+                throw new Error('Failed to delete availability');
+            }
+             
             document.querySelector(`button[data-id="${availability_id}"]`).closest("tr").remove();
             this.render();
         })

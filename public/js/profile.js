@@ -1,38 +1,3 @@
-/* document.addEventListener('DOMContentLoaded', function() {
-    
-    const authToken = sessionStorage.getItem("authToken");
-    const appointmentRequestForm = document.getElementById("appointmentRequestForm");
-
-    if (!authToken) {
-        window.location.href = "login.html";
-    } else {
-        const headers = new Headers({
-            'Content-Type': 'application/json',
-            'Authorization': authToken
-        });
-        fetchUserDetails();
-    }
-
-    if (appointmentRequestForm) {
-        appointmentRequestForm.addEventListener("submit", function(event) {
-            event.preventDefault();
-            const tutorId = document.getElementById("tutorSelect").value;
-            const date = document.getElementById("appointmentDate").value;
-            const startTime = document.getElementById("appointmentStartTime").value;
-            const endTime = document.getElementById("appointmentEndTime").value;
-            const subject = document.getElementById("subject").value;
-
-            requestAppointment(tutorId, date, startTime, endTime, subject);
-        });
-    }
-    toggleElementVisibility();
-    getUserAppointments();
-    getTutorAppointments();
-    fetchAndDisplayAvailability();
-    searchTutorsAndSubjects();
-    displayAppointmentsBasedOnRole();
-}); */
-
 let availabilityBtn = document.getElementById('availabilityButton');
 if (availabilityBtn) {
     availabilityBtn.addEventListener('click', function() {
@@ -404,39 +369,6 @@ function requestAppointment(tutorId, date, start, end, subject) {
     .catch(error => console.error('Failed to request appointment:', error));
 }
 
-// Button functions
-document.getElementById("logoutButton").addEventListener("click", function() {
-    fetch('/api/logout', {
-        method: 'POST',
-        headers: new Headers({
-            'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
-            'Content-Type': 'application/json'
-        }),
-        body: JSON.stringify({}) 
-    })
-    .then(response => {
-        if(response.ok) {
-            sessionStorage.clear();
-            window.location.href = "login.html";
-        } else {
-            throw new Error('Failed to log out');
-        } 
-    })
-    .catch(error => console.error('Failed to log out:', error));
-});
-
-// document.getElementById("rateButton").addEventListener("click", function() {
-//     const selectedRating = document.getElementById("rating").value;
-
-//     setRate(selectedRating);
-// });
-
-function checkLogin() {
-    if (!sessionStorage.getItem("userData")) {
-        window.location.href = "login.html";
-    }
-}
-
 // on page load
 let availabilityPanel;
 let appointmentPanel;
@@ -463,6 +395,9 @@ document.addEventListener('DOMContentLoaded', () => {
         availabilityPanel = new AvailabilityPanel("availability-entries");
         availabilityPanel.show();
         availabilityPanel.render();
+    } else {
+        // show the tutor search button
+        document.getElementById("searchButton").style.display = "block";
     }
 });
 

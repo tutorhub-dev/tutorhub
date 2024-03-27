@@ -36,6 +36,12 @@ function editUser() {
             alert('Your account has been updated!');
             window.location.href = "profile.html";
         } else {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "An internal error ocurred"
+            });
+
             throw new Error('Failed to update account');
         }
     })
@@ -66,6 +72,12 @@ function deleteUser() {
                 window.location.href = "login.html";
             }
             else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "An internal error ocurred"
+                });
+                
                 throw new Error('Failed to delete account');
             }
         })

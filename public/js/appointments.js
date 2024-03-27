@@ -1,28 +1,5 @@
 const btn_style = "bg-gray-800 text-white font-medium rounded-lg px-4 py-2.5 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300";
 
-function setRate(appointmentId, rating, review = null) {
-    fetch(`/api/appointment/rate`, {
-        method: 'POST',
-        headers: new Headers({
-            'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
-            'Content-Type': 'application/json'
-        }),
-        body: JSON.stringify({ rating: rating, review: review, appointment_id: appointmentId})
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error("Failed to rate the appointment");
-        }
-        alert ("You have successfully rated and reviewed the appointment!");
-        getUserAppointments();     
-    })
-    .catch(error => console.error('Failed to rate the appointment:', error));
-}
-
-function submitRatingAndReview (appointmentId, rating, review) {
-    setRate(appointmentId, rating, review);
-}
-
 function editAppointment(appointmentId, newStart, newEnd) {
     const body = JSON.stringify({
         start: newStart,
@@ -39,7 +16,16 @@ function editAppointment(appointmentId, newStart, newEnd) {
         body: body
     }) 
     .then(response => {
-        if (!response.ok) throw new Error('Failed to edit appointment');
+        if (!response.ok) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "An internal error ocurred"
+            }); 
+            
+            throw new Error('Failed to edit appointment');
+        }
+        
         alert('Your appointment has been successfully edited!');
     })
     .catch(error => console.error('Failed to edit appointment:', error));
@@ -57,7 +43,16 @@ function cancelAppointment(appointmentId) {
         body: body
     })
     .then(response => {
-        if (!response.ok) throw new Error('Failed to cancel appointment');
+        if (!response.ok) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "An internal error ocurred"
+            }); 
+            
+            throw new Error('Failed to cancel appointment');
+        }
+
         alert('Your appointment has been cancelled!');
     })
     .catch(error => console.error('Failed to cancel appointment:', error));
@@ -84,8 +79,22 @@ class AppointmentPanel {
             body: body
         })
         .then(response => {
-            if (!response.ok) throw new Error('Failed to accept appointment');
-            alert('You have accepted the appointment!');
+            if (!response.ok) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "An internal error ocurred"
+                });
+                
+                throw new Error('Failed to accept appointment');
+            }
+            
+            Swal.fire({
+                icon: "success",
+                title: "Success!",
+                text: "Appointment accepted successfully."
+            });
+
             this.render();
         })
         .catch(error => console.error('Failed to accept appointment:', error));
@@ -103,7 +112,15 @@ class AppointmentPanel {
             body: body
         })
         .then(response => {
-            if (!response.ok) throw new Error('Failed to decline appointment');
+            if (!response.ok) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "An internal error ocurred"
+                }); 
+                
+                throw new Error('Failed to decline appointment');
+            }
             alert('You have declined/deleted the appointment!');
             this.render();
         })
@@ -126,7 +143,16 @@ class AppointmentPanel {
             body: body
         })
         .then(response => {
-            if (!response.ok) throw new Error('Failed to rate appointment');
+            if (!response.ok)
+            {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "An internal error ocurred"
+                });
+
+                throw new Error('Failed to rate appointment');
+            }
             alert('You have rated the appointment!');
             this.render();
         })
@@ -143,7 +169,15 @@ class AppointmentPanel {
             })
         })
         .then(response => {
-            if (!response.ok) throw new Error('Failed to get appointments');
+            if (!response.ok) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "An internal error ocurred"
+                }); 
+                
+                throw new Error('Failed to get appointments');
+            }
             return response.json();
         })
         .then(appointments => {
@@ -173,21 +207,23 @@ class AppointmentPanel {
                         `;
                 } else {
                     // if it's not rated and the appointment time has passed
-                    if (!appointment.is_rated && new Date(appointment.end_time) < new Date())
+                    if (!appointment.is_rated && new Date(Number(appointment.end_time)) < new Date())
                         confirm = `<button class="${btn_style}" onclick="appointmentPanel.rateAppointment('${ appointment.appointment_id }')">Rate</button>`;
                     else if (appointment.is_rated)
                         confirm = 'rated';
                 }
 
-                console.log(appointment);
-
-                let start_date = new Date(Number(appointment.start_time)).toDateString();
-                let end_date = new Date(Number(appointment.end_time)).toDateString();
+                let start_date = new Date(Number(appointment.start_time));
+                let end_date = new Date(Number(appointment.end_time));
+                let start_day = start_date.toLocaleString(undefined, { weekday: 'long' });
+                let end_day = end_date.toLocaleString(undefined, { weekday: 'long' });
+                let start_hour = start_date.toLocaleString(undefined, { hour: 'numeric', minute: 'numeric', hour12: true });
+                let end_hour = end_date.toLocaleString(undefined, { hour: 'numeric', minute: 'numeric', hour12: true });
                 row.innerHTML = `
-                    <td>${ start_date }</td>
-                    <td>${ end_date }</td>
-                    <td>${ appointment.subject }</td>
-                    <td>${ confirm }</td>
+                    <td>${start_day} at<br> ${start_hour}</td>
+                    <td>${end_day} at<br> ${end_hour}</td>
+                    <td>${appointment.subject}</td>
+                    <td>${confirm}</td>
                 `;
                 table.appendChild(row);
             });

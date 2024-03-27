@@ -27,7 +27,12 @@ document.addEventListener("DOMContentLoaded", function() {
           })
           .then(response => {
               if (!response.ok) {
-
+                  Swal.fire({
+                      icon: "error",
+                      title: "Oops...",
+                      text: "An internal error ocurred"
+                  });
+                  
                   throw new Error('Http error ');
               }
               // Parse response body as JSON

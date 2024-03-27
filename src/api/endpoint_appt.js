@@ -15,7 +15,7 @@ class ApptEndpoints {
             else {
                 // get all the appointments for the user
                 let query;
-                if (account.isTutor) query = { tutor_id: account.getID() }
+                if (account.isTutor()) query = { tutor_id: account.getID() }
                 else query = { user_id: account.getID() }
 
                 // find all appointments for the user

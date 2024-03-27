@@ -1,38 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>Search</title>
-    <!-- Include Tailwind CSS from CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <!-- Include custom CSS file -->
-    <link rel="stylesheet" href="css/style.css">
-    <!-- Include Font Awesome from CDN -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-  </head>
-  <body class="bg-slate-300">
-    <!-- Search bar section -->
-    <div class="search-bar">
-      <div class="container mx-auto p-8">
-        <div class="bg-white p-4 rounded-lg shadow-md">
-          <h1 class="text-2xl font-semibold mb-4">Search for Tutors</h1>
-          <div class="flex items-center">
-            <input type="text" id="searchInput" class="w-full rounded-lg p-2" placeholder="Search for tutors...">
-            <button id="searchButton" class="bg-blue-500 text-white rounded-lg p-2 ml-2">Search</button>
-          </div>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+  <link
+    href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/profile.css">
+  <!-- Include Font Awesome CSS -->
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-gray-300">
+
+  <!-- Left-side navbar -->
+  <div class="flex h-screen">
+    <div class="bg-gray-800 text-white w-64 flex-shrink-0">
+      <div class="p-4 flex flex-col h-full justify-between">
+        <div>
+          <h1 id="dashboard-label" class="text-2xl font-bold mb-4">Tutor Search</h1>
+          <ul class="space-y-2">
+            <li>
+              <a href="./profile.html" id="returnButton" class="block py-2 px-4 rounded hover:bg-gray-700">
+                <i class="fas fa-arrow-left mr-2"></i> Return to Dashboard
+              </a>
+            </li>
+          </ul>
+        </div>
+        <!-- User Info Section -->
+        <div id="user-section" class="text-center">
+          <img id="profile-image" src="images/profile.png"
+            class="w-20 h-20 rounded-full mx-auto mb-4">
+          <h2 id="profile-username" class="font-semibold"></h2>
+          <p id="profile-email" class="text-gray-400 text-sm"></p>
+        </div>
+        <!-- Logout Button -->
+        <div>
+          <button id="logoutButton"
+            class="block w-full py-2 px-4 rounded hover:bg-gray-700">Logout</button>
         </div>
       </div>
-    <!-- Availability results section -->
-    <div id="availability-results">
-      <!-- Heading for available tutors -->
-      <h2 class="font-mono">Available Tutors</h2>
-      <div class="list">
-        <ul id="availabilityList">
-          <!-- Tutors will be populated here -->
-        </ul>
+    </div>
+
+
+    <div class="flex-1 p-8">
+      <!-- Tutor Search -->
+      <div class="bg-white rounded-lg shadow-md p-6 w-full">
+        <h2 class="text-lg font-semibold mb-4 text-center">Tutor Search</h2>
+        <form id="searchForm" class="mb-4 flex">
+          <div class="flex-grow flex items-center space-x-4">
+            <div class="flex-grow">
+              <label for="dayInput" class="block font-semibold">Day:</label>
+              <input type="text" id="dayInput" class="w-full border border-gray-300 rounded px-2 py-1" placeholder="Enter a single day: i.e. Monday, Tuesday, etc...">
+            </div>
+            <div>
+              <label for="usernameInput" class="block font-semibold">Tutor Username:</label>
+              <input type="text" id="usernameInput" class="w-32 border border-gray-300 rounded px-2 py-1" placeholder="Enter username">
+            </div>
+            <div>
+              <label for="subjectInput" class="block font-semibold">Subject:</label>
+              <input type="text" id="subjectInput" class="w-64 border border-gray-300 rounded px-2 py-1" placeholder="Enter one subject">
+            </div>
+            <button id="search-button" type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded">Search</button>
+            </div>
+        </form>
+        <p id="form-warning" style="display: none" class="text-center text-red-500">Please enter at least one of the above to search.</p>
+        <table id="availabilityTable" class="w-full table-auto">
+          <thead>
+            <tr>
+              <th class="font-semibold">Days</th>
+              <th class="font-semibold">Time Slot</th>
+              <th class="font-semibold">Subject</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="search-entries"></tbody>
+        </table>
       </div>
     </div>
-    <!-- Include JavaScript file -->
-    <script src="js/profile.js"></script>
-  </body>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/user_panel.js"></script>
+    <script src="js/search_panel.js"></script>
+    <script src="js/search.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        // if we are not signed in redirect to login
+        checkLogin();
+
+        // load the user panel
+        userPanel = new UserPanel("user-section");
+        userPanel.render();
+      });
+    </script>
+</body>
+
 </html>

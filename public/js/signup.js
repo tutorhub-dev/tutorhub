@@ -54,10 +54,21 @@ document.addEventListener("DOMContentLoaded", function() {
           .then(response => {
               if (!response.ok) {
                   if (response.status === 409) {
+                      Swal.fire({
+                          icon: "error",
+                          title: "Account Exists",
+                          text: "An account with this email exists already. Please try a different email."
+                      });
+
                       // Conflict error: email already exists
-                      console.error('Email already exists');
                       throw new Error('Email already exists');
                   } else {
+                      Swal.fire({
+                          icon: "error",
+                          title: "Oops...",
+                          text: "An internal error ocurred"
+                      });
+                      
                       // Other server-side errors
                       throw new Error('HTTP error ' + response.status);
                   }
