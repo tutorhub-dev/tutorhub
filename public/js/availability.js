@@ -1,3 +1,4 @@
+const delete_btn_style = "bg-red-500 text-white font-medium rounded-lg px-4 py-2.5 hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-red-300 w-full";
 
 class AvailabilityPanel {
 
@@ -45,12 +46,10 @@ class AvailabilityPanel {
                     <td>${slot.start_hour}</td>
                     <td>${slot.end_hour}</td>
                     <td>${slot.subject}</td>
-                    <td><button data-id="${id}" onclick="availabilityPanel.deleteAvailability('${id}')">Delete</button></td>
+                    <td><button data-id="${id}" class="${ delete_btn_style }" onclick="availabilityPanel.deleteAvailability('${id}')">Delete</button></td>
                 `;
                 table.appendChild(row);
             });
-
-            document.getElementById(this.domID).appendChild(table);
         })
         .catch(error => console.error('Failed to render availability:', error));
     }

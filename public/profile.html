@@ -17,11 +17,11 @@
     <div class="bg-gray-800 text-white w-64 flex-shrink-0">
         <div class="p-4 flex flex-col h-full justify-between">
             <div>
-                <h1 class="text-2xl font-bold mb-4">Tutor Dashboard</h1>
+                <h1 id="dashboard-label" class="text-2xl font-bold mb-4">User Dashboard</h1>
                 <ul class="space-y-2">
-                    <li><a href="#" id="bookingsButton" class="block py-2 px-4 rounded hover:bg-gray-700">
+                    <li><a href="#" id="appointmentButton" class="block py-2 px-4 rounded hover:bg-gray-700">
                         <i class="fas fa-calendar-alt mr-2"></i> <!-- Font Awesome calendar icon -->
-                        Bookings
+                        Appointment
                     </a></li>
                     <li><a href="#" id="editProfileButton" class="block py-2 px-4 rounded hover:bg-gray-700">
                         <i class="fas fa-user-edit mr-2"></i> <!-- Font Awesome edit icon -->
@@ -34,8 +34,10 @@
                 </ul>
             </div>
             <!-- User Info Section -->
-            <div class="flex items-center space-x-4">
-                <span class="text-sm font-medium">Username</span>
+            <div id="user-section" class="text-center">
+                <img id="profile-image" src="images/profile.png" class="w-20 h-20 rounded-full mx-auto mb-4">
+                <h2 id="profile-username" class="font-semibold"></h2>
+                <p id="profile-email" class="text-gray-400 text-sm"></p>
             </div>
             <!-- Logout Button -->
             <div>
@@ -49,30 +51,32 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <!-- Left Column -->
             <div class="user-class">
-                <!-- Request Appointment Section -->
-                <div class="bg-white rounded-lg shadow-md p-6 mt-8">
-                    <h2 class="text-lg font-semibold mb-4">Request an Appointment</h2>
-                    <form id="appointmentRequestForm">
-                        <div class="mb-4">
-                            <label for="tutorSelect" class="block font-medium">Select Tutor:</label>
-                            <select id="tutorSelect" name="tutorId" required class="border border-gray-300 rounded-lg p-2 w-full">
-                                <!-- Options should be populated dynamically based on available tutors -->
-                            </select>
-                        </div>
-                        <!-- Other input fields -->
-                        <button type="submit" id="reqApptButton" class="bg-gray-800 text-white font-medium rounded-lg px-4 py-2.5 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300">Request Appointment</button>
-                    </form>
+                <!-- Appointments Table -->
+                <div id="appointment-panel" class="bg-white rounded-lg shadow-md p-6">
+                    <h2 class="text-lg font-semibold mb-4 text-center">Appointments</h2>
+                    <table class="w-full table-auto">
+                        <thead>
+                            <tr>
+                                <th class="font-semibold">Start Time</th>
+                                <th class="font-semibold">End Time</th>
+                                <th class="font-semibold">Subject</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="appointment-entries"></tbody>
+                    </table>
+                    <p id="no-appointments" style="display: none" class="text-center text-gray-500 mt-4">There are no appointments at this time.</p>
                 </div>
             </div>
             <!-- Right Column -->
             <div id="availability-panel" class="tutor-class" style="display: none">
                 <!-- Tutor Availability Table -->
                 <div class="bg-white rounded-lg shadow-md p-6">
-                    <h2 class="text-lg font-semibold mb-4">Tutor Availability</h2>
+                    <h2 class="text-lg font-semibold mb-4 text-center">Tutor Availability</h2>
                     <table id="availabilityTable" class="w-full table-auto">
                         <thead>
                             <tr>
-                                <th class="font-semibold">Days (Monday, Tuesday, etc.)</th>
+                                <th class="font-semibold">Days <small class="text-gray-500">(Monday, Tuesday, etc.)</small></th>
                                 <th class="font-semibold">Start Time</th>
                                 <th class="font-semibold">End Time</th>
                                 <th class="font-semibold">Subject</th>
@@ -93,9 +97,9 @@
                 </div>
             </div>
         </div>
-
     </div>
-    
+    <script src="js/user_panel.js"></script>
+    <script src="js/appointments.js"></script>
     <script src="js/availability.js"></script>
     <script src="js/profile.js"></script>
 </body>

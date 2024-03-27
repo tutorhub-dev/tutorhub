@@ -440,14 +440,27 @@ function checkLogin() {
 
 // on page load
 let availabilityPanel;
+let appointmentPanel;
 document.addEventListener('DOMContentLoaded', () => {
     // if we are not signed in redirect to login
     checkLogin();
+
+    // load the user panel
+    userPanel = new UserPanel("user-section");
+    userPanel.render();
+
+    // load the appointment panel
+    appointmentPanel = new AppointmentPanel("appointment-entries");
+    appointmentPanel.render();
 
     // load tutor specific things
     let is_tutor = JSON.parse(sessionStorage.getItem("userData")).is_tutor;
 
     if (is_tutor) {
+        // update the dashboard label
+        document.getElementById("dashboard-label").textContent = "Tutor Dashboard";
+
+        // create the availability panel
         availabilityPanel = new AvailabilityPanel("availability-entries");
         availabilityPanel.show();
         availabilityPanel.render();

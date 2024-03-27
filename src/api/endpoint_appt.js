@@ -31,7 +31,10 @@ class ApptEndpoints {
                                 tutor_id: appt.tutor_id,
                                 user_id: appt.user_id,
                                 start_time: appt.start_time,
-                                end_time: appt.end_time
+                                end_time: appt.end_time,
+                                subject: appt.subject,
+                                is_confirmed: appt.is_confirmed,
+                                is_rated: appt.is_rated
                             }
                         });
 
