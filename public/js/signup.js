@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function() {
       const passwordInput = document.querySelector("#pwd");
       const confirmPasswordInput = document.querySelector("#pwd1");
       const emailInput = document.querySelector("#Email");
+      const hourlyRateInput = document.querySelector("#hourly-rate");
       const isTutorInput = document.querySelector("#is-tutor");
 
       // Get values from input fields
@@ -21,6 +22,7 @@ document.addEventListener("DOMContentLoaded", function() {
       const password = passwordInput.value;
       const confirmPassword = confirmPasswordInput.value;
       const email = emailInput.value;
+      const hourlyRate = hourlyRateInput.value;
       const is_Tutor = isTutorInput.checked;
 
 
@@ -38,6 +40,7 @@ document.addEventListener("DOMContentLoaded", function() {
           username: username,
           password: password,
           email: email,
+          hourly_rate: hourlyRate,
           is_tutor: is_Tutor
       };
       // Send form data to server
