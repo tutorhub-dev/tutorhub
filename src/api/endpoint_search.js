@@ -10,6 +10,9 @@ class SearchEndpoints {
         // check that the request contains at least a tutor, subject, or day
         this.#validateRequest(req)
         .then(() => {
+            return this.#usernameToId(req);
+        })
+        .then(() => {
             // get the tutors, subjects, and days from the request
             let tutor_id = req.body.tutor_id;
             let subject = req.body.subject;
@@ -21,7 +24,6 @@ class SearchEndpoints {
             if (tutor_id != undefined) query.tutor_id = tutor_id;
             if (subject != undefined) query.subject = subject;
             if (day != undefined) query.days = { $in: [day] };
-            console.log("Query: " + JSON.stringify(query));
 
             // find all availabilities that match the query
             return this.#api.availabilityCollection.find(query);
@@ -55,12 +57,32 @@ class SearchEndpoints {
         return new Promise((resolve, reject) => {
             // check that the request contains at least a tutor, subject, or day
             if (
+                req.body.tutor_username == undefined &&
                 req.body.tutor_id == undefined &&
                 req.body.subject == undefined &&
                 req.body.day == undefined
             ) reject(400);
 
             else resolve();
+        });
+    }
+
+    #usernameToId = (req) => {
+        return new Promise((resolve, reject) => {
+            // if the tutor id is not provided, but the tutor username is, convert it
+            if (req.body.tutor_username != undefined) {
+                this.#api.tutorCollection.findOne({
+                    username: req.body.tutor_username
+                })
+                .then((tutor) => {
+                    if (tutor == null) reject(404);
+                    else {
+                        req.body.tutor_id = tutor._id;
+                        resolve();
+                    }
+                })
+                .catch(reject);
+            } else resolve();
         });
     }
 };
