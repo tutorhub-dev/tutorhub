@@ -128,6 +128,11 @@ class SearchPanel {
                 showCancelButton: true,
                 confirmButtonText: "Book",
                 showLoaderOnConfirm: false
+            }).then(result => {
+                if (result.isConfirmed)
+                    return new Promise((resolve) => resolve(result.value));
+                else
+                    Promise.reject('User cancelled the prompt');
             });
         } else {
             return new Promise((resolve) => resolve(appointment.days[0]));
