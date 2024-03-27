@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     
         // Send POST request to update user data
-        fetch(/api/user, {
+        fetch('/api/user', {
             method: 'POST',
             headers: {
                 'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
