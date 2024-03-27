@@ -41,10 +41,12 @@ class AvailabilityPanel {
                 const row = document.createElement('tr');
                 const days = slot.days.join(', ');
                 const id = slot.availability_id;
+                const start_hour = this.#formatTime(slot.start_hour);
+                const end_hour = this.#formatTime(slot.end_hour);
                 row.innerHTML = `
                     <td>${days}</td>
-                    <td>${slot.start_hour}</td>
-                    <td>${slot.end_hour}</td>
+                    <td>${start_hour}</td>
+                    <td>${end_hour}</td>
                     <td>${slot.subject}</td>
                     <td><button data-id="${id}" class="${ delete_btn_style }" onclick="availabilityPanel.deleteAvailability('${id}')">Delete</button></td>
                 `;
@@ -103,5 +105,23 @@ class AvailabilityPanel {
             this.render();
         })
         .catch(error => console.error('Failed to delete availability:', error));
+    }
+
+    #formatTime(time) {
+        // convert from decimal to 12-hour time
+        let hours = Math.floor(time);
+        let minutes = Math.round((time - hours) * 60);
+
+        // convert from 24-hour to 12-hour time
+        let suffix = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+
+        // handle midnight
+        hours = hours ? hours : 12;
+
+        // handle single digit minutes
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+
+        return `${hours}:${minutes} ${suffix}`;
     }
 }

@@ -33,11 +33,10 @@
     displayAppointmentsBasedOnRole();
 }); */
 
-
 let availabilityBtn = document.getElementById('availabilityButton');
 if (availabilityBtn) {
     availabilityBtn.addEventListener('click', function() {
-        window.location.href = "availability.html";
+        window.location.href = "search.html";
     });
 }
 

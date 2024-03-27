@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>Availability</title>
+    <title>Search</title>
     <!-- Include Tailwind CSS from CDN -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <!-- Include custom CSS file -->
@@ -12,10 +12,16 @@
   </head>
   <body class="bg-slate-300">
     <!-- Search bar section -->
-    <div id="search">
-      <input type="text" id="searchBar" placeholder="Search for tutors...">
-      <button id="searchButton" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300">Search</button>
-    </div>
+    <div class="search-bar">
+      <div class="container mx-auto p-8">
+        <div class="bg-white p-4 rounded-lg shadow-md">
+          <h1 class="text-2xl font-semibold mb-4">Search for Tutors</h1>
+          <div class="flex items-center">
+            <input type="text" id="searchInput" class="w-full rounded-lg p-2" placeholder="Search for tutors...">
+            <button id="searchButton" class="bg-blue-500 text-white rounded-lg p-2 ml-2">Search</button>
+          </div>
+        </div>
+      </div>
     <!-- Availability results section -->
     <div id="availability-results">
       <!-- Heading for available tutors -->
