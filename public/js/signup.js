@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function() {
       const passwordInput = document.querySelector("#pwd");
       const confirmPasswordInput = document.querySelector("#pwd1");
       const emailInput = document.querySelector("#Email");
-      const hourlyRateInput = document.querySelector("#hourly-rate");
+      const hourlyRateInput = document.querySelector("#hourly_rate");
       const isTutorInput = document.querySelector("#is-tutor");
 
       // Get values from input fields
