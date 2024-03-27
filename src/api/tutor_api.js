@@ -65,7 +65,7 @@ class TutorAPI {
     validateRequest(req, res, requiredParams) {
         // check if all the required parameters are present
         for (let i = 0; i < requiredParams.length; i++) {
-            if (req.body[requiredParams[i]] == undefined) {
+            if (    req.body[requiredParams[i]] == undefined) {
                 res.status(400).send('Bad Request')
                 return false
             }

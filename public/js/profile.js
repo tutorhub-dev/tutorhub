@@ -33,15 +33,27 @@
     displayAppointmentsBasedOnRole();
 }); */
 
-document.getElementById('availabilityButton').addEventListener('click', function() {
-    window.location.href = "availability.html";
-});
-document.getElementById('editProfileButton').addEventListener('click', function() {
-    window.location.href = "editProfile.html";
-});
-document.getElementById('bookingsButton').addEventListener('click', function() {
-    window.location.href = "appointments.html";
-});
+
+let availabilityBtn = document.getElementById('availabilityButton');
+if (availabilityBtn) {
+    availabilityBtn.addEventListener('click', function() {
+        window.location.href = "availability.html";
+    });
+}
+
+let editProfileBtn = document.getElementById('editProfileButton');
+if (editProfileBtn) {
+    editProfileBtn.addEventListener('click', function() {
+        window.location.href = "editProfile.html";
+    });
+}
+
+let bookingsBtn = document.getElementById('bookingsButton');
+if (bookingsBtn) {
+    bookingsBtn.addEventListener('click', function() {
+        window.location.href = "appointments.html";
+    });
+}
 
 class Observer {
     update(appointmentId) {
@@ -301,13 +313,16 @@ function toggleElementVisibility(is_tutor) {
 
 // Availability functions
 document.getElementById("add-availability").addEventListener("click", function() {
-    const date = document.getElementById("date").value;
     const start = document.getElementById("start").value;
     const end = document.getElementById("end").value;
     const subject = document.getElementById("subject").value;
     const tutor_id = JSON.parse(sessionStorage.userData).token;
+    const dateInput = document.getElementById("date").value;
 
-    createAvailability(tutor_id, date, start, end, subject);
+    let date = dateInput.split(","); // split at commas
+    date = date.map(day => day.trim()); // remove whitespace
+
+    availabilityPanel.createAvailability(date, start, end, subject);
 
     document.getElementById("date").value = "";
     document.getElementById("start").value = "";
@@ -315,92 +330,50 @@ document.getElementById("add-availability").addEventListener("click", function()
     document.getElementById("subject").value = "";
 });
 
-function fetchAndDisplayAvailability() {
-    fetch('/api/tutor/', {
-        method: 'POST',
-        headers: new Headers({
-            'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
-            'Content-Type': 'application/json'
-        })
-    })
-    .then(response => {
-        if (!response.ok) throw new Error('Failed to fetch availability');
-        return response.json();
-    })
-    .then (data => {
-        const tableBody = document.getElementById("availabilityTable").getElementsByTagName("tbody")[0];
-        tableBody.innerHTML = "";
+// function fetchAndDisplayAvailability() {
+//     fetch('/api/tutor/', {
+//         method: 'POST',
+//         headers: new Headers({
+//             'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
+//             'Content-Type': 'application/json'
+//         })
+//     })
+//     .then(response => {
+//         if (!response.ok) throw new Error('Failed to fetch availability');
+//         return response.json();
+//     })
+//     .then (data => {
+//         const tableBody = document.getElementById("availabilityTable").getElementsByTagName("tbody")[0];
+//         tableBody.innerHTML = "";
 
-        data.forEach(slot => {
-            const addRow = tableBody.insertRow();
+//         data.forEach(slot => {
+//             const addRow = tableBody.insertRow();
 
-            const dateCell = addRow.insertCell(0);
-            const startCell = addRow.insertCell(1);
-            const endCell = addRow.insertCell(2);
-            const subjectCell = addRow.insertCell(3);
+//             const dateCell = addRow.insertCell(0);
+//             const startCell = addRow.insertCell(1);
+//             const endCell = addRow.insertCell(2);
+//             const subjectCell = addRow.insertCell(3);
 
-            dateCell.textContent = slot.date;
-            startCell.textContent = slot.start;
-            endCell.textContent = slot.end;
-            subjectCell.textContent = slot.subject;
+//             dateCell.textContent = slot.date;
+//             startCell.textContent = slot.start;
+//             endCell.textContent = slot.end;
+//             subjectCell.textContent = slot.subject;
 
-            const deleteCell = addRow.insertCell(4);
-            const deleteButton = document.createElement("button");
-            deleteButton.textContent = "Delete Availability";
-            deleteButton.dataset.id = slot.id;
-            deleteButton.onclick = function() { deleteAvailability(slot.id); };
-            deleteCell.appendChild(deleteButton);
-        });
-    })
-    .catch(error => console.error('Failed to fetch availability:', error));
+//             const deleteCell = addRow.insertCell(4);
+//             const deleteButton = document.createElement("button");
+//             deleteButton.textContent = "Delete Availability";
+//             deleteButton.dataset.id = slot.id;
+//             deleteButton.onclick = function() { deleteAvailability(slot.id); };
+//             deleteCell.appendChild(deleteButton);
+//         });
+//     })
+//     .catch(error => conso313le.error('Failed to fetch availability:', error));
+// }
+
+function getUserToken() {
+   return JSON.parse(sessionStorage.getItem("userData")).token;
 }
 
-function createAvailability(tutor_id, days, start_hour, end_hour, subject) {
-    const body = JSON.stringify({
-        tutor_id: tutor_id,
-        days: days,
-        start_hour: start_hour,
-        end_hour: end_hour,
-        subject: subject
-    });
-
-    fetch('/api/availability', {
-        method: 'POST',
-        headers: new Headers({
-            'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
-            'Content-Type': 'application/json'
-        }),
-        body: body
-    })
-    .then(response => {
-        if (!response.ok) throw new Error('Failed to add your availability');
-        return response.json();
-    })
-    .then(newSlot => {
-        const tableBody = document.getElementById("availabilityTable").getElementsByTagName("tbody")[0];
-        const addRow = tableBody.insertRow();
-
-        const dateCell = addRow.insertCell(0);
-        dateCell.textContent = newSlot.days;
-
-        const startCell = addRow.insertCell(1);
-        startCell.textContent = newSlot.start_hour;
-
-        const endCell = addRow.insertCell(2);
-        endCell.textContent = newSlot.end_hour;
-
-        const subjectCell = addRow.insertCell(3);
-        subjectCell.textContent = newSlot.subject;
-
-        const deleteCell = addRow.insertCell(4);
-        const deleteButton = document.createElement("button");
-        deleteButton.textContent = "Delete Availability";
-        deleteButton.dataset.id = newSlot.id;
-        deleteButton.onclick = function() { deleteAvailability(newSlot.id); };
-        deleteCell.appendChild(deleteButton);
-    })
-    .catch(error => console.error('Failed to add your availability:', error));   
-}
 
 function formatHour(decimalHour) {
     const hour = Math.floor(decimalHour);
@@ -453,9 +426,31 @@ document.getElementById("logoutButton").addEventListener("click", function() {
     .catch(error => console.error('Failed to log out:', error));
 });
 
-document.getElementById("rateButton").addEventListener("click", function() {
-    const selectedRating = document.getElementById("rating").value;
+// document.getElementById("rateButton").addEventListener("click", function() {
+//     const selectedRating = document.getElementById("rating").value;
 
-    setRate(selectedRating);
+//     setRate(selectedRating);
+// });
+
+function checkLogin() {
+    if (!sessionStorage.getItem("userData")) {
+        window.location.href = "login.html";
+    }
+}
+
+// on page load
+let availabilityPanel;
+document.addEventListener('DOMContentLoaded', () => {
+    // if we are not signed in redirect to login
+    checkLogin();
+
+    // load tutor specific things
+    let is_tutor = JSON.parse(sessionStorage.getItem("userData")).is_tutor;
+
+    if (is_tutor) {
+        availabilityPanel = new AvailabilityPanel("availability-entries");
+        availabilityPanel.show();
+        availabilityPanel.render();
+    }
 });
 

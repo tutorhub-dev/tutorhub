@@ -65,20 +65,21 @@
                 </div>
             </div>
             <!-- Right Column -->
-            <div class="tutor-class">
+            <div id="availability-panel" class="tutor-class" style="display: none">
                 <!-- Tutor Availability Table -->
                 <div class="bg-white rounded-lg shadow-md p-6">
                     <h2 class="text-lg font-semibold mb-4">Tutor Availability</h2>
-                    <table id="availabilityTable" class="w-full">
+                    <table id="availabilityTable" class="w-full table-auto">
                         <thead>
                             <tr>
-                                <th class="font-semibold">Date</th>
+                                <th class="font-semibold">Days (Monday, Tuesday, etc.)</th>
                                 <th class="font-semibold">Start Time</th>
                                 <th class="font-semibold">End Time</th>
                                 <th class="font-semibold">Subject</th>
                                 <th></th>
                             </tr>
                         </thead>
+                        <tbody id="availability-entries"></tbody>
                         <tbody>
                             <tr>
                                 <td><input type="text" id="date" class="border border-gray-300 rounded-lg p-2 w-full"></td>
@@ -95,6 +96,7 @@
 
     </div>
     
+    <script src="js/availability.js"></script>
     <script src="js/profile.js"></script>
 </body>
 
