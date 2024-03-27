@@ -43,6 +43,7 @@ class TutorEndpoints {
                     email: tutor.email,
                     username: tutor.username,
                     hourly_rate: tutor.hourly_rate,
+                    rating: tutor.rating,
                     is_tutor: true
                 });
         })
@@ -50,7 +51,6 @@ class TutorEndpoints {
             this.#api.handleError(err, res);
         });
     };
-    
 
     deleteTutor = (req, res) => {
         // get the tutor from the auth token

@@ -25,6 +25,13 @@ class Tutor {
         return this.#id;
     }
 
+    getRating = () => {
+        let rating = this.#data.ratingSum / this.#data.ratingCount;
+        if (isNaN(rating)) return 0;
+
+        return rating;
+    }
+
     getDataFiltered = () => {
         return {
             _id: this.#id,
@@ -33,6 +40,7 @@ class Tutor {
             email: this.#data.email,
             username: this.#data.username,
             hourly_rate: this.#data.hourly_rate,
+            rating: this.getRating(),
             is_tutor: true
         };
     }

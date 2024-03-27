@@ -171,6 +171,101 @@ class ApptEndpoints {
         });
     }
 
+    rateAppointment = (req, res) => {
+        // validate the request
+        if (this.#api.validateRequest(
+            req, res, ['appointment_id', 'rating']
+        ) == false) return;
+
+        // ensure the rating is between 1 and 5
+        if (req.body.rating < 1 || req.body.rating > 5)
+        {
+            res.status(400).send('Rating must be between 1 and 5');
+            return;
+        }
+
+        // variables to store the user and appointment
+        let userAccount, targetAppointment;
+
+        // get the user from the auth token
+        let token = req.headers['authorization']
+        this.#api.account.createAccountHandler(token)
+        .then((account) => {
+            if (account == null)
+                return Promise.reject(401);
+            else {
+                userAccount = account;
+
+                // Extract appointment ID from request parameters
+                const appointment_id = req.body.appointment_id;
+
+                // get the appointment with the given ID
+                return this.#api.appointmentCollection.findById(appointment_id)
+            }
+        })
+        .then((appointment) => {
+            if (!appointment) {
+                res.status(404).send('Appointment not found');
+            } else {
+                // check that the account is the student
+                if (userAccount.getID() != appointment.user_id) {
+                    return Promise.reject(401);
+                }
+                
+                // check that the appointment is not already rated
+                else if (appointment.is_rated) {
+                    console.log("error: Appointment is already rated")
+                    return Promise.reject(400);
+                }
+
+                // check that appointment was confirmed
+                else if (!appointment.is_confirmed) {
+                    console.log("error: Appointment is not confirmed")
+                    return Promise.reject(400);
+                }
+
+                // get the tutor with the given ID
+                else {
+                    targetAppointment = appointment;
+                    return this.#api.tutorCollection.findById(appointment.tutor_id)
+                }
+            }
+        })
+        .then((tutor) => {
+            if (!tutor)
+                res.status(404).send('Tutor not found');
+            else {
+                // calculate the new rating
+                let updateFields = {
+                    ratingCount: tutor.get('ratingCount') + 1,
+                    ratingSum: tutor.get('ratingSum') + Number(req.body.rating)
+                }
+
+                return this.#api.tutorCollection.findOneAndUpdate(
+                    { _id: targetAppointment.tutor_id }, updateFields, { new: true }
+                )
+            }
+        })
+        .then((result) => {
+            if (!result)
+                res.status(404).send();
+            else
+                // update the appointment to rated
+                return this.#api.appointmentCollection.findOneAndUpdate(
+                    { _id: req.body.appointment_id }, { is_rated: true }, { new: true }
+                )
+        })
+        .then((result) => {
+            if (!result)
+                res.status(404).send();
+            else
+                res.status(200).json(result);
+        })
+        .catch(err => {
+            this.#api.handleError(err, res);
+        });
+    }
+
     deleteAppointment = (req, res) => {
         // validate the request
         if (this.#api.validateRequest(

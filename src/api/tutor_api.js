@@ -70,6 +70,7 @@ class TutorAPI {
                 return false
             }
         }
+        
         return true
     }
 

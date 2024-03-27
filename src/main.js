@@ -45,6 +45,7 @@ app.get('/api/appointment', api.apptEndpoints.getAppointment)
 app.put('/api/appointment', api.apptEndpoints.createAppointment)
 app.post('/api/appointment', api.apptEndpoints.updateAppointment)
 app.post('/api/appointment/accept', api.apptEndpoints.acceptAppointment)
+app.post('/api/appointment/rate', api.apptEndpoints.rateAppointment)
 app.delete('/api/appointment', api.apptEndpoints.deleteAppointment)
 
 /* search endpoints */

@@ -28,7 +28,9 @@ class TutorSchemas {
             email: { type: String, required: true, unique: true },
             hash_password: { type: String, required: true },
             username: { type: String, required: true },
-            hourly_rate: { type: Number, required: true }
+            hourly_rate: { type: Number, required: true },
+            ratingSum: { type: Number, required: false, default: 0 },
+            ratingCount: { type: Number, required: false, default: 0 }
         }
     }
 
@@ -39,7 +41,8 @@ class TutorSchemas {
             start_time: { type: String, required: true },
             end_time: { type: String, required: true },
             subject: { type: String, required: true },
-            is_confirmed: { type: Boolean, required: true, default: false }
+            is_confirmed: { type: Boolean, required: false, default: false },
+            is_rated : { type: Boolean, required: false, default: false }
         }
     }
 
