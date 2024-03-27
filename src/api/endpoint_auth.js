@@ -51,7 +51,7 @@ class AuthEndpoints {
                 .then((authToken) => {
                     // send the user data and the auth token
                     let data = account.getDataFiltered()
-                    data.auth_token = authToken
+                    data.token = authToken
                     delete data._id
 
                     res.status(200).send(data)
