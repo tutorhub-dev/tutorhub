@@ -160,9 +160,9 @@ function searchTutorsAndSubjects() {
     .catch(error => console.error('Failed to search for tutors:', error));
 }
 
-document.getElementById("searchButton").addEventListener("click", function() {
+/* document.getElementById("searchButton").addEventListener("click", function() {
     searchTutorsAndSubjects();
-});
+}); */
 
 function fetchTutorAvailability(tutorId) {
     const body = JSON.stringify({ tutor_id: tutorId });
@@ -406,24 +406,6 @@ function formatHour(decimalHour) {
     return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
 }
 
-function deleteAvailability(slotId) {
-    const body = JSON.stringify({ slot_id: slotId });
-
-    fetch(`/api/tutor/`, { /* Maybe add a slotId feature in the availability API? */
-        method: 'DELETE',
-        headers: new Headers({
-            'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
-            'Content-Type': 'application/json'
-        }),
-        body: body
-    })
-    .then(response => {
-        if (!response.ok) throw new Error('Failed to delete availability');
-        document.querySelector(`button[data-id="${slotId}"]`).closest("tr").remove();
-    })
-    .catch(error => console.error('Failed to delete availability:', error));
-}
-
 // Appointment functions
 function requestAppointment(tutorId, date, start, end, subject) {
     const body = JSON.stringify({
@@ -448,108 +430,6 @@ function requestAppointment(tutorId, date, start, end, subject) {
     .catch(error => console.error('Failed to request appointment:', error));
 }
 
-function editAppointment(appointmentId, newStart, newEnd) {
-    const body = JSON.stringify({
-        start: newStart,
-        end: newEnd,
-        appointment_id: appointmentId
-    });
-
-    fetch(`/api/appointment/`, {
-        method: 'POST',
-        headers: new Headers({
-            'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
-            'Content-Type': 'application/json'
-        }),
-        body: body
-    }) 
-    .then(response => {
-        if (!response.ok) throw new Error('Failed to edit appointment');
-        alert('Your appointment has been successfully edited!');
-    })
-    .catch(error => console.error('Failed to edit appointment:', error));
-}
-
-function cancelAppointment(appointmentId) {
-    const body = JSON.stringify({ appointment_id: appointmentId });
-
-    fetch(`/api/appointment/`, {
-        method: 'DELETE',
-        headers: new Headers({
-            'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
-            'Content-Type': 'application/json'
-        }),
-        body: body
-    })
-    .then(response => {
-        if (!response.ok) throw new Error('Failed to cancel appointment');
-        alert('Your appointment has been cancelled!');
-    })
-    .catch(error => console.error('Failed to cancel appointment:', error));
-}
-
-function acceptAppointment(appointmentId) {
-    const body = JSON.stringify({ appointment_id: appointmentId });
-
-    fetch(`/api/appointment/accept`, {
-        method: 'POST',
-        headers: new Headers({
-            'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
-            'Content-Type': 'application/json'
-        }),
-        body: body
-    })
-    .then(response => {
-        if (!response.ok) throw new Error('Failed to accept appointment');
-        alert('You have accepted the appointment!');
-        getTutorAppointments();
-    })
-    .catch(error => console.error('Failed to accept appointment:', error));
-} 
-
-function declineAppointment(appointmentId) {
-    const body = JSON.stringify({ appointment_id: appointmentId });
-
-    fetch(`/api/appointment`, {
-        method: 'DELETE',
-        headers: new Headers({
-            'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
-            'Content-Type': 'application/json'
-        }),
-        body: body
-    })
-    .then(response => {
-        if (!response.ok) throw new Error('Failed to decline appointment');
-        alert('You have declined the appointment!');
-        getTutorAppointments();
-    })
-    .catch(error => console.error('Failed to decline appointment:', error));
-}
-
-function setRate(appointmentId, rating, review = null) {
-    fetch(`/api/appointment/rate`, {
-        method: 'POST',
-        headers: new Headers({
-            'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
-            'Content-Type': 'application/json'
-        }),
-        body: JSON.stringify({ rating: rating, review: review, appointment_id: appointmentId})
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error("Failed to rate the appointment");
-        }
-        alert ("You have successfully rated and reviewed the appointment!");
-        getUserAppointments();     
-    })
-    .catch(error => console.error('Failed to rate the appointment:', error));
-}
-
-function submitRatingAndReview (appointmentId, rating, review) {
-    setRate(appointmentId, rating, review);
-}
-
-
 // Button functions
 document.getElementById("logoutButton").addEventListener("click", function() {
     fetch('/api/logout', {
@@ -571,31 +451,9 @@ document.getElementById("logoutButton").addEventListener("click", function() {
     .catch(error => console.error('Failed to log out:', error));
 });
 
-document.getElementById("deleteAccountButton").addEventListener("click", function() {
-    if(confirm("Are you sure you want to delete your account?")) {
-        fetch('/api/user', {
-            method: 'DELETE',
-            headers: new Headers({
-                'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
-                'Content-Type': 'application/json'
-            })
-        })
-        .then(response => {
-            if (!response.ok) throw new Error('Failed to delete account');
-            alert('Your account has been successfully deleted!');
-            sessionStorage.clear();
-            window.location.href = "login.html";
-        })
-        .catch(error => {
-            console.error('Failed to delete account:', error);
-            alert('Failed to delete account');
-        });
-    }
-});
-
 document.getElementById("rateButton").addEventListener("click", function() {
     const selectedRating = document.getElementById("rating").value;
-    
+
     setRate(selectedRating);
 });
 
