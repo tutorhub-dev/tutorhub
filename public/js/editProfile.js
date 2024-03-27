@@ -21,32 +21,6 @@ document.addEventListener("DOMContentLoaded", function() {
         console.error('Delete account button not found');
     }
 
-    const isTutor = sessionStorage.getItem("isTutor") === "true";
-    const hourlyRateField = document.getElementById("hourlyRateField");
-
-    if (isTutor && hourlyRateField) {
-        hourlyRateField.style.display = "block";
-    }
-
-    function validateUsername(username) {
-        const usernameRegex = /^[a-zA-Z0-9]{4,}$/;
-        return usernameRegex.test(username);
-    }
-
-    function validateEmail(email) {
-        const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-        return emailRegex.test(email);
-    }
-
-    function validatePassword(password) {
-        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-        return passwordRegex.test(password);
-    }
-
-    function notEmpty(value) {
-        return value.trim() !== "";
-    }
-
 
     // Function to handle editing user profile
     function editUser() {
@@ -55,37 +29,6 @@ document.addEventListener("DOMContentLoaded", function() {
         const password = document.getElementById("password").value;
         const confirmPassword = document.getElementById("confirm-password").value;
         const hourlyRate = isTutor ? document.getElementById("hourlyRate").value : null;
-        
-        document.querySelectorAll('.error-message').forEach(e => e.textContent = '');
-
-        let isValid = true;
-
-        if (!validateEmail(email)) {
-            document.getElementById("email-error").textContent = "Invalid email";
-            isValid = false;
-        }
-
-        if (!validateUsername(username)) {
-            document.getElementById("username-error").textContent = "Invalid username";
-            isValid = false;
-        }
-
-        if (!validatePassword(password)) {
-            document.getElementById("password-error").textContent = "Password must be at least 8 characters long and contain at least one letter and one number";
-            isValid = false;
-        }
-
-        if (password !== confirmPassword) {
-            document.getElementById("confirm-password-error").textContent = "Passwords do not match";
-            isValid = false;
-        }
-
-        if (!notEmpty(username) || !notEmpty(email) || !notEmpty(password) || !notEmpty(confirmPassword)) {
-            alert('Please fill out all fields');
-            isValid = false;
-        }
-
-        if (!isValid) return;
 
         // Create form data object to send user data
         const formData = {
@@ -98,10 +41,9 @@ document.addEventListener("DOMContentLoaded", function() {
         let data = sessionStorage.getItem("userData");
         let userData = JSON.parse(data);
 
-        const apiEndpoint = isTutor ? '/api/tutor' : '/api/user';
-
+    
         // Send POST request to update user data
-        fetch(apiEndpoint, {
+        fetch(/api/user, {
             method: 'POST',
             headers: {
                 'authorization': JSON.parse(sessionStorage.getItem("userData")).token,
