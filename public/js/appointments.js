@@ -132,7 +132,16 @@ class AppointmentPanel {
         let rating = prompt('Please rate the appointment (1-5):');
         if (rating == null) return;
 
-        console.log(rating)
+        // validate the rating
+        if (isNaN(rating) || rating < 1 || rating > 5) {
+            Swal.fire({
+                icon: "error",
+                title: "Invalid rating",
+                text: "Please enter a number between 1 and 5"
+            });
+
+            return;
+        }
 
         const body = JSON.stringify({
             appointment_id: appointmentId,
@@ -212,7 +221,11 @@ class AppointmentPanel {
                         `;
                 } else {
                     // if it's not rated and the appointment time has passed
-                    if (!appointment.is_rated && appointment.is_confirmed && new Date(Number(appointment.end_time)) < new Date())
+                    if (
+                        !appointment.is_rated &&
+                        appointment.is_confirmed &&
+                        new Date(Number(appointment.end_time)) < new Date()
+                    )
                         confirm = `<button class="${btn_style}" onclick="appointmentPanel.rateAppointment('${ appointment.appointment_id }')">Rate</button>`;
                     else if (appointment.is_rated)
                         confirm = 'rated';

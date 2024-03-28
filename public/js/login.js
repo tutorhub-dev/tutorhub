@@ -27,29 +27,36 @@ document.addEventListener("DOMContentLoaded", function() {
           })
           .then(response => {
               if (!response.ok) {
-                  Swal.fire({
-                      icon: "error",
-                      title: "Oops...",
-                      text: "An internal error ocurred"
-                  });
-                  
-                  throw new Error('Http error ');
+                // if the error is 401, alert the user that the credentials are invalid
+                if (response.status === 401) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Invalid Credentials",
+                        text: "Double check that you've entered your username and password correctly"
+                    });
+                }
+
+                else throw new Error('Http error ');
               }
               // Parse response body as JSON
               return response.json();
           })
-          .then(data => {
-              // Store user data in session storage
-              sessionStorage.setItem("userData", JSON.stringify(data));
-              console.log("Login successful. User data:", data);
-              // Redirect to profile page after successful login
-              window.location.href = "profile.html";
-          })
-          .catch(error => {
-              // Handle login failure
-              console.error('Login failed :', error);
-              // Alert user about invalid credentials
-              alert('Invalid Username or password ');
-          });
-  });
+        .then(data => {
+            // Store user data in session storage
+            sessionStorage.setItem("userData", JSON.stringify(data));
+            console.log("Login successful. User data:", data);
+
+            // Redirect to profile page after successful login
+            window.location.href = "profile.html";
+        })
+        .catch(error => {
+            console.error('Login failed :', error);
+
+            Swal.fire({
+                icon: "error",
+                title: "Login Failed",
+                text: "Double check that you've entered your email and password correctly"
+            });
+        });
+    });
 });
