@@ -57,11 +57,26 @@ class ApptEndpoints {
 
         // get the user from the auth token
         let token = req.headers['authorization']
+        let tutorData;
         this.#api.account.createAccountHandler(token)
         .then((account) => {
             if (account == null)
                 res.status(401).send('Unauthorized')
             else {
+                // Get the tutor's email from the provided ID
+                return this.#api.tutorCollection.findById(
+                    req.body.tutor_id
+                );
+            }
+        })
+        .then((tutor) => {
+            if (!tutor) {
+                res.status(404).send('Tutor not found');
+            }
+            else
+            {
+                tutorData = tutor;
+
                 // Extract appointment details from request body
                 const tutor_id = req.body.tutor_id;
                 const user_id = req.body.user_id;
@@ -79,13 +94,15 @@ class ApptEndpoints {
                 });
 
                 // Save appointment to the database
-                return appointment.save()
+                return appointment.save();
             }
         })
         .then((result) => {
             if (!result) res.status(500).send();
             else res.status(201).json({
-                appointment_id: result._id
+                appointment_id: result._id,
+                email: tutorData.email,
+                name: tutorData.first_name + ' ' + tutorData.last_name
             });
         })
         .catch((err) => {

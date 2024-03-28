@@ -33,22 +33,26 @@ function editUser() {
     })
     .then(response => {
         if (response.ok) {
-            alert('Your account has been updated!');
-            window.location.href = "profile.html";
-        } else {
             Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "An internal error ocurred"
+                icon: "success",
+                title: "Profile Updated",
+                text: "Your profile has been updated"
             });
 
+            window.location.href = "profile.html";
+        } else {
             throw new Error('Failed to update account');
         }
     })
     .catch(error => {
         // Log and alert user for any errors
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "An internal error ocurred"
+        });
+
         console.error('Failed to update account:', error);
-        alert('Failed to update account');
     });
 }
 
@@ -68,23 +72,30 @@ function deleteUser() {
         })
         .then(response => {
             if (response.ok) {
-                alert('Your account has been deleted!');
-                window.location.href = "login.html";
+                // delete session storage
+                sessionStorage.removeItem("userData");
+                
+                Swal.fire({
+                    icon: "success",
+                    title: "Account Deleted",
+                    text: "Your account has been deleted"
+                }).then(() => {
+                    window.location.href = "login.html";
+                });
             }
             else {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "An internal error ocurred"
-                });
-                
                 throw new Error('Failed to delete account');
             }
         })
         .catch(error => {
             // Log and alert user for any errors
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "An internal error ocurred"
+            });
+
             console.error('Failed to delete account:', error);
-            alert('Failed to delete account');
         });
     }
 }

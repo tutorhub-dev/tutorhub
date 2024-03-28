@@ -177,11 +177,16 @@ class SearchPanel {
                 throw new Error('Failed to book appointment');
             }
         })
-        .then(() => {
+        .then((response) => {
+            // show the contact information
             Swal.fire({
+                title: "Success, but don't go yet!",
                 icon: "success",
-                title: "Success!",
-                text: "Appointment booked successfully."
+                html: `
+                    <p>Your appointment was booked successfully! Here are your tutors contact details. <br>For privacy reasons <bold>these are not saved.</bold> Be sure to write them down!</p>
+                    <p><strong>Name:</strong> ${response.name}</p>
+                    <p><strong>Email:</strong> ${response.email}</p>
+                `
             });
         })
         .catch(error => {

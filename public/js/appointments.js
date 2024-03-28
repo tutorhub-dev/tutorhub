@@ -132,7 +132,12 @@ class AppointmentPanel {
         let rating = prompt('Please rate the appointment (1-5):');
         if (rating == null) return;
 
-        const body = JSON.stringify({ appointment_id: appointmentId });
+        console.log(rating)
+
+        const body = JSON.stringify({
+            appointment_id: appointmentId,
+            rating: Number(rating)
+        });
 
         fetch(`/api/appointment/rate`, {
             method: 'POST',
@@ -207,7 +212,7 @@ class AppointmentPanel {
                         `;
                 } else {
                     // if it's not rated and the appointment time has passed
-                    if (!appointment.is_rated && new Date(Number(appointment.end_time)) < new Date())
+                    if (!appointment.is_rated && appointment.is_confirmed && new Date(Number(appointment.end_time)) < new Date())
                         confirm = `<button class="${btn_style}" onclick="appointmentPanel.rateAppointment('${ appointment.appointment_id }')">Rate</button>`;
                     else if (appointment.is_rated)
                         confirm = 'rated';
